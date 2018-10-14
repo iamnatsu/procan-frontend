@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Button } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import { AppState } from '../../redux/index';
 import { RouteComponentProps, withRouter } from "react-router";
-import * as AuthService from '../../service/AuthService'
-import { transitionToLoginPage } from '../../util/transition';
 
 export interface ReactProps extends RouteComponentProps<any> { }
 
@@ -41,16 +39,10 @@ class DashBoard extends React.Component<DashBoardProps, DashBoardViewerState> {
   render() {
     console.log("render dashboard")
     return (
-      <div style={{ padding: '10px', width: '100vw', height: '100vh' }}>
-        <Button variant="contained" type='submit' onClick={ this.logout }>Logout</Button>
-      </div>
+      <Paper style={{ width: '100%' }}>
+      Dashboard
+      </Paper>
     );
-  }
-
-  logout() {
-    AuthService.logout().then(() => {
-      transitionToLoginPage();
-    })
   }
 }
 

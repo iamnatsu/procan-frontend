@@ -1,7 +1,6 @@
 import * as ActionType from './LoginActionCreator';
 import { Credential } from '../../types/Credential';
 import * as AuthService from '../../service/AuthService';
-import { setToken } from '../../service/HttpService';
 
 export default class LoginDispatcher {
   constructor(public dispatch: (action: any) => any) {
@@ -9,13 +8,7 @@ export default class LoginDispatcher {
   }
 
   refreshLoginUser() {
-    return AuthService.getLoginUser().then(response => {
-      setToken({token: response.data.id, expireAt: new Date(response.data.expireAt)});
-      this.dispatch(ActionType.UpdateLoginUser(response.data));
-      return Promise.resolve();
-    }).catch(result => {
-      return Promise.reject(result);
-    })
+    return Promise.resolve()
   }
 
   updateLoginUser(user: Credential) {
@@ -23,13 +16,10 @@ export default class LoginDispatcher {
   }
 
   login(loginId: string, password: string) {
-    return AuthService.login(loginId, password).then(response => {
+    AuthService.login(loginId, password).then(response => {
       this.dispatch(ActionType.UpdateLoginUser(response.data));
-      return Promise.resolve()
-    }).catch(result => {
-      this.dispatch(ActionType.SetErrorMessage('ログインIDまたはパスワードに誤りがあります。'));
-      return Promise.reject(result);
     })
+    return Promise.resolve()
   }
 
   logout() {

@@ -3,13 +3,12 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import * as PropTypes from 'prop-types';
-import { MuiThemeProvider } from '@material-ui/core/styles';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { TextField, Button/*, MenuItem, SelectField*/ } from '@material-ui/core';
 import { transitionTo } from '../../util/transition';
 import { AppState } from 'src/redux';
 import LoginStore from 'src/redux/Login/LoginStore';
 import LoginDispatcher from '../../redux/Login/LoginDispatcher';
-import { topMuiTheme } from '../../config/Theme';
 
 export interface ReactProps extends RouteComponentProps<any> { }
 
@@ -33,7 +32,11 @@ export class Login extends React.Component<MergedProps, LoginState> {
 
   componentWillMount() {
     this.props.action.login.refreshLoginUser().then(async res => {
-      transitionTo('/dashboard');
+      /*
+      if (res.status === 200 && res.data && res.data.userId) {
+        await this.setCurrentWorkspace(this.props.workspace.getWorkspaceId() || this.getLastAccessWorkspace());
+        this.context.router.history.push(this.getRedirectPath());
+      }*/
     });
   }
 
@@ -44,17 +47,17 @@ export class Login extends React.Component<MergedProps, LoginState> {
   render() {
     if (this.state.loading) return null;
 
-    // console.dir(this.props.login.getLoginUser().toJS());
+    console.dir(this.props.login.getLoginUser().toJS());
     return (
-      <MuiThemeProvider theme={topMuiTheme}>
+      <MuiThemeProvider theme={loginMuiTheme}>
         <div style={{ width: '100vw', height: '100vh', backgroundColor: "#88C542"}}>
           <div style={{ width: 400, margin: 'auto', paddingTop: 'calc(50vh - 175px)'}}>
             <h2 style={{ color: 'white' }}>Procan</h2>
             <form onSubmit={this.handleLogin.bind(this)} style={{ padding: 20 }}>
-              <TextField id='loginId' label='email' fullWidth={true} InputLabelProps={{ shrink: true }} autoFocus={true} style={{marginBottom: 20}} onChange={this.handleChange}/>
-              <TextField id='password' label='password' type='password' fullWidth={true} InputLabelProps={{ shrink: true }} style={{marginBottom: 20}} onChange={this.handleChange} />
+              <TextField id='loginId' label='ログインID / メールアドレス' fullWidth={true} InputLabelProps={{ shrink: true }} autoFocus={true} style={{marginBottom: 20}} onChange={this.handleChange}/>
+              <TextField id='password' label='パスワード' type='password' fullWidth={true} InputLabelProps={{ shrink: true }} style={{marginBottom: 20}} onChange={this.handleChange} />
               {this.renderErrorMessage()}
-              <div style={{ textAlign: 'right', marginTop: 15 }}><Button variant="contained" type='submit' fullWidth disabled={this.state.isSubmitting} >Login</Button></div>
+              <div style={{ textAlign: 'right', marginTop: 15 }}><Button variant="contained" type='submit' fullWidth disabled={this.state.isSubmitting} >ログイン</Button></div>
             </form>
           </div>
         </div>
@@ -75,12 +78,15 @@ export class Login extends React.Component<MergedProps, LoginState> {
 
     this.setState(Object.assign({}, this.state, { isSubmitting: true }));
     this.props.action.login.login(loginId, password).then(async response => {
-      this.setState(Object.assign({}, this.state, { isSubmitting: false }), () => {
-        transitionTo('/dashboard');
-      });
+      this.setState(Object.assign({}, this.state, { isSubmitting: false }));
+      transitionTo('/dashboard');
     }).catch(() => {
       this.setState(Object.assign({}, this.state, { isSubmitting: false }));
     });
+  }
+
+  renderErrorText() {
+    return (this.props.login.getErrorMessage()) ? ' ' : '';
   }
 
   renderErrorMessage(): any {
@@ -99,6 +105,53 @@ const mapDispatchToProps = (dispatch: any) => {
     }
   }
 }
+
+const loginMuiTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#fff"
+    }
+  },
+  overrides: {
+    MuiButton: {
+      contained: {
+        color: '#88C542',
+        backgroundColor: "white"
+      }
+    },
+    MuiInputLabel: {
+      root: {
+        color: 'white',
+      }
+    },
+    MuiFormLabel: {
+      focused: {
+        "&$focused": {
+          color: "white"
+        }
+      }
+    },
+    MuiInput: {
+      root: {
+        color: 'white',
+      },
+      underline: {
+        '&:before': {
+          borderBottom: '1px solid #fff',
+        },
+        '&:hover:before': {
+          borderBottom: '1px solid #fff',
+        },
+        '&:hover:not($disabled):not($focused):not($error):before': {
+          borderBottom: '1px solid #fff',
+        },
+        '&:after': {
+          borderBottom: '2px solid #fff',
+        },
+      }
+    },
+  }
+});
 
 export interface LoginStateProps {
   action: {
