@@ -1,28 +1,24 @@
 import { combineReducers, applyMiddleware } from 'redux';
-//import { reducer as reduxFormReducer } from 'redux-form';
-//import { routerReducer, RouterState, routerMiddleware } from 'react-router-redux';
 
 import { LoginReducer, LoginState } from './Login/LoginReducer';
+import { MessageDialogReducer, MessageDialogState } from './component/MessageDialog/MessageDialogReducer';
 
-/*
 export interface AppComponentState {
-  messageModal: MessageModalState,
-  snackbar: GlobalSnackbarState,
+  messageDialog: MessageDialogState,
 }
 const component = combineReducers<AppComponentState>({
-  messageModal: MessageModalReducer,
-  snackbar: GlobalSnackbarReducer
+  messageDialog: MessageDialogReducer,
 });
-*/
 
 export interface AppState {
-  //component: AppComponentState;
+  component: AppComponentState;
   login: LoginState;
 }
 
 // container
 export const reducers = combineReducers<AppState>({
   login: LoginReducer,
+  component: component,
 });
 
 export const middlewares = applyMiddleware(...[

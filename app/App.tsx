@@ -18,6 +18,9 @@ export const muiTheme = createMuiTheme({
       main: ACCENT_COLOR
     }
   },
+  typography: {
+    useNextVariants: true,
+  },
   overrides: {
     MuiButton: {
       contained: {

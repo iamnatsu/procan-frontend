@@ -12,15 +12,19 @@ export function sessionProceed(): HttpService._Promise<Credential> {
 }
 
 export function login(id: string, password: string): HttpService._Promise<Credential> {
-  if(true) {
-      const res: HttpService._Response<any> = {data: { id:"xxxx", loginId: "nwada", name: "natsuho wada"}} as HttpService._Response<any>;
-      return Promise.resolve(res);
+  const req = {
+    loginId: id,
+    password: password
   }
-  let req = new URLSearchParams();
-  req.append('loginId', id);
-  req.append('password', password);
-  return HttpService.post(AUTH_LOGIN, req, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then((response: HttpService._Response<Credential>) => {
+  return HttpService.post(AUTH_LOGIN, req, { headers: { 'Authorization': 'Bearer dummy', 'Content-Type': 'application/json' } }).then((response: HttpService._Response<Credential>) => {
     HttpService.setToken({ token: response.data.id, expireAt: moment(response.data.expireAt).toDate() });
     return response;
   });
+}
+
+export function logout(): HttpService._Promise<any> {
+  return HttpService.del(AUTH_SESSION).then(r => {
+    HttpService.setToken();
+    return r;
+  }); 
 }

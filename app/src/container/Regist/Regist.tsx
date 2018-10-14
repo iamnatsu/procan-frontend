@@ -7,20 +7,20 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import { TextField, Button/*, MenuItem, SelectField*/ } from '@material-ui/core';
 import { transitionTo } from '../../util/transition';
 import { AppState } from 'src/redux';
-import LoginStore from 'src/redux/Login/LoginStore';
-import LoginDispatcher from '../../redux/Login/LoginDispatcher';
 import { topMuiTheme } from '../../config/Theme';
+
+import * as RegistService from '../../service/RegistService'
+import { MessageDialogDispatcher } from "../../redux/component/MessageDialog/MessageDialogDispatcher";
 
 export interface ReactProps extends RouteComponentProps<any> { }
 
 export interface LoginProps extends React.Props<any> {
   style?: React.CSSProperties;
-  login: LoginStore;
 }
 
 type MergedProps = LoginProps & LoginStateProps & ReactProps;
 
-export class Login extends React.Component<MergedProps, LoginState> {
+export class Regist extends React.Component<MergedProps, LoginState> {
   public workspaceInput: any;
   static contextTypes = {
     router: PropTypes.object
@@ -28,13 +28,10 @@ export class Login extends React.Component<MergedProps, LoginState> {
 
   constructor(props: MergedProps) {
     super(props);
-    this.state = { loading: true, isSubmitting: false, loginId: '', password: '' };
+    this.state = { loading: true, isSubmitting: false, name: '', email: '', password: '' };
   }
 
   componentWillMount() {
-    this.props.action.login.refreshLoginUser().then(async res => {
-      transitionTo('/dashboard');
-    });
   }
 
   async componentDidMount() {
@@ -42,19 +39,18 @@ export class Login extends React.Component<MergedProps, LoginState> {
   }
 
   render() {
-    if (this.state.loading) return null;
+    if (this.state.loading || !this.props.match.params || !this.props.match.params.token) return null;
 
-    // console.dir(this.props.login.getLoginUser().toJS());
     return (
       <MuiThemeProvider theme={topMuiTheme}>
         <div style={{ width: '100vw', height: '100vh', backgroundColor: "#88C542"}}>
           <div style={{ width: 400, margin: 'auto', paddingTop: 'calc(50vh - 175px)'}}>
-            <h2 style={{ color: 'white' }}>Procan</h2>
-            <form onSubmit={this.handleLogin.bind(this)} style={{ padding: 20 }}>
-              <TextField id='loginId' label='email' fullWidth={true} InputLabelProps={{ shrink: true }} autoFocus={true} style={{marginBottom: 20}} onChange={this.handleChange}/>
+            <h2 style={{ color: 'white' }}>Procan Registration</h2>
+            <form onSubmit={this.handleRegist.bind(this)} style={{ padding: 20 }}>
+              <TextField id='name' label='your name' fullWidth={true} InputLabelProps={{ shrink: true }} autoFocus={true} style={{marginBottom: 20}} onChange={this.handleChange}/>
+              <TextField id='email' label='email (LOGIN ID)' fullWidth={true} InputLabelProps={{ shrink: true }} style={{marginBottom: 20}} onChange={this.handleChange}/>
               <TextField id='password' label='password' type='password' fullWidth={true} InputLabelProps={{ shrink: true }} style={{marginBottom: 20}} onChange={this.handleChange} />
-              {this.renderErrorMessage()}
-              <div style={{ textAlign: 'right', marginTop: 15 }}><Button variant="contained" type='submit' fullWidth disabled={this.state.isSubmitting} >Login</Button></div>
+              <div style={{ textAlign: 'right', marginTop: 15 }}><Button variant="contained" type='submit' fullWidth disabled={this.state.isSubmitting} >Regist</Button></div>
             </form>
           </div>
         </div>
@@ -68,24 +64,26 @@ export class Login extends React.Component<MergedProps, LoginState> {
     this.setState(Object.assign({}, this.state, param));
   };
 
-  handleLogin(e: any) {
+  handleRegist(e: any) {
     e.preventDefault();
-    const loginId = this.state.loginId
+    const name = this.state.name;
+    const email = this.state.email;
     const password = this.state.password;
 
     this.setState(Object.assign({}, this.state, { isSubmitting: true }));
-    this.props.action.login.login(loginId, password).then(async response => {
-      this.setState(Object.assign({}, this.state, { isSubmitting: false }), () => {
-        transitionTo('/dashboard');
+    RegistService.regist(name, email, password, this.props.match.params.token).then(res => {
+      this.props.action.modal.showMessage('ご登録、ありがとうございます', 
+      [{ message: '登録完了メールをお送りいたしました。' }, { message: '次の画面からログインし、Procan をご利用ください。' }],
+      () => {
+        transitionTo('/login');
       });
-    }).catch(() => {
+
+    }).catch(e => {
+      this.props.action.modal.showMessage('', [{ message: e && e.response && e.response.data ? e.response.data.message : 'unknown error occurred' }]);
       this.setState(Object.assign({}, this.state, { isSubmitting: false }));
-    });
+    })
   }
 
-  renderErrorMessage(): any {
-    return (this.props.login.getErrorMessage()) ? (<div style={{ color: '#f44336', fontSize: 14, padding: '10px 0' }}>{this.props.login.getErrorMessage()}</div>) : '';
-  }
 }
 
 const mapStateToProps = (state: AppState) => {
@@ -95,23 +93,24 @@ const mapStateToProps = (state: AppState) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     action: {
-      login: new LoginDispatcher(dispatch),
+      modal: new MessageDialogDispatcher(dispatch),
     }
   }
 }
 
 export interface LoginStateProps {
   action: {
-    login: LoginDispatcher;
+    modal: MessageDialogDispatcher;
   }
 }
 
 interface LoginState extends React.Props<any> {
   loading: boolean;
   isSubmitting: boolean;
-  loginId: string;
+  name: string;
+  email: string;
   password: string;
 }
 
-const component: any = connect(mapStateToProps, mapDispatchToProps)(Login);
-export const LoginContainer: React.ComponentClass<any> = withRouter(component);
+const component: any = connect(mapStateToProps, mapDispatchToProps)(Regist);
+export const RegistContainer: React.ComponentClass<any> = withRouter(component);
