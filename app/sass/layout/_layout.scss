@@ -1,0 +1,31 @@
+#app {
+  height: 100vh;
+}
+.header {
+  height: 50px;
+}
+.main {
+  height: calc(100vh - 50px);
+  width: 100%;
+  position: absolute;
+}
+@media screen and (max-width: 1250px) {
+  .right-el-1-1250 {
+    display: none;
+  }
+}
+@media screen and (max-width: 1175px) {
+  .right-el-2-1150 {
+    display: none;
+  }
+}
+@media screen and (max-width: 1100px) {
+  .right-el-3-1050 {
+    display: none;
+  }
+}
+@media screen and (max-width: 1025px) {
+  .right-el-4-950 {
+    display: none;
+  }
+}
