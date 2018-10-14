@@ -2,8 +2,12 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { withRouter , Switch, Route } from 'react-router-dom';
 import { LoginContainer as Login } from '../Login/Login';
+import { RegistContainer as Regist } from '../Regist/Regist';
+import { PrepareContainer as Prepare } from '../Prepare/Prepare';
 import Auth from '../../component/Auth/Auth';
 import ContentsBase from '../ContentsBase/ContentsBase';
+import MessageDialog from '../../component/MessageDialog/MessageDialog';
+
 class App extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -13,6 +17,7 @@ class App extends React.Component<any, any> {
     return (
       <div>
         {this.renderInner()}
+        <MessageDialog />
       </div>
     );
   }
@@ -34,6 +39,8 @@ class App extends React.Component<any, any> {
     return (
         <Switch>
           <Route strict exact path='/login' component={Login} />
+          <Route strict exact path='/regist/:token' component={Regist} />
+          <Route strict exact path='/prepare' component={Prepare} />
           <Auth>
             <Switch>
               <Route path='/' component={ContentsBase} />
