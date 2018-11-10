@@ -44,9 +44,10 @@ export class Prepare extends React.Component<MergedProps, LoginState> {
           <div style={{ width: 400, margin: 'auto', paddingTop: 'calc(50vh - 175px)'}}>
             <h2 style={{ color: 'white' }}>Procan</h2>
             <form onSubmit={this.handlePrepare.bind(this)} style={{ padding: 20 }}>
-              <TextField id='email' label='email' fullWidth={true} InputLabelProps={{ shrink: true }} autoFocus={true} style={{marginBottom: 20}} onChange={this.handleChange}/>
-              <div style={{ textAlign: 'right', marginTop: 15 }}><Button variant="contained" type='submit' fullWidth disabled={this.state.isSubmitting} >Sign Up</Button></div>
+              <TextField autoComplete='off' id='email' label='email' fullWidth={true} InputLabelProps={{ shrink: true }} autoFocus={true} style={{marginBottom: 20}} onChange={this.handleChange}/>
+              <div style={{ textAlign: 'right', marginTop: 15 }}><Button variant="contained" type='submit' fullWidth disabled={this.state.isSubmitting} >Sign Up (Send Mail)</Button></div>
             </form>
+            <a href="#/login" style={{ color: 'white', display: 'block', textAlign: 'center', textDecoration: 'none' }}>Sign In</a>
           </div>
         </div>
       </MuiThemeProvider>

@@ -21,20 +21,7 @@ class App extends React.Component<any, any> {
       </div>
     );
   }
-/*
 
-          <Route strict exact path='/login/:workspaceId' component={Login} />
-          <Route strict exact path='/start' component={Start} />
-          <Route strict exact path='/signup' component={ConfirmAndSignUp} />
-          <Route strict exact path='/inquiryworkspace' component={InquiryWorkspace} />
-          <Route strict exact path='/createworkspace' component={CreateWorkspace} />
-          <Route strict exact path='/workspaces/:email/:token' component={Workspaces} />
-          <Auth>
-            <Switch>
-              <Route path='/' component={ContentsBase} />
-            </Switch>
-          </Auth>
-*/
   renderInner() {
     return (
         <Switch>

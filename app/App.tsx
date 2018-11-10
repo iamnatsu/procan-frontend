@@ -22,11 +22,23 @@ export const muiTheme = createMuiTheme({
     useNextVariants: true,
   },
   overrides: {
+    MuiAppBar: {
+      root: {
+        boxShadow: 'none !important',
+      }
+    },
     MuiButton: {
       contained: {
         color: 'white',
         backgroundColor: MAIN_COLOR
       }
+    },
+    MuiToolbar: {
+      regular: {
+        '@media (min-width: 600px)': {
+          minHeight: "50px"
+        }
+      },
     }
   }
 });

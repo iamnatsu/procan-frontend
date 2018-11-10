@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Button } from '@material-ui/core';
 import { AppState } from '../../redux/index';
 import { RouteComponentProps, withRouter } from "react-router";
 import * as AuthService from '../../service/AuthService'
@@ -39,10 +38,11 @@ class DashBoard extends React.Component<DashBoardProps, DashBoardViewerState> {
   }
 
   render() {
-    console.log("render dashboard")
+    const style = { padding: '10px', width: '100vw', height: 'calc(100vh - 50px)' };
     return (
-      <div style={{ padding: '10px', width: '100vw', height: '100vh' }}>
-        <Button variant="contained" type='submit' onClick={ this.logout }>Logout</Button>
+      <div style={style}>
+        <p>グループを作成する</p>
+        <p>プロジェクトを作成する</p>
       </div>
     );
   }
@@ -50,7 +50,7 @@ class DashBoard extends React.Component<DashBoardProps, DashBoardViewerState> {
   logout() {
     AuthService.logout().then(() => {
       transitionToLoginPage();
-    })
+    });
   }
 }
 
@@ -69,11 +69,6 @@ function mapDispatchToProps(dispatch: any) {
   return {
   };
 }
-/*
-function mergeProps(stateProps: StateProps, dispatchProps: DispatchProps, ownProps: DashBoardProps) {
-  return Object.assign({}, stateProps, dispatchProps, ownProps);
-}
-*/
 
 const component: any = connect(mapStateToProps, mapDispatchToProps)(DashBoard);
 export default withRouter(component);
