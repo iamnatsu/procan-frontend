@@ -56,7 +56,6 @@ export class Auth extends React.Component<AuthProps, any>  {
 
   checkLoginUser(props: AuthProps) {
     if (!props.login.isLogined()) {
-      console.log("not logged in")
       props.action.login.refreshLoginUser().then(async () => {
         if (!this.props.login.getLoginUser().toJS().id) transitionToLoginPage();
       }).catch((result: any) => {
@@ -66,8 +65,6 @@ export class Auth extends React.Component<AuthProps, any>  {
           throw result;
         }
       });
-    } else {
-      console.log("logged in")
     }
   }
 }

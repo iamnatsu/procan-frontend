@@ -1,11 +1,15 @@
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   // モード値を production に設定すると最適化された状態で、
   // development に設定するとソースマップ有効でJSファイルが出力される
   mode: 'development',
  
+  watchOptions: {
+    poll: 2000
+  },
   // メインとなるJavaScriptファイル（エントリーポイント）
   entry: ['./app/App.tsx', './app/sass/style.scss'],
   // ファイルの出力設定
@@ -15,9 +19,6 @@ module.exports = {
     // 出力ファイル名
     filename: 'app.js'
   },
-  watchOptions: {
-    poll: 2000
-  },
   module: {
     rules: [
       {
@@ -26,6 +27,15 @@ module.exports = {
         // TypeScript をコンパイルする
         use: 'ts-loader'
       },
+      {
+        test: /\.(scss|css)$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',
+        ],
+      },
+      /*
       {
         test: /\.scss/, // 対象となるファイルの拡張子
         use: ExtractTextPlugin.extract({
@@ -55,7 +65,7 @@ module.exports = {
             }
           ]
         }),
-      }
+      }*/
 
     ]
   },
@@ -67,7 +77,12 @@ module.exports = {
   },
 
   plugins: [
-    new ExtractTextPlugin('style.css'),
+    // new ExtractTextPlugin('style.css'),
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: "style.css"
+    }),
     new TsconfigPathsPlugin({ configFile: `${__dirname}/tsconfig.json` })
   ],
 };

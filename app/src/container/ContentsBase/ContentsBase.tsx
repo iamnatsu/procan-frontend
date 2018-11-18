@@ -12,7 +12,6 @@ class ContentsBase extends React.Component<any, any> {
   }
 
   render() {
-    console.log("render contents-base")
     return (
       <div key="contents-base">
         <AppBar elevation={24}></AppBar>
