@@ -38,9 +38,9 @@ export function setTokenByCacheOnly(token: string) {
 
 function initDefaultConfig(token?: string | null) {
   if (token) {
-    _defaultConfig = { headers: { 'Authorization': 'Bearer ' + token } };
+    _defaultConfig = { headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' } };
   } else {
-    _defaultConfig = {};
+    _defaultConfig = { headers: { 'Content-Type': 'application/json' } };
   }
 }
 

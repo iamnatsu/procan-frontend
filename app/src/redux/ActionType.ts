@@ -8,4 +8,8 @@ export const enum ActionType {
   LoginDestory = 'LoginDestory',
   LoginSetErrorMessage = 'LoginSetErrorMessage',
 
+  // dashboard
+  DashBoardIsShowProjectModal = 'DashBoardIsShowProjectModal',
+  DashBoardUpdateProject = 'DashBoardUpdateProject',
+  DashBoardUpdateProjects = 'DashBoardUpdateProjects',
 }
