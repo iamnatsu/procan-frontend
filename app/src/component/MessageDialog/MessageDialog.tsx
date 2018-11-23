@@ -70,6 +70,9 @@ export class MessageDialog extends React.Component<MessageDialogProps, MessageDi
 
   renderActions() {
     const buttons: any = [];
+    buttons.push(
+      <Button key='close' onClick={this.closeAction.bind(this)} autoFocus>close</Button>
+    );
     const actionMap: MessageDialogActionMap = this.props.MessageDialog.getActionMap().toJS();
     if (actionMap && Object.keys(actionMap).length > 0) {
       Object.keys(actionMap).forEach(k => {
@@ -78,9 +81,6 @@ export class MessageDialog extends React.Component<MessageDialogProps, MessageDi
         );
       })
     }
-    buttons.push(
-      <Button key='close' onClick={this.closeAction.bind(this)} autoFocus>close</Button>
-    );
     return buttons;
   }
 

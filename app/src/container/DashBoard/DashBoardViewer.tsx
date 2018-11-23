@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { AppState } from '../../redux/index';
 import { RouteComponentProps } from "react-router";
+import { withNamespaces, TransProps } from 'react-i18next';
 import Modal from '@material-ui/core/Modal';
 import * as AuthService from '../../service/AuthService'
 import * as ProjectService from '../../service/ProjectService'
@@ -30,7 +31,7 @@ export interface DashBoardViewerState extends React.Props<any> {
   toggleDrawer: boolean;
 }
 
-type MergedProps = StateProps & DispatchProps & DashBoardProps & StyledComponentProps;
+type MergedProps = StateProps & DispatchProps & DashBoardProps & StyledComponentProps & TransProps;
 
 class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
   constructor(props: any) {
@@ -51,6 +52,7 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
   }
 
   render() {
+    const { t } = this.props;
     const style = { width: '100vw', height: 'calc(100vh - 50px)' };
     const modalStyle: React.CSSProperties = {
       top: '15vh',
@@ -66,6 +68,7 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
         <div style={{height: '100%', width:'300px', padding: '10px', backgroundColor:'ivory', float: 'left'}}>
           <p><Button onClick={this.handleOpenProjectModal.bind(this)} color="primary">プロジェクトを作成する</Button></p>
           <p><Button color="primary">グループを作成する</Button></p>
+          <p><Button color="primary">{t('Welcome to React')}</Button></p>
         </div>
         <div style={{height: '100%', width:'calc(100% - 300px)', padding: '10px', backgroundColor:'lightblue', float: 'left'}}>
           { projects && projects.size > 0 && (
@@ -127,7 +130,6 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
   }
 
   handleSubmitProject(values: Project) {
-    console.dir(values)
     ProjectService.post(values);
     this.props.action.dashboard.updateProject(values);
     this.handleCloseProjectModal();
@@ -203,5 +205,6 @@ const styles: Record<string, CSSProperties> = {
   },
 };
 
-const container = connect<StateProps, DispatchProps, DashBoardProps, MergedProps>(mapStateToProps, mapDispatchToProps, mergeProps)(DashBoard);
-export default withStyles(styles)(container) as React.ComponentClass<DashBoardProps>;
+const i18n = withNamespaces()(DashBoard)
+const connected = connect<StateProps, DispatchProps, DashBoardProps, MergedProps>(mapStateToProps, mapDispatchToProps, mergeProps)(i18n);
+export default withStyles(styles)(connected) as React.ComponentClass<DashBoardProps>;

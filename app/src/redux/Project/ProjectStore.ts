@@ -2,13 +2,14 @@ import { Record, Map, List } from 'immutable';
 import { Project } from '../../model/project';
 import { Task } from '../../model/task';
 
-
-const DashBoardRecord = Record({ 
+const ProjectRecord = Record({ 
   isShowProjectModal: false,
+  isShowTaskModal: false,
   project: Map(),
   tasks: List()
 });
-export default class DashBoardStore extends DashBoardRecord {
+
+export default class ProjectStore extends ProjectRecord {
 
   isShowProjectModal() {
     return this.get('isShowProjectModal');
@@ -16,6 +17,14 @@ export default class DashBoardStore extends DashBoardRecord {
 
   setIsShowProjectModal(isShowProjectModal: boolean): this {
     return this.set('isShowProjectModal', isShowProjectModal) as this;
+  }
+
+  isShowTaskModal() {
+    return this.get('isShowTaskModal');
+  }
+
+  setIsShowTaskModal(isShowTaskModal: boolean): this {
+    return this.set('isShowTaskModal', isShowTaskModal) as this;
   }
 
   getProject(): Map<string, any> {
@@ -30,8 +39,12 @@ export default class DashBoardStore extends DashBoardRecord {
     return this.get('tasks');
   }
 
-  setTasks(projects: Array<Task>): this {
-    return this.set('tasks', List(projects)) as this;
+  addTask(task: Task) {
+    return this.setTasks(this.getTasks().push(task).toJS());
+  }
+
+  setTasks(tasks: Array<Task>): this {
+    return this.set('tasks', List(tasks)) as this;
   }
 
 }

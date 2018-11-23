@@ -76,15 +76,15 @@ class PrimarySearchAppBar extends React.Component<any, any> {
         onClose={this.handleMobileMenuClose}
       >
         <MenuItem>
-          <IconButton color="inherit">
-            <Badge className={classes.margin} badgeContent={11} color="secondary">
+          <IconButton color='inherit'>
+            <Badge className={classes.margin} badgeContent={11} color='secondary'>
               <NotificationsIcon />
             </Badge>
           </IconButton>
           <p>Notifications</p>
         </MenuItem>
         <MenuItem onClick={this.handleProfileMenuOpen}>
-          <IconButton color="inherit">
+          <IconButton color='inherit'>
             <AccountCircle />
           </IconButton>
           <p>Profile</p>
@@ -94,20 +94,20 @@ class PrimarySearchAppBar extends React.Component<any, any> {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position='static'>
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
+            <IconButton className={classes.menuButton} color='inherit' aria-label='Open drawer'>
               <MenuIcon />
             </IconButton>
-            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-             ProCan
+            <Typography className={classes.title} variant='h6' color='inherit' noWrap>
+            <a href='#/dashboard'  style={{ color: 'white', display: 'block', textDecoration: 'none' }}>ProCan</a>
             </Typography>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <SearchIcon />
               </div>
               <InputBase
-                placeholder="Search…"
+                placeholder='Search…'
                 classes={{
                   root: classes.inputRoot,
                   input: classes.inputInput,
@@ -116,22 +116,22 @@ class PrimarySearchAppBar extends React.Component<any, any> {
             </div>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-              <IconButton color="inherit">
-                <Badge className={classes.margin} badgeContent={1} color="secondary">
+              <IconButton color='inherit'>
+                <Badge className={classes.margin} badgeContent={1} color='secondary'>
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
               <IconButton
                 aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                aria-haspopup="true"
+                aria-haspopup='true'
                 onClick={this.handleProfileMenuOpen}
-                color="inherit"
+                color='inherit'
               >
                 <AccountCircle />
               </IconButton>
             </div>
             <div className={classes.sectionMobile}>
-              <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
+              <IconButton aria-haspopup='true' onClick={this.handleMobileMenuOpen} color='inherit'>
                 <MoreIcon />
               </IconButton>
             </div>

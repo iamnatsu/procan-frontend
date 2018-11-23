@@ -8,6 +8,12 @@ export function post(project: Project): HttpService._Promise<Project> {
   });
 }
 
+export function put(project: Project): HttpService._Promise<Project> {
+  return HttpService.put(PROJECT + '/' + project.id, project).then((response: HttpService._Response<Project>) => {
+    return response;
+  });
+}
+
 export function get(id: String): HttpService._Promise<Project> {
   const url = PROJECT + '/' + id;
   return HttpService.get(url).then((response: HttpService._Response<Project>) => {
