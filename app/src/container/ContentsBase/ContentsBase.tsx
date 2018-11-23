@@ -14,7 +14,7 @@ class ContentsBase extends React.Component<any, any> {
 
   render() {
     return (
-      <div key="contents-base">
+      <div key='contents-base'>
         <AppBar elevation={24}></AppBar>
         <Switch>
           <Route strict exact path='/dashboard' component={DashBoardViewer} />
