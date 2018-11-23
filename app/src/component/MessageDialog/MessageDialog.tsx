@@ -26,7 +26,7 @@ export class MessageDialog extends React.Component<MessageDialogProps, MessageDi
       <Dialog open={this.props.MessageDialog.isShow()}>
         {this.props.MessageDialog.getTitle() && <DialogTitle>{this.props.MessageDialog.getTitle()}</DialogTitle>}
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id='alert-dialog-description'>
             {this.renderInner(this.props.MessageDialog.getMessageList())}
           </DialogContentText>
         </DialogContent>

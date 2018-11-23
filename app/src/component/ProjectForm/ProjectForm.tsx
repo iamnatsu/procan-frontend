@@ -30,12 +30,12 @@ class ProjectForm extends React.Component<ProjectFormProps, ProjectFormState> {
     const style = Object.assign({}, this.props.style, { padding: '10px' })
     return (
       <form className='project' style={style} onSubmit={this.props.handleSubmit}>
-        { false && <Field component="input" name="name"></Field> }
-        { true && <Field component={Text} name="name" label={"name"}></Field> }
-        <Field component={Select} name="permissionLevel" label={"permissionLevel"} options={ProjectForm.options}></Field>
+        { false && <Field component='input' name='name'></Field> }
+        { true && <Field component={Text} name='name' label={'name'}></Field> }
+        <Field component={Select} name='permissionLevel' label={'permissionLevel'} options={ProjectForm.options}></Field>
         <footer style={{ marginTop: '10px' }}>
-          <Button type="submit" variant="contained" color="primary" style={{ width: '100px'}}>OK</Button>
-          <Button type="button" color="secondary" style={{ width: '100px', marginLeft: '10px' }} onClick={this.props.onClose}>CANCEL</Button>
+          <Button type='submit' variant='contained' color='primary' style={{ width: '100px'}}>OK</Button>
+          <Button type='button' color='secondary' style={{ width: '100px', marginLeft: '10px' }} onClick={this.props.onClose}>CANCEL</Button>
         </footer>
       </form>
     );

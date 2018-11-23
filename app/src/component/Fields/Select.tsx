@@ -16,7 +16,7 @@ class Select extends Component<MergedProps, any> {
   render() {
     return (
       <div style={{ marginTop: '5px' }}>
-        {this.props.label && <p style={{color: "rgba(0, 0, 0, 0.54)"}}>{this.props.label}</p> }
+        {this.props.label && <p style={{color: 'rgba(0, 0, 0, 0.54)'}}>{this.props.label}</p> }
         <MuiSelect  autoWidth={true} {...this.props.input}>
           {this.renderOptions()}
         </MuiSelect>

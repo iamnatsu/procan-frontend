@@ -1,7 +1,7 @@
 import { Record, List, Map, fromJS } from 'immutable';
 
 const MessageDialogRecord = Record({ isShow: false, isConfirmShow: false, title: '', messageList: List(), modalAction: null, confirmAction: null, actionMap: Map() });
-export type MessageDialogActionMap = { [k:string]: { action: () => void, caption: string, color: "inherit" | "primary" | "secondary" | "default" | undefined } };
+export type MessageDialogActionMap = { [k:string]: { action: () => void, caption: string, color: 'inherit' | 'primary' | 'secondary' | 'default' | undefined } };
 
 export default class MessageDialogStore extends MessageDialogRecord {
 

@@ -7,7 +7,7 @@ import { MuiThemeProvider} from '@material-ui/core/styles';
 import { TextField, Button } from '@material-ui/core';
 import { AppState } from 'src/redux';
 import * as RegistService from '../../service/RegistService'
-import { MessageDialogDispatcher } from "../../redux/component/MessageDialog/MessageDialogDispatcher";
+import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
 import { topMuiTheme } from '../../config/Theme';
 
 export interface ReactProps extends RouteComponentProps<any> { }
@@ -40,14 +40,14 @@ export class Prepare extends React.Component<MergedProps, LoginState> {
     if (this.state.loading) return null;
     return (
       <MuiThemeProvider theme={topMuiTheme}>
-        <div style={{ width: '100vw', height: '100vh', backgroundColor: "#88C542"}}>
+        <div style={{ width: '100vw', height: '100vh', backgroundColor: '#88C542'}}>
           <div style={{ width: 400, margin: 'auto', paddingTop: 'calc(50vh - 175px)'}}>
             <h2 style={{ color: 'white' }}>Procan</h2>
             <form onSubmit={this.handlePrepare.bind(this)} style={{ padding: 20 }}>
               <TextField autoComplete='off' id='email' label='email' fullWidth={true} InputLabelProps={{ shrink: true }} autoFocus={true} style={{marginBottom: 20}} onChange={this.handleChange}/>
-              <div style={{ textAlign: 'right', marginTop: 15 }}><Button variant="contained" type='submit' fullWidth disabled={this.state.isSubmitting} >Sign Up (Send Mail)</Button></div>
+              <div style={{ textAlign: 'right', marginTop: 15 }}><Button variant='contained' type='submit' fullWidth disabled={this.state.isSubmitting} >Sign Up (Send Mail)</Button></div>
             </form>
-            <a href="#/login" style={{ color: 'white', display: 'block', textAlign: 'center', textDecoration: 'none' }}>Sign In</a>
+            <a href='#/login' style={{ color: 'white', display: 'block', textAlign: 'center', textDecoration: 'none' }}>Sign In</a>
           </div>
         </div>
       </MuiThemeProvider>

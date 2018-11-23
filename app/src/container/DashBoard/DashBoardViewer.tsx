@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { AppState } from '../../redux/index';
-import { RouteComponentProps } from "react-router";
+import { RouteComponentProps } from 'react-router';
 import { withNamespaces, TransProps } from 'react-i18next';
 import Modal from '@material-ui/core/Modal';
 import * as AuthService from '../../service/AuthService'
@@ -66,9 +66,9 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
     return (
       <div style={style}>
         <div style={{height: '100%', width:'300px', padding: '10px', backgroundColor:'ivory', float: 'left'}}>
-          <p><Button onClick={this.handleOpenProjectModal.bind(this)} color="primary">プロジェクトを作成する</Button></p>
-          <p><Button color="primary">グループを作成する</Button></p>
-          <p><Button color="primary">{t('Welcome to React')}</Button></p>
+          <p><Button onClick={this.handleOpenProjectModal.bind(this)} color='primary'>プロジェクトを作成する</Button></p>
+          <p><Button color='primary'>グループを作成する</Button></p>
+          <p><Button color='primary'>{t('Welcome to React')}</Button></p>
         </div>
         <div style={{height: '100%', width:'calc(100% - 300px)', padding: '10px', backgroundColor:'lightblue', float: 'left'}}>
           { projects && projects.size > 0 && (
@@ -76,8 +76,8 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
           )}
         </div>
         <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
+          aria-labelledby='simple-modal-title'
+          aria-describedby='simple-modal-description'
           open={this.props.dashboard.isShowProjectModal()}
           onClose={this.handleCloseProjectModal.bind(this)}
         >
@@ -98,12 +98,12 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
         <Card className={classes.card} key={pr.id}>
           <CardActionArea className={classes.action} onClick={ (event) => { this.transitionProject(pr.id); } }>
             <CardContent>
-                <Typography component="p">
+                <Typography component='p'>
                   { pr.name }
                 </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" onClick={ (event) => {event.stopPropagation(); this.deleteProjectConfirm(pr.id)} }>Learn More</Button>
+              <Button size='small' onClick={ (event) => {event.stopPropagation(); this.deleteProjectConfirm(pr.id)} }>Learn More</Button>
             </CardActions>
           </CardActionArea>
         </Card>
