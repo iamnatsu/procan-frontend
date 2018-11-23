@@ -6,7 +6,7 @@ import { ActionType } from 'src/redux/ActionType';
 export const MessageDialogReducer: Reducer<Store> = (state = new Store(), action) => {
   switch (action.type) {
     case ActionType.MessageDialogUpdateAction:
-      return state.setModal(action.isShow, action.title, action.message, action.action);
+      return state.setModal(action.isShow, action.title, action.message, action.action, action.actionMap);
     case ActionType.MessageDialogUpdateIsShowAction:
       return state.setIsShow(action.isShow);
       /*

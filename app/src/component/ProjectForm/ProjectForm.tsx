@@ -15,7 +15,6 @@ export interface OwnProps extends React.Props<InjectedFormProps> {
   onSubmit?: any;
 }
 export interface ProjectFormState {
-  openPasswordDialog: boolean;
 }
 
 //type MergedOwnProps = OwnProps;
@@ -40,10 +39,7 @@ class ProjectForm extends React.Component<ProjectFormProps, ProjectFormState> {
         </footer>
       </form>
     );
-  }
-
-
-  
+  } 
 }
 
 interface StateProps {
@@ -56,7 +52,7 @@ interface DispatchProps {
 function mapStateToProps(state: AppState) {
   return {
     dashboard: state.dashboard,
-    initialValues: state.dashboard.getProject().toJS() // { name: "hoge"}
+    initialValues: state.dashboard.getProject().toJS()
   };
 }
 function mapDispatchToProps(dispatch: any) {

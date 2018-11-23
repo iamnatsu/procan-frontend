@@ -1,9 +1,10 @@
 import { createMuiTheme } from '@material-ui/core/styles';
+import { MAIN_COLOR, ACCENT_COLOR/*, ACCENT_COLOR, GREY*/ } from './Color';
 
 export const topMuiTheme = createMuiTheme({
   palette: {
     primary: {
-      main: "#fff"
+      main: '#fff'
     }
   },
   typography: {
@@ -13,7 +14,7 @@ export const topMuiTheme = createMuiTheme({
     MuiButton: {
       contained: {
         color: '#88C542',
-        backgroundColor: "white"
+        backgroundColor: 'white'
       }
     },
     MuiInputLabel: {
@@ -23,8 +24,8 @@ export const topMuiTheme = createMuiTheme({
     },
     MuiFormLabel: {
       focused: {
-        "&$focused": {
-          color: "white"
+        '&$focused': {
+          color: 'white'
         }
       }
     },
@@ -47,5 +48,41 @@ export const topMuiTheme = createMuiTheme({
         },
       }
     },
+  }
+});
+
+export const appTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: ACCENT_COLOR
+    }
+  },
+  typography: {
+    useNextVariants: true,
+  },
+  overrides: {
+    MuiAppBar: {
+      root: {
+        boxShadow: 'none !important',
+      }
+    },
+    MuiButton: {
+      contained: {
+        color: 'white',
+        backgroundColor: MAIN_COLOR
+      }
+    },
+    MuiToolbar: {
+      regular: {
+        '@media (min-width: 600px)': {
+          minHeight: '50px'
+        }
+      },
+    },
+    MuiBackdrop: {
+      root: {
+        backgroundColor: 'rgba(0, 0, 0, 0.2)'
+      }
+    }
   }
 });

@@ -1,12 +1,13 @@
 import { MessageDialogUpdateAction, MessageDialogUpdateIsShowAction } from './MessageDialogActionCreator';
+import { MessageDialogActionMap } from './MessageDialogStore';
 
 export class MessageDialogDispatcher {
   constructor(public dispatch: (action: any) => any) {
     this.dispatch = dispatch
   }
 
-  showMessage(title: string, message: Array<any>, action = () => {}) {
-    this.dispatch(MessageDialogUpdateAction(true, title, message, action));
+  showMessage(title: string, message: Array<any>, action = () => {}, actionMap?: MessageDialogActionMap) {
+    this.dispatch(MessageDialogUpdateAction(true, title, message, action, actionMap));
   }
 
   closeMessage() {

@@ -1,6 +1,8 @@
 import { ActionType } from '../../ActionType';
+import { MessageDialogActionMap } from './MessageDialogStore';
 
-export const MessageDialogUpdateAction = (isShow: boolean, title: string, message: Array<any>, action = {}) => ({ type: ActionType.MessageDialogUpdateAction, isShow, title, message, action });
+export const MessageDialogUpdateAction = (isShow: boolean, title: string, message: Array<any>, action = {}, actionMap?: MessageDialogActionMap) =>
+                                               ({ type: ActionType.MessageDialogUpdateAction, isShow, title, message, action, actionMap });
 export const MessageDialogUpdateIsShowAction = (isShow: boolean) => ({ type: ActionType.MessageDialogUpdateIsShowAction, isShow });
 
 /*

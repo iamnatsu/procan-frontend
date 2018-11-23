@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@material-ui/core';
 import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
-import MessageDialogStore from '../../redux/component/MessageDialog/MessageDialogStore';
+import MessageDialogStore, { MessageDialogActionMap } from '../../redux/component/MessageDialog/MessageDialogStore';
 import { AppState } from 'src/redux';
 
 export interface StateProps {
@@ -12,8 +12,8 @@ export interface DispatchProps {
   actions: MessageDialogDispatcher;
 }
 type MessageDialogProps = StateProps & DispatchProps;
-export interface MessageDialogState {
-}
+
+export interface MessageDialogState {}
 
 export class MessageDialog extends React.Component<MessageDialogProps, MessageDialogState> {
   constructor(props: any) {
@@ -69,9 +69,19 @@ export class MessageDialog extends React.Component<MessageDialogProps, MessageDi
   }
 
   renderActions() {
-    return [
+    const buttons: any = [];
+    buttons.push(
       <Button key='close' onClick={this.closeAction.bind(this)} autoFocus>close</Button>
-    ];
+    );
+    const actionMap: MessageDialogActionMap = this.props.MessageDialog.getActionMap().toJS();
+    if (actionMap && Object.keys(actionMap).length > 0) {
+      Object.keys(actionMap).forEach(k => {
+        buttons.push(
+          <Button key={k} onClick={actionMap[k].action.bind(this)} color={actionMap[k].color} >{actionMap[k].caption}</Button>
+        );
+      })
+    }
+    return buttons;
   }
 
   closeAction() {
