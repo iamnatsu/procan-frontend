@@ -24,11 +24,15 @@ import { StyledComponentProps, ClassNameMap, CSSProperties } from '@material-ui/
 import { MessageDialogState } from '../../redux/component/MessageDialog/MessageDialogReducer';
 import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
 
+import Popover from '@material-ui/core/Popover';
+import TextField from '@material-ui/core/TextField';
+
 export interface DashBoardProps extends RouteComponentProps<any> {
 }
 
 export interface DashBoardViewerState extends React.Props<any> {
   toggleDrawer: boolean;
+  anchorEl: HTMLElement |  null;
 }
 
 type MergedProps = StateProps & DispatchProps & DashBoardProps & StyledComponentProps & TransProps;
@@ -37,7 +41,8 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      toggleDrawer: false
+      toggleDrawer: false,
+      anchorEl: null
     }
   }
 
@@ -52,7 +57,9 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
   }
 
   render() {
-    const { t } = this.props;
+    const { t, classes } = this.props;
+    const { anchorEl } = this.state;
+    const openGroup = Boolean(anchorEl);
     const style = { width: '100vw', height: 'calc(100vh - 50px)' };
     const modalStyle: React.CSSProperties = {
       top: '15vh',
@@ -63,11 +70,13 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
       position: 'absolute'
     }
     const projects = this.props.dashboard.getProjects();
+    if (!classes) return;
+    console.dir(classes);
     return (
       <div style={style}>
         <div style={{height: '100%', width:'300px', padding: '10px', backgroundColor:'ivory', float: 'left'}}>
           <p><Button onClick={this.handleOpenProjectModal.bind(this)} color='primary'>プロジェクトを作成する</Button></p>
-          <p><Button color='primary'>グループを作成する</Button></p>
+          <p><Button color='primary' onClick={this.handleGroupOpen.bind(this)}>グループを作成する</Button></p>
           <p><Button color='primary'>{t('Welcome to React')}</Button></p>
         </div>
         <div style={{height: '100%', width:'calc(100% - 300px)', padding: '10px', backgroundColor:'lightblue', float: 'left'}}>
@@ -85,6 +94,28 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
             <ProjectForm onSubmit={this.handleSubmitProject.bind(this)} onClose={this.handleCloseProjectModal.bind(this)}></ProjectForm>
           </div>
         </Modal>
+        <Popover
+          //className={this.props.classes ? this.props.classes.popover : ''}
+          classes={{
+            paper: classes.paper
+          }}
+          id="simple-popper"
+          open={openGroup}
+          anchorEl={anchorEl}
+          onClose={this.handleGroupClose.bind(this)}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <Typography >The content of the Popover.</Typography>
+          <TextField fullWidth={true} />
+          <Button color='primary'>Test</Button>
+        </Popover>
       </div>
     );
   }
@@ -140,6 +171,18 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
 
   handleCloseProjectModal() {
     this.props.action.dashboard.closeProjectModal();
+  }
+
+  handleGroupOpen(event: React.MouseEvent<HTMLElement>) {
+    this.setState(Object.assign({}, this.state, {
+      anchorEl: event.currentTarget,
+    }));
+  }
+
+  handleGroupClose() {
+    this.setState(Object.assign({}, this.state, {
+      anchorEl: null,
+    }));
   }
 
   logout() {
@@ -203,6 +246,12 @@ const styles: Record<string, CSSProperties> = {
   pos: {
     marginBottom: 12,
   },
+  paper: {
+    minWidth: 300,
+    maxWidth: 300,
+    maxHeight: 200,
+    minHeight: 200,
+  }
 };
 
 const i18n = withNamespaces()(DashBoard)

@@ -6,10 +6,12 @@ import { ProjectState } from '../../redux/Project/ProjectReducer';
 import { ProjectDispatcher } from '../../redux/Project/ProjectDispatcher';
 import { MessageDialogState } from '../../redux/component/MessageDialog/MessageDialogReducer';
 import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
+import { TaskFormDispatcher } from '../../redux/component/TaskForm/TaskFormDispatcher';
 import { DragSource, DragSourceSpec, DragSourceMonitor, DragSourceCollector, DragSourceConnector, ConnectDragSource,
   DropTargetCollector, DropTargetConnector, DropTargetMonitor, DropTarget, ConnectDropTarget, DropTargetSpec, ConnectDragPreview } from 'react-dnd';
   import { getEmptyImage } from 'react-dnd-html5-backend'
 import { ItemTypes } from '../../config/DnDItemType';
+import { Task } from '../../model/task';
 /*
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -90,8 +92,17 @@ class TaskCard extends React.Component<MergedProps, TaskCardState> {
     const handleStyle: React.CSSProperties  = { backgroundColor: 'lightgray', margin: '10px', width: 'calc(100% - 56px)', height: '24px', fontSize:'14px',
             borderRadius: '3px', padding:'5px', float: 'left', cursor: 'move', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'};
             */
-    return connectDropTarget(connectDragSource(<div style={style}>{this.props.name + ':' + this.props.beforePos+ ':' + this.props.pos+ ':' + this.props.nextPos}</div>));
+    return connectDropTarget(
+      connectDragSource(<div className="task-cardß" onClick={this.handleClick.bind(this)} style={style}>
+        {this.props.name + ':' + this.props.beforePos+ ':' + this.props.pos+ ':' + this.props.nextPos}</div>));
+  }
 
+  handleClick() {
+    const task = new Task();
+    task.id = this.props.id;
+    task.name = this.props.name;
+    this.props.action.taskForm.updateTask(task);
+    this.props.action.project.showTaskModal();
   }
 }
 
@@ -104,6 +115,7 @@ interface StateProps {
 interface DispatchProps {
   action: {
     project: ProjectDispatcher,
+    taskForm: TaskFormDispatcher,
     messageDialog: MessageDialogDispatcher
   };
 }
@@ -119,6 +131,7 @@ function mapDispatchToProps(dispatch: any) {
   return {
     action: {
       project: new ProjectDispatcher(dispatch),
+      taskForm: new TaskFormDispatcher(dispatch),
       messageDialog: new MessageDialogDispatcher(dispatch),
     }
   };
