@@ -71,7 +71,6 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
     }
     const projects = this.props.dashboard.getProjects();
     if (!classes) return;
-    console.dir(classes);
     return (
       <div style={style}>
         <div style={{height: '100%', width:'300px', padding: '10px', backgroundColor:'ivory', float: 'left'}}>

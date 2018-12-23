@@ -1,12 +1,16 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import {  reduxForm, InjectedFormProps, Field } from 'redux-form';
+import {  reduxForm, InjectedFormProps, Field, FieldArray } from 'redux-form';
 import { AppState } from 'src/redux/index';
 import { FormName } from '../../config/FormName';
-import { Task} from '../../model/task';
+import { Task } from '../../model/task';
 import { TaskFormState as _TaskFormState } from 'src/redux/component/TaskForm/TaskFormReducer';
 import Text from '../Fields/Text';
+import Select from '../Fields/Select';
 import { Button } from '@material-ui/core';
+import { ProjectState } from 'src/redux/Project/ProjectReducer';
+import { Project } from 'src/model/project';
+import UserSelector from '../UserSelector/UserSelector';
 
 export interface OwnProps extends React.Props<InjectedFormProps> {
   style?: React.CSSProperties;
@@ -19,11 +23,14 @@ type TaskFormProps = OwnProps & InjectedFormProps<Task, OwnProps, TaskFormState>
 
 class TaskForm extends React.Component<TaskFormProps, TaskFormState> {
   render(): JSX.Element { 
+    const project: Project = this.props.project.getProject().toJS();
     const style = Object.assign({}, this.props.style, { padding: '10px' })
     return (
       <form autoComplete='off' className='task' style={style} onSubmit={this.props.handleSubmit}>
-        <Field autoComplete='off' component={Text} name='name' label={'name'}></Field>
-        <Field component={Text} name='statusId' label={'status'}></Field>
+        <Field autoComplete='off' component={Text} name='name' label={'name'} autoFocus></Field>
+    {/*false && <Field component={Text} name='statusId' label={'status'}></Field> */}
+        <Field component={Select} name='statusId' label={'statusId'} options={this.toOptions(project.statuses)}></Field>
+        <FieldArray component={UserSelector} name='assignees'></FieldArray>
         <footer style={{ marginTop: '10px' }}>
           <Button type='submit' variant='contained' color='primary' style={{ width: '100px'}}>OK</Button>
           <Button type='button' color='secondary' style={{ width: '100px', marginLeft: '10px' }} onClick={this.props.onClose}>CANCEL</Button>
@@ -31,19 +38,27 @@ class TaskForm extends React.Component<TaskFormProps, TaskFormState> {
       </form>
     );
   }
+
+  toOptions(statuses: Project['statuses']) {
+    return statuses.map(status => { return { value: status.id, caption: status.name } });
+  }
 }
 
 interface StateProps {
   taskForm: _TaskFormState
+  project: ProjectState
 }
 
 interface DispatchProps {
 }
 
 function mapStateToProps(state: AppState) {
+  const task = state.component.taskForm.getTask().toJS();
+  task.assignees = [{id: '1'}, {id: '2'}]
   return {
     taskForm: state.component.taskForm,
-    initialValues: state.component.taskForm.getTask().toJS()
+    project: state.project,
+    initialValues: task //state.component.taskForm.getTask().toJS()
   };
 }
 function mapDispatchToProps(dispatch: any) {

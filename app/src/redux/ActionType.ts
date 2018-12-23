@@ -3,6 +3,11 @@ export const enum ActionType {
   MessageDialogUpdateAction = 'MessageDialogUpdateAction',
   MessageDialogUpdateIsShowAction = 'MessageDialogUpdateIsShowAction',
 
+  // UserSelector
+  UserSelectorUpdateIsShowAction = 'UserSelectorUpdateIsShowAction',
+  UserSelectorUpdateCandidates = 'UserSelectorUpdateCandidates',
+  UserSelectorUpdateSelections = 'UserSelectorUpdateSelections',
+  
   // TaskFormUpdateIsShowAction = 'TaskFormUpdateIsShowAction',
   TaskFormUpdateTask = 'TaskFormUpdateTask',
 

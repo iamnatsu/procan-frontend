@@ -17,7 +17,6 @@ export interface OwnProps extends React.Props<InjectedFormProps> {
 export interface ProjectFormState {
 }
 
-//type MergedOwnProps = OwnProps;
 type ProjectFormProps = OwnProps & InjectedFormProps<Project, OwnProps, ProjectFormState> & DispatchProps & StateProps;
 
 class ProjectForm extends React.Component<ProjectFormProps, ProjectFormState> {

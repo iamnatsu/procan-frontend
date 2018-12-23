@@ -11,7 +11,9 @@ import { DragSource, DragSourceSpec, DragSourceMonitor, DragSourceCollector, Dra
   DropTargetCollector, DropTargetConnector, DropTargetMonitor, DropTarget, ConnectDropTarget, DropTargetSpec, ConnectDragPreview } from 'react-dnd';
   import { getEmptyImage } from 'react-dnd-html5-backend'
 import { ItemTypes } from '../../config/DnDItemType';
-import { Task } from '../../model/task';
+//import { Task } from '../../model/task';
+import * as TaskService from '../../service/TaskService';
+
 /*
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -93,16 +95,15 @@ class TaskCard extends React.Component<MergedProps, TaskCardState> {
             borderRadius: '3px', padding:'5px', float: 'left', cursor: 'move', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'};
             */
     return connectDropTarget(
-      connectDragSource(<div className="task-cardß" onClick={this.handleClick.bind(this)} style={style}>
+      connectDragSource(<div className="task-card" onClick={this.handleClick.bind(this)} style={style}>
         {this.props.name + ':' + this.props.beforePos+ ':' + this.props.pos+ ':' + this.props.nextPos}</div>));
   }
 
   handleClick() {
-    const task = new Task();
-    task.id = this.props.id;
-    task.name = this.props.name;
-    this.props.action.taskForm.updateTask(task);
-    this.props.action.project.showTaskModal();
+    TaskService.get(this.props.id).then(res => {
+      this.props.action.taskForm.updateTask(res.data);
+      this.props.action.project.showTaskModal();
+    });
   }
 }
 
@@ -180,7 +181,6 @@ const dropTarget: DropTargetSpec<any> = {
 		if (!component) {
 			return null;
     }
-
     
     if (!monitor.getItem() || !props) {
       return null;

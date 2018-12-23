@@ -4,15 +4,18 @@ import { reducer as reduxFormReducer } from 'redux-form';
 import { LoginReducer, LoginState } from './Login/LoginReducer';
 import { DashBoardReducer, DashBoardState } from './DashBoard/DashBoardReducer';
 import { MessageDialogReducer, MessageDialogState } from './component/MessageDialog/MessageDialogReducer';
+import { UserSelectorReducer, UserSelectorState } from './component/UserSelector/UserSelectorReducer';
 import { TaskFormReducer, TaskFormState } from './component/TaskForm/TaskFormReducer';
 import { ProjectState, ProjectReducer } from './Project/ProjectReducer';
 
 export interface AppComponentState {
   messageDialog: MessageDialogState,
+  userSelector: UserSelectorState,
   taskForm: TaskFormState,
 }
 const component = combineReducers<AppComponentState>({
   messageDialog: MessageDialogReducer,
+  userSelector: UserSelectorReducer,
   taskForm: TaskFormReducer,
 });
 
