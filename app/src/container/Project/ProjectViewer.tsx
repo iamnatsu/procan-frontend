@@ -13,7 +13,7 @@ import ProjectCustomDragLayer from './ProjectCustomDragLayer';
 import TaskForm from '../../component/TaskForm/TaskForm';
 import { Task } from '../../model/task';
 import Modal from '@material-ui/core/Modal';
-//import * as ProjectService from '../../service/ProjectService'
+import { MODAL_STYLE } from '../../config/Style' 
 
 export interface ProjectViewerProps extends RouteComponentProps<any> { }
 export interface ProjectViewerState extends React.Props<any> { }
@@ -32,14 +32,7 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
     const style = { width: '100vw', height: 'calc(100vh - 50px)' };
     const innerHeader = { width: '100vw', height: '30px', backgroundColor: 'lightblue' };
     const innerBody = { width: '100vw', height: 'calc(100% - 30px)', backgroundColor: 'ivory' };
-    const modalStyle: React.CSSProperties = {
-      top: '15vh',
-      left: '25vw',
-      width: '50vw',
-      height: '70vh',
-      backgroundColor: 'white',
-      position: 'absolute'
-    }
+
     return (
       <div style={style}>
         <div style={innerHeader}>{this.props.project.getProject().get('name')}</div>
@@ -53,7 +46,7 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
           open={this.props.project.isShowTaskModal()}
           onClose={this.handleCloseTaskModal.bind(this)}
         >
-          <div style={modalStyle} >
+          <div style={MODAL_STYLE} >
             <TaskForm onSubmit={this.handleSubmitTask.bind(this)} onClose={this.handleCloseTaskModal.bind(this)} />
           </div>
         </Modal>
@@ -62,18 +55,24 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
   }
 
   handleSubmitTask(values: Task) {
-    values.projectId = this.props.project.getProject().get('id');
-    let boardPos = 10000;
-    this.props.project.getTasks()
-      .filter(t => !!t && t.statusId === values.statusId)
-      .sort(this.taskComparator)
-      .forEach(t => {
-        if (!t) return;
-        const pos = t.boardPos / 2;
-        if (boardPos > pos) boardPos = pos;
-      });
-    values.boardPos = boardPos;
-    this.props.action.project.addTask(values);
+    if (!values.id) {
+      values.projectId = this.props.project.getProject().get('id');
+      let boardPos = 10000;
+      this.props.project.getTasks()
+        .filter(t => !!t && t.statusId === values.statusId)
+        .sort(this.taskComparator)
+        .forEach(t => {
+          if (!t) return;
+          const pos = t.boardPos / 2;
+          if (boardPos > pos) boardPos = pos;
+        });
+      values.boardPos = boardPos;
+      this.props.action.project.addTask(values);
+    } else {
+      console.dir("update task");
+      console.dir(values);
+      // TODO
+    }
     this.handleCloseTaskModal();
   }
 

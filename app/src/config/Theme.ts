@@ -83,6 +83,11 @@ export const appTheme = createMuiTheme({
       root: {
         backgroundColor: 'rgba(0, 0, 0, 0.2)'
       }
+    },
+    MuiPopover: {
+      paper: {
+        padding: 10
+      }
     }
   }
 });

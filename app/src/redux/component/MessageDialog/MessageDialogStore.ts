@@ -42,7 +42,7 @@ export default class MessageDialogStore extends MessageDialogRecord {
       .update('title', (old: string) => old = title)
       .update('messageList', (old: List<any>) => old = fromJS(messageList))
       .update('modalAction', (old: () => void) => old = action)
-      .update('actionMap', (old: Map<string, any>) => old = fromJS(actionMap)) as this;
+      .update('actionMap', (old: Map<string, any>) => old = fromJS(actionMap ? actionMap: {})) as this;
   }
 
   getModalAction() {

@@ -61,7 +61,7 @@ class ProjectBoard extends React.Component<MergedProps, ProjectBoardState> {
     return <span>{ connectDropTarget(
       <div style={style}>
         <CustomScrollbars renderThumbHorizontal={this.renderThumbHorizontal.bind(this)}>
-          <div style={{height: '100%', width: statusCount * (250 + 10) + 190}}>
+          <div style={{height: '100%', width: statusCount * (250 + 10) + 300}}>
             { this.renderProjectStatuses(project.toJS()) }
             <p><Button onClick={this.handleOpenStatus.bind(this)} color='primary'>ステータス（リスト）を追加</Button></p>
           </div>
