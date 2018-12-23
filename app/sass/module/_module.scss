@@ -1,3 +1,17 @@
-.taskCard:hover {
+.task-card:hover {
   background-color: whitesmoke !important;
+}
+
+.candidate {
+  padding: 0 5px;
+  font-size: 14px;
+  height: 40px;
+  line-height: 40px;
+  &.selected {
+    background-color: lightgray !important;
+  }
+}
+
+.candidate:hover {
+  background-color: whitesmoke;
 }
