@@ -6,11 +6,11 @@ export class UserSelectorDispatcher {
     this.dispatch = dispatch
   }
 
-  show(anchorEl: HTMLElement) {
-    this.dispatch(UserSelectorUpdateIsShowAction(true, anchorEl));
+  show(anchorEl: HTMLElement, onSubmit: () => void) {
+    this.dispatch(UserSelectorUpdateIsShowAction(true, anchorEl, onSubmit));
   }
   close() {
-    this.dispatch(UserSelectorUpdateIsShowAction(false, null));
+    this.dispatch(UserSelectorUpdateIsShowAction(false, null, () => {}));
   }
 
   updateCandidate(candidates: User[]) {

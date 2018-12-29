@@ -80,7 +80,9 @@ class UserSelector extends Component<MergedProps, UserSelectorState> {
 
   handleSubmit() {
     this.props.actions.close();
-    if (this.props.onSubmit) this.props.onSubmit(this.props.userSelector.getSelections().toJS());
+    if (this.props.userSelector.get('onSubmit')) {
+      this.props.userSelector.get('onSubmit')(this.props.userSelector.getSelections().toJS());
+    }
   }
 
   handleClose() {

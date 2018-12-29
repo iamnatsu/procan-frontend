@@ -63,7 +63,7 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
             <TaskForm onSubmit={this.handleSubmitTask.bind(this)} onClose={this.handleCloseTaskModal.bind(this)} />
           </div>
         </Modal>
-        <UserSelector onSubmit={this.handleUserSelect.bind(this) }/>
+        <UserSelector />
       </div>
     );
   }
@@ -71,16 +71,15 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
   renderAvatar(assignees: User[]) {
     if (!assignees || assignees.length <=0) return;
     return assignees.map(a => {
-      return <Avatar style={{ width: 28, height: 28, float: 'left', fontSize: '16px'}}>{a.name.substr(0, 1)}</Avatar>
+      return <Avatar key={a.id} style={{ width: 28, height: 28, float: 'left', fontSize: '16px'}}>{a.name.substr(0, 1)}</Avatar>
     })
   }
 
   handleOpenUserSelector(event: React.MouseEvent<HTMLInputElement>) {
-    this.props.action.userSelector.show(event.target as any);
+    this.props.action.userSelector.show(event.target as any, this.handleUserSelect.bind(this));
   }
 
   handleUserSelect(users: { [id: string]: User }) {
-    console.dir(users)
     const project: Project = this.props.project.getProject().toJS();
     if (!project.assignees) project.assignees = [];
     Object.keys(users).forEach(k => {
@@ -90,7 +89,6 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
     });
     this.props.action.project.updateProject(project);
   }
-
 
   handleSubmitTask(values: Task) {
     if (!values.id) {
@@ -107,9 +105,7 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
       values.boardPos = boardPos;
       this.props.action.project.addTask(values);
     } else {
-      console.dir("update task");
-      console.dir(values);
-      // TODO
+      this.props.action.project.updateTask(values);
     }
     this.handleCloseTaskModal();
   }
