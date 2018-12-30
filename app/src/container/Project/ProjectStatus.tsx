@@ -47,6 +47,11 @@ class ProjectStatus extends React.Component<MergedProps, ProjectStatusState> {
   }
   shouldComponentUpdate(nextProps: ProjectStatusProps, nextState: ProjectStatusState) {
     return true;
+    /*
+    return this.props.id != nextProps.id ||
+      this.props.name != nextProps.name ||
+      this.props.pos != nextProps.pos;
+      */
   }
 
   componentDidMount() {

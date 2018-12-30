@@ -28,9 +28,8 @@ class TaskForm extends React.Component<TaskFormProps, TaskFormState> {
     return (
       <form autoComplete='off' className='task' style={style} onSubmit={this.props.handleSubmit}>
         <Field autoComplete='off' component={Text} name='name' label={'name'} autoFocus></Field>
-    {/*false && <Field component={Text} name='statusId' label={'status'}></Field> */}
         <Field component={Select} name='statusId' label={'statusId'} options={this.toOptions(project.statuses)}></Field>
-        <FieldArray component={Assignee} name='assignees'></FieldArray>
+        <FieldArray component={Assignee} name='assignees' label='assignees'></FieldArray>
         <footer style={{ marginTop: '10px' }}>
           <Button type='submit' variant='contained' color='primary' style={{ width: '100px'}}>OK</Button>
           <Button type='button' color='secondary' style={{ width: '100px', marginLeft: '10px' }} onClick={this.props.onClose}>CANCEL</Button>

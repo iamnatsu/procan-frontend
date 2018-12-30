@@ -11,17 +11,7 @@ import { DragSource, DragSourceSpec, DragSourceMonitor, DragSourceCollector, Dra
   DropTargetCollector, DropTargetConnector, DropTargetMonitor, DropTarget, ConnectDropTarget, DropTargetSpec, ConnectDragPreview } from 'react-dnd';
   import { getEmptyImage } from 'react-dnd-html5-backend'
 import { ItemTypes } from '../../config/DnDItemType';
-//import { Task } from '../../model/task';
 import * as TaskService from '../../service/TaskService';
-
-/*
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import IconButton from '@material-ui/core/IconButton';
-import MoreVert from '@material-ui/icons/MoreVert';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { default as CustomScrollbars } from 'react-custom-scrollbars';
-*/
 
 export interface TaskCardProps { 
   id: string;
@@ -39,20 +29,22 @@ export interface TaskCardProps {
   handleMoveTask: (srcTaskId: string, distStatusId: string, distBoardPos: number) => void;
 }
 export interface TaskCardState {
-  anchorEl: HTMLAnchorElement | null;
 }
 
 type MergedProps = StateProps & DispatchProps & TaskCardProps & StyledComponentProps;
 
 class TaskCard extends React.Component<MergedProps, TaskCardState> {
-  constructor(props: MergedProps) {
-    super(props);
-    this.state = {
-      anchorEl: null
-    }
-  }
+
   shouldComponentUpdate(nextProps: TaskCardProps, nextState: TaskCardState) {
-    return true;
+//    return true;
+    return this.props.id != nextProps.id ||
+      this.props.name != nextProps.name ||
+      this.props.statusId != nextProps.statusId ||
+      this.props.pos != nextProps.pos || 
+      this.props.isOver != nextProps.isOver || 
+      this.props.isDragging != nextProps.isDragging ||
+      this.props.draggingItemId != nextProps.draggingItemId 
+      ;   
   }
 
   componentDidMount() {
@@ -63,18 +55,6 @@ class TaskCard extends React.Component<MergedProps, TaskCardState> {
 
   componentWillMount() {
   }
-
-  handleMenuClose = () => {
-    this.setState({ anchorEl: null });
-  };
-
-  addTask = () => {
-    this.setState({ anchorEl: null });
-  };
-
-  handleProfileMenuOpen = (event: any) => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
 
   render() {
     const { connectDropTarget, connectDragSource, connectDragPreview } = this.props;

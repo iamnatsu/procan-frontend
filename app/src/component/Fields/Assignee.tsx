@@ -5,6 +5,7 @@ import { User } from '../../model/user'
 import { Button, Avatar } from '@material-ui/core';
 import UserSelector from '../../component/UserSelector/UserSelector'
 import { UserSelectorDispatcher } from '../../redux/component/UserSelector/UserSelectorDispatcher';
+import Label from './Lable'
 
 export interface AssigneeProps {
   label: string;
@@ -15,6 +16,7 @@ class Assignee extends Component<MergedProps, any> {
   render() {
     return (
       <div style={{ marginTop: '5px' }}>
+        <Label caption={this.props.label} />
         { this.renderAvatar() }
         <UserSelector />
         <Button onClick={this.handleOpenUserSelector.bind(this)}>+</Button>

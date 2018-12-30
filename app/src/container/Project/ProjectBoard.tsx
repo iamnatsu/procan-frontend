@@ -44,7 +44,8 @@ class ProjectBoard extends React.Component<MergedProps, ProjectBoardState> {
     }
   }
 
-  componentWillMount() {
+  componentDidUpdate() {
+    this.isMoving = false;
   }
 
   render() {
@@ -57,7 +58,7 @@ class ProjectBoard extends React.Component<MergedProps, ProjectBoardState> {
     if (project.get('statuses')) {
       statusCount = project.get('statuses').length | 0;
     } 
-    const style = { width: '100%', height: '100%', backgroundColor: 'ivory' };
+    const style = { width: '100%', height: '100%', backgroundColor: 'ivory' };    this.isMoving = false;
     return <span>{ connectDropTarget(
       <div style={style}>
         <CustomScrollbars renderThumbHorizontal={this.renderThumbHorizontal.bind(this)}>
@@ -119,6 +120,8 @@ class ProjectBoard extends React.Component<MergedProps, ProjectBoardState> {
   }
 
   handleMoveStatus(dragId: string, hoverId: string) {
+    if (this.isMoving) return;
+    this.isMoving = true;
     const project: Project  = this.props.project.getProject().toJS();
     const s1 = project.statuses.find(s => s.id === dragId);
     const s2 = project.statuses.find(s => s.id === hoverId);
@@ -132,6 +135,7 @@ class ProjectBoard extends React.Component<MergedProps, ProjectBoardState> {
     project.statuses = sorted;
     this.props.action.project.updateProject(project);
   }
+  private isMoving = false;
   
   statusComparator(s1: Status, s2: Status) {
     if (s1.pos < s2.pos) return -1;
