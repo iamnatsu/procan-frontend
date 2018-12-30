@@ -47,4 +47,10 @@ export default class ProjectStore extends ProjectRecord {
     return this.set('tasks', List(tasks)) as this;
   }
 
+  updateTask(task: Task): this {
+    const tasks = this.getTasks();
+    const i = tasks.findIndex(t => !!t && t.id === task.id);
+    return this.set('tasks', tasks.set(i, task)) as this;
+  }
+
 }

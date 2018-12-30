@@ -10,7 +10,7 @@ import Select from '../Fields/Select';
 import { Button } from '@material-ui/core';
 import { ProjectState } from 'src/redux/Project/ProjectReducer';
 import { Project } from 'src/model/project';
-import UserSelector from '../UserSelector/UserSelector';
+import Assignee from '../Fields/Assignee';
 
 export interface OwnProps extends React.Props<InjectedFormProps> {
   style?: React.CSSProperties;
@@ -28,9 +28,8 @@ class TaskForm extends React.Component<TaskFormProps, TaskFormState> {
     return (
       <form autoComplete='off' className='task' style={style} onSubmit={this.props.handleSubmit}>
         <Field autoComplete='off' component={Text} name='name' label={'name'} autoFocus></Field>
-    {/*false && <Field component={Text} name='statusId' label={'status'}></Field> */}
         <Field component={Select} name='statusId' label={'statusId'} options={this.toOptions(project.statuses)}></Field>
-        <FieldArray component={UserSelector} name='assignees'></FieldArray>
+        <FieldArray component={Assignee} name='assignees' label='assignees'></FieldArray>
         <footer style={{ marginTop: '10px' }}>
           <Button type='submit' variant='contained' color='primary' style={{ width: '100px'}}>OK</Button>
           <Button type='button' color='secondary' style={{ width: '100px', marginLeft: '10px' }} onClick={this.props.onClose}>CANCEL</Button>
@@ -54,7 +53,6 @@ interface DispatchProps {
 
 function mapStateToProps(state: AppState) {
   const task = state.component.taskForm.getTask().toJS();
-  task.assignees = [{id: '1'}, {id: '2'}]
   return {
     taskForm: state.component.taskForm,
     project: state.project,

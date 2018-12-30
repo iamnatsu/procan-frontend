@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { WrappedFieldProps } from 'redux-form';
 import { Select as MuiSelect, MenuItem } from '@material-ui/core';
+import Label from './Lable'
 
 export interface SelectOption {
   caption: string;
@@ -16,7 +17,7 @@ class Select extends Component<MergedProps, any> {
   render() {
     return (
       <div style={{ marginTop: '5px' }}>
-        {this.props.label && <p style={{color: 'rgba(0, 0, 0, 0.54)'}}>{this.props.label}</p> }
+        <Label caption={this.props.label} />
         <MuiSelect  autoWidth={true} {...this.props.input}>
           {this.renderOptions()}
         </MuiSelect>

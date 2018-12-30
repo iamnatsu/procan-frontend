@@ -1,11 +1,11 @@
 import { Record, List, Map } from 'immutable';
 import { User } from '../../../model/user';
 
-const UserSelectorRecord = Record({ isShow: false, anchorEl: null, candidates: List(), selections: Map() });
+const UserSelectorRecord = Record({ isShow: false, anchorEl: null, onSubmit: () => {}, candidates: List(), selections: Map() });
 
 export default class UserSelectorStore extends UserSelectorRecord {
-  setShow(isShow: true, anchorEl: HTMLElement | null) {
-    return this.set('anchorEl', anchorEl).set('isShow', isShow) as this;
+  setShow(isShow: true, anchorEl: HTMLElement | null, onSubmit: () => {}) {
+    return this.set('anchorEl', anchorEl).set('isShow', isShow).set('onSubmit', onSubmit) as this;
   }
 
   getCandidates() {

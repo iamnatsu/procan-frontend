@@ -19,6 +19,7 @@ import { default as CustomScrollbars } from 'react-custom-scrollbars';
 import TaskCard from '../../component/Task/TaskCard';
 import { Task } from '../../model/task';
 import { Iterable } from 'immutable';
+import * as TaskService from '../../service/TaskService';
 
 export interface ProjectStatusProps { 
   id: string;
@@ -46,6 +47,11 @@ class ProjectStatus extends React.Component<MergedProps, ProjectStatusState> {
   }
   shouldComponentUpdate(nextProps: ProjectStatusProps, nextState: ProjectStatusState) {
     return true;
+    /*
+    return this.props.id != nextProps.id ||
+      this.props.name != nextProps.name ||
+      this.props.pos != nextProps.pos;
+      */
   }
 
   componentDidMount() {
@@ -137,9 +143,16 @@ class ProjectStatus extends React.Component<MergedProps, ProjectStatusState> {
     const targetTask = this.props.project.getTasks().find(t => !!t && t.id === srcTaskId);
     if (!targetTask) return;
 
-
+    const beforeStatusId = targetTask.statusId;
+    const beforeBoardPos = targetTask.boardPos;
     targetTask.statusId = distStatusId;
     targetTask.boardPos = distBoardPos;
+
+    TaskService.put(targetTask).catch(() => {
+      targetTask.statusId = beforeStatusId;
+      targetTask.boardPos = beforeBoardPos;
+      this.props.action.project.updateTasks(this.props.project.getTasks().toJS());
+    });
 
     this.props.action.project.updateTasks(this.props.project.getTasks().toJS());
   }
