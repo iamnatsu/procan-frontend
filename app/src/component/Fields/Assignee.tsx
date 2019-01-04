@@ -3,7 +3,6 @@ import { WrappedFieldArrayProps } from 'redux-form';
 import { connect } from 'react-redux';
 import { User } from '../../model/user'
 import { Button, Avatar } from '@material-ui/core';
-import UserSelector from '../../component/UserSelector/UserSelector'
 import { UserSelectorDispatcher } from '../../redux/component/UserSelector/UserSelectorDispatcher';
 import Label from './Lable'
 
@@ -18,7 +17,6 @@ class Assignee extends Component<MergedProps, any> {
       <div style={{ marginTop: '5px' }}>
         <Label caption={this.props.label} />
         { this.renderAvatar() }
-        <UserSelector />
         <Button onClick={this.handleOpenUserSelector.bind(this)}>+</Button>
       </div>
     )
@@ -32,7 +30,7 @@ class Assignee extends Component<MergedProps, any> {
   renderAvatar() {
     if (!this.props.fields.getAll()) return null;
     return this.props.fields.getAll().map(u => {
-      return <Avatar key={'task-' + u.id} style={{ width: 36, height: 36, float: 'left', fontSize: '16px'}}>
+      return <Avatar key={'task-' + u.id} style={{ width: 36, height: 36, float: 'left', fontSize: '16px', cursor: 'pointer'}}>
         {u && u.name ? u.name.substr(0, 1) : '?'}</Avatar>
     })
   }

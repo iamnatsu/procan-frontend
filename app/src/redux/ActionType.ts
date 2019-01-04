@@ -8,6 +8,9 @@ export const enum ActionType {
   UserSelectorUpdateCandidates = 'UserSelectorUpdateCandidates',
   UserSelectorUpdateSelections = 'UserSelectorUpdateSelections',
   
+  // UserCard
+  UserCardUpdateIsShowAction = 'UserCardUpdateIsShowAction',
+
   // TaskFormUpdateIsShowAction = 'TaskFormUpdateIsShowAction',
   TaskFormUpdateTask = 'TaskFormUpdateTask',
 

@@ -4,8 +4,12 @@ import { User } from '../../../model/user';
 const UserSelectorRecord = Record({ isShow: false, anchorEl: null, onSubmit: () => {}, candidates: List(), selections: Map() });
 
 export default class UserSelectorStore extends UserSelectorRecord {
-  setShow(isShow: true, anchorEl: HTMLElement | null, onSubmit: () => {}) {
-    return this.set('anchorEl', anchorEl).set('isShow', isShow).set('onSubmit', onSubmit) as this;
+  setShow(isShow: boolean, anchorEl: HTMLElement | null, onSubmit: () => {}) {
+    if (isShow) {
+      return this.set('anchorEl', anchorEl).set('isShow', isShow).set('onSubmit', onSubmit) as this;
+    } else {
+      return this.set('anchorEl', anchorEl).set('isShow', isShow).set('onSubmit', onSubmit).set('candidates', List()).set('selections', Map()) as this;
+    }
   }
 
   getCandidates() {
