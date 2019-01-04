@@ -5,8 +5,10 @@ import { RouteComponentProps } from 'react-router';
 import { ProjectState } from '../../redux/Project/ProjectReducer';
 import { ProjectDispatcher } from '../../redux/Project/ProjectDispatcher';
 import UserSelector from '../../component/UserSelector/UserSelector'
+import UserCard from '../../component/UserCard/UserCard'
 import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
 import { UserSelectorDispatcher } from '../../redux/component/UserSelector/UserSelectorDispatcher';
+import { UserCardDispatcher } from '../../redux/component/UserCard/UserCardDispatcher';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import ProjectBoard from './ProjectBoard';
@@ -64,22 +66,37 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
           </div>
         </Modal>
         <UserSelector />
+        <UserCard />
       </div>
     );
   }
 
   renderAvatar(assignees: User[]) {
-    if (!assignees || assignees.length <=0) return;
+    if (!assignees || assignees.length <= 0) return;
+    const style: React.CSSProperties = { width: 28, height: 28, float: 'left', fontSize: '16px', cursor: 'pointer' };
     return assignees.map(a => {
-      return <Avatar key={a.id} style={{ width: 28, height: 28, float: 'left', fontSize: '16px'}}>{a.name.substr(0, 1)}</Avatar>
+      return <Avatar key={a.id} style={style} onClick={((e: React.MouseEvent<HTMLInputElement>) => { this.handleOpenUserCard(e, a)}).bind(this)}>{a.name.substr(0, 1)}</Avatar>
     })
   }
 
-  handleOpenUserSelector(event: React.MouseEvent<HTMLInputElement>) {
-    this.props.action.userSelector.show(event.target as any, this.handleUserSelect.bind(this));
+  handleOpenUserCard(event: React.MouseEvent<HTMLInputElement>, user: User) {
+    this.props.action.userCard.show(event.target as any, user, this.unAssign.bind(this));
   }
 
-  handleUserSelect(users: { [id: string]: User }) {
+  unAssign(user: User) {
+    const project: Project = this.props.project.getProject().toJS();
+    if (!project.assignees) return;
+
+    const i = project.assignees.findIndex(a => a.id === user.id);
+    project.assignees.splice(i, 1);
+    this.props.action.project.updateProject(project);
+  }
+
+  handleOpenUserSelector(event: React.MouseEvent<HTMLInputElement>) {
+    this.props.action.userSelector.show(event.target as any, this.assign.bind(this));
+  }
+
+  assign(users: { [id: string]: User }) {
     const project: Project = this.props.project.getProject().toJS();
     if (!project.assignees) project.assignees = [];
     Object.keys(users).forEach(k => {
@@ -129,7 +146,8 @@ interface StateProps {
 interface DispatchProps {
   action: {
     project: ProjectDispatcher,
-    userSelector: UserSelectorDispatcher
+    userSelector: UserSelectorDispatcher,
+    userCard: UserCardDispatcher
   };
 }
 
@@ -145,6 +163,7 @@ function mapDispatchToProps(dispatch: any) {
     action: {
       project: new ProjectDispatcher(dispatch),
       userSelector: new UserSelectorDispatcher(dispatch),
+      userCard: new UserCardDispatcher(dispatch),
       messageDialog: new MessageDialogDispatcher(dispatch),
     }
   };

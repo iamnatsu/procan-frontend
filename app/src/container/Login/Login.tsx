@@ -43,8 +43,6 @@ export class Login extends React.Component<MergedProps, LoginState> {
 
   render() {
     if (this.state.loading) return null;
-
-    // console.dir(this.props.login.getLoginUser().toJS());
     return (
       <MuiThemeProvider theme={topMuiTheme}>
         <div style={{ width: '100vw', height: '100vh', backgroundColor: '#88C542'}}>
