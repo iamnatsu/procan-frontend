@@ -40,7 +40,7 @@ export class Auth extends React.Component<AuthProps, any>  {
       if (!c || !c.expireAt) return;
 
       let expireAt = new Date(c.expireAt)
-      if ((expireAt.getTime() - new Date().getTime()) < 600000) {
+      if ((expireAt.getTime() - new Date().getTime()) < 3600000) {
         AuthService.sessionProceed();
       }
     })
