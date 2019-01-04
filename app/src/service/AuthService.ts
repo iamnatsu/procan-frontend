@@ -8,7 +8,10 @@ export function getLoginUser(): HttpService._Promise<Credential> {
 }
 
 export function sessionProceed(): HttpService._Promise<Credential> {
-  return HttpService.get(AUTH_SESSION); 
+  return HttpService.put(AUTH_SESSION).then((response: HttpService._Response<Credential>) => {
+    HttpService.setToken({ token: response.data.id, expireAt: moment(response.data.expireAt).toDate() });
+    return response;
+  }); 
 }
 
 export function login(id: string, password: string): HttpService._Promise<Credential> {
