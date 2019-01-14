@@ -6,7 +6,7 @@ import { FormName } from '../../config/FormName';
 import { Task } from '../../model/task';
 import { TaskFormState as _TaskFormState } from 'src/redux/component/TaskForm/TaskFormReducer';
 import Text from '../Fields/Text';
-import Select from '../Fields/Select';
+//import Select from '../Fields/Select';
 import DateField from '../Fields/Date';
 import { Button } from '@material-ui/core';
 import { ProjectState } from 'src/redux/Project/ProjectReducer';
@@ -25,20 +25,31 @@ type MergedProps = TaskFormProps & FormProps<Task, TaskFormProps, TaskFormState>
 
 class TaskForm extends React.Component<MergedProps, TaskFormState> {
   render(): JSX.Element { 
-    const project: Project = this.props.project.getProject().toJS();
+    //const project: Project = this.props.project.getProject().toJS();
     const style = Object.assign({}, this.props.style, { padding: '10px' });
-    const onchangeFunc: (date: Date) => void = ((date: number) => {this.onChangeDate(date)}).bind(this);
     return (
-      <form autoComplete='off' className='task' style={style} onSubmit={this.props.handleSubmit}>
-        <Field autoComplete='off' component={Text} name='name' label={'name'} autoFocus></Field>
-        <Field component={Select} name='statusId' label={'statusId'} options={this.toOptions(project.statuses)}></Field>
-        <FieldArray component={Assignee} name='assignees' label='assignees'></FieldArray>
-        <Field component={DateField} name='expectedStartDay' label={'expectedStartDay'}
-                onChangeValue={onchangeFunc}></Field>
-        <footer style={{ marginTop: '10px' }}>
-          <Button type='submit' variant='contained' color='primary' style={{ width: '100px'}}>OK</Button>
-          <Button type='button' color='secondary' style={{ width: '100px', marginLeft: '10px' }} onClick={this.props.onClose}>CANCEL</Button>
-        </footer>
+      <form autoComplete='off' className='task' style={style}>
+          <Button type='button' color='secondary' style={{ width: '100px', position: 'absolute', right: '10px' }} onClick={this.props.onClose}>close</Button>
+        <div className='clearfix'>
+          <Field autoComplete='off' component={Text} name='name' label={'name'} autoFocus={true}></Field>
+          { /*}
+          <Field component={Select} name='statusId' label={'statusId'} options={this.toOptions(project.statuses)}></Field>
+          */}
+          <FieldArray component={Assignee} name='assignees' label='assignees'></FieldArray>
+          <Field component={DateField} name='expectedStartDay' label={'expectedStartDay'} style={{ float: 'left' }}
+                  onChangeValue={((date: number) => {this.onChangeDate('expectedStartDay', date)}).bind(this)}></Field>
+          <Field component={DateField} name='expectedEndDay' label={'expectedEndDay'} style={{ float: 'left' }}
+                  onChangeValue={((date: number) => {this.onChangeDate('expectedEndDay', date)}).bind(this)}></Field>
+          <div style={{clear: 'both'}}></div>
+          <Field component={Text} name='expectedCost' label={'expectedCost'} type='number' placeholder='人日'></Field>
+          <Field component={DateField} name='actualStartDay' label={'actualStartDay'} style={{ float: 'left' }}
+                  onChangeValue={((date: number) => {this.onChangeDate('actualStartDay', date)}).bind(this)}></Field>
+          <Field component={DateField} name='actualEndDay' label={'actualEndDay'} style={{ float: 'left' }}
+                  onChangeValue={((date: number) => {this.onChangeDate('actualEndDay', date)}).bind(this)}></Field>
+          <div style={{clear: 'both'}}></div>
+          <Field component={Text} name='actualCost' label={'actualCost'} type='number' placeholder='人日'></Field>
+          <Field component={Text} name='progress' label={'progress'} type='number' placeholder='%' inputProps={{min:0, max: 100}}></Field>
+        </div>
       </form>
     );
   }
@@ -47,8 +58,8 @@ class TaskForm extends React.Component<MergedProps, TaskFormState> {
     return statuses.map(status => { return { value: status.id, caption: status.name } });
   }
 
-  onChangeDate(value: number) {
-    this.props.dispatch(change(FormName.TaskForm, 'expectedStartDay', new Date(value)));
+  onChangeDate(target: string, value: number) {
+    this.props.dispatch(change(FormName.TaskForm, target, value ? new Date(value) : null));
   }
 }
 

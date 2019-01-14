@@ -4,5 +4,6 @@ export const MODAL_STYLE: React.CSSProperties = {
   width: '50vw',
   height: '70vh',
   backgroundColor: 'white',
-  position: 'absolute'
+  position: 'absolute',
+  overflow: 'auto'
 }

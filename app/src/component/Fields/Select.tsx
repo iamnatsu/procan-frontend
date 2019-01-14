@@ -16,7 +16,7 @@ type MergedProps = SelectProps & WrappedFieldProps;
 class Select extends Component<MergedProps, any> {
   render() {
     return (
-      <div style={{ marginTop: '5px' }}>
+      <div style={{ margin: '5px' }}>
         <Label caption={this.props.label} />
         <MuiSelect  autoWidth={true} {...this.props.input}>
           {this.renderOptions()}
