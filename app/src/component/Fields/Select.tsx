@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { WrappedFieldProps } from 'redux-form';
 import { Select as MuiSelect, MenuItem } from '@material-ui/core';
 import Label from './Lable'
+import { FIELD_STYLE } from '../../config/Style';
 
 export interface SelectOption {
   caption: string;
@@ -10,14 +11,17 @@ export interface SelectOption {
 export interface SelectProps {
   label: string;
   options: {[k: string]: SelectOption}
+  style?: React.CSSProperties;
 }
 type MergedProps = SelectProps & WrappedFieldProps;
 
 class Select extends Component<MergedProps, any> {
   render() {
+    const { style, label } = this.props; 
+    const styles = style ? Object.assign({}, FIELD_STYLE, style) : FIELD_STYLE;
     return (
-      <div style={{ margin: '5px' }}>
-        <Label caption={this.props.label} />
+      <div style={styles}>
+        <Label caption={label} />
         <MuiSelect  autoWidth={true} {...this.props.input}>
           {this.renderOptions()}
         </MuiSelect>

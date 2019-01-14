@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { AppState } from '../../redux/index';
 import { StyledComponentProps } from '@material-ui/core/styles/withStyles';
+import { TASK_CARD } from '../../config/Style'
 import { ProjectState } from '../../redux/Project/ProjectReducer';
 import { ProjectDispatcher } from '../../redux/Project/ProjectDispatcher';
 import { MessageDialogState } from '../../redux/component/MessageDialog/MessageDialogReducer';
@@ -27,6 +28,8 @@ export interface TaskCardProps {
   isDragging?: boolean;
   draggingItemId?: string;
   handleMoveTask: (srcTaskId: string, distStatusId: string, distBoardPos: number) => void;
+  handleSaveTask: (id: string) => void;
+  lastHover?: (time?: number) => number;
 }
 export interface TaskCardState {
 }
@@ -34,6 +37,10 @@ export interface TaskCardState {
 type MergedProps = StateProps & DispatchProps & TaskCardProps & StyledComponentProps;
 
 class TaskCard extends React.Component<MergedProps, TaskCardState> {
+  
+  constructor(props: MergedProps) {
+    super(props);
+  }
 
   shouldComponentUpdate(nextProps: TaskCardProps, nextState: TaskCardState) {
 //    return true;
@@ -60,10 +67,8 @@ class TaskCard extends React.Component<MergedProps, TaskCardState> {
     const { connectDropTarget, connectDragSource, connectDragPreview } = this.props;
     if (!connectDropTarget || !connectDragSource || !connectDragPreview) return null;
 
-    const style: React.CSSProperties = { width: '225px', height: '100px', backgroundColor: 'white', color: 'rgba(0, 0, 0, 0.87)',
-            boxShadow: '0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12)',
-            padding: '5px',
-            borderRadius: '3px', margin: '10px 5px', opacity: this.props.isDragging || this.props.draggingItemId == this.props.id ? 0.3 : 1 };
+    const style = Object.assign({}, TASK_CARD);
+    if (this.props.isDragging || this.props.draggingItemId == this.props.id) style.opacity = 0.3;
     if (this.props.id === '$dummy') {
       style.backgroundColor= 'lightgray';
       style.height = 'calc(100% - 20px)';
@@ -75,8 +80,8 @@ class TaskCard extends React.Component<MergedProps, TaskCardState> {
             borderRadius: '3px', padding:'5px', float: 'left', cursor: 'move', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'};
             */
     return connectDropTarget(
-      connectDragSource(<div className="task-card" onClick={this.handleClick.bind(this)} style={style}>
-        {this.props.name + ':' + this.props.beforePos+ ':' + this.props.pos+ ':' + this.props.nextPos}</div>));
+      connectDragSource(<div id={"task-card-" + this.props.id} className="task-card" onClick={this.handleClick.bind(this)} style={style}>
+        {this.props.name}</div>));
   }
 
   handleClick() {
@@ -165,29 +170,48 @@ const dropTarget: DropTargetSpec<any> = {
     if (!monitor.getItem() || !props) {
       return null;
     }
+
+
 		const dragId = monitor.getItem().id;
 		const hoverId = props.id;
 		if (dragId === hoverId) {
-			return;
+			return null;
     }
 
     const item = props.project.getTasks().find(t => !!t && t.id === dragId);
-    if (!item) return;
+    if (!item) {
+			return null;
+    }
 
-    
+    const time = new Date().getTime();
     if (item.boardPos > props.nextPos && props.beforePos && item.statusId == props.statusId) {
+      if (props.lastHover && time - props.lastHover() < 100) {
+        // パフォーマンスのため、短時間での移動は無視
+        return;
+      } else if (props.lastHover) {
+        props.lastHover(time);
+      }
       if (props.handleMoveTask) props.handleMoveTask(dragId, props.statusId, props.beforePos);
     } else if (props.beforePos && item.statusId != props.statusId) {
+      if (props.lastHover && time - props.lastHover() < 100) {
+        return;
+      } else if (props.lastHover) {
+        props.lastHover(time);
+      }
       if (props.handleMoveTask) props.handleMoveTask(dragId, props.statusId, props.beforePos);
     } else {
+      if (props.lastHover && time - props.lastHover() < 100) {
+        return;
+      } else if (props.lastHover) {
+        props.lastHover(time);
+      }
       if (props.handleMoveTask) props.handleMoveTask(dragId, props.statusId, props.nextPos);
     }
-    
 
   },
 
   drop(props: TaskCardProps, monitor: any) {
-    return;
+    props.handleSaveTask(props.id);
   }
 };
 

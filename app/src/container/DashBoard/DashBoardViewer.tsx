@@ -4,6 +4,8 @@ import { AppState } from '../../redux/index';
 import { RouteComponentProps } from 'react-router';
 import { withNamespaces, TransProps } from 'react-i18next';
 import Modal from '@material-ui/core/Modal';
+import { P_RED, P_IVORY } from '../../config/Color';
+import { MODAL_STYLE } from '../../config/Style';
 import * as AuthService from '../../service/AuthService'
 import * as ProjectService from '../../service/ProjectService'
 import { transitionToLoginPage } from '../../util/transition';
@@ -61,24 +63,16 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
     const { anchorEl } = this.state;
     const openGroup = Boolean(anchorEl);
     const style = { width: '100vw', height: 'calc(100vh - 50px)' };
-    const modalStyle: React.CSSProperties = {
-      top: '15vh',
-      left: '25vw',
-      width: '50vw',
-      height: '70vh',
-      backgroundColor: 'white',
-      position: 'absolute'
-    }
     const projects = this.props.dashboard.getProjects();
     if (!classes) return;
     return (
       <div style={style}>
-        <div style={{height: '100%', width:'300px', padding: '10px', backgroundColor:'ivory', float: 'left'}}>
-          <p><Button onClick={this.handleOpenProjectModal.bind(this)} color='primary'>プロジェクトを作成する</Button></p>
-          <p><Button color='primary' onClick={this.handleGroupOpen.bind(this)}>グループを作成する</Button></p>
-          <p><Button color='primary'>{t('Welcome to React')}</Button></p>
+        <div style={{height: '100%', width:'300px', padding: '10px', backgroundColor: P_RED, float: 'left'}}>
+          <p><Button className={classes.button} onClick={this.handleOpenProjectModal.bind(this)} >プロジェクトを作成する</Button></p>
+          <p><Button className={classes.button} onClick={this.handleGroupOpen.bind(this)}>グループを作成する</Button></p>
+          <p><Button className={classes.button}>{t('Welcome to React')}</Button></p>
         </div>
-        <div style={{height: '100%', width:'calc(100% - 300px)', padding: '10px', backgroundColor:'lightblue', float: 'left'}}>
+        <div style={{height: '100%', width:'calc(100% - 300px)', padding: '10px', backgroundColor: P_IVORY, float: 'left'}}>
           { projects && projects.size > 0 && (
             this.renderProjects(projects, this.props.classes || {})
           )}
@@ -89,7 +83,7 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
           open={this.props.dashboard.isShowProjectModal()}
           onClose={this.handleCloseProjectModal.bind(this)}
         >
-          <div style={modalStyle} >
+          <div style={MODAL_STYLE} >
             <ProjectForm onSubmit={this.handleSubmitProject.bind(this)} onClose={this.handleCloseProjectModal.bind(this)}></ProjectForm>
           </div>
         </Modal>
@@ -127,15 +121,16 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
         const card = 
         <Card className={classes.card} key={pr.id}>
           <CardActionArea className={classes.action} onClick={ (event) => { this.transitionProject(pr.id); } }>
-            <CardContent>
+            <CardContent className={classes.content}>
                 <Typography component='p'>
                   { pr.name }
                 </Typography>
             </CardContent>
-            <CardActions>
-              <Button size='small' onClick={ (event) => {event.stopPropagation(); this.deleteProjectConfirm(pr.id)} }>Learn More</Button>
-            </CardActions>
           </CardActionArea>
+          <CardActions className={classes.cardActions} >
+              <Button size='small' className={classes.cardButton} color='primary' onClick={ (event) => {event.stopPropagation(); /* edit */} }>EDIT</Button>
+              <Button size='small' className={classes.cardButton} color='secondary' onClick={ (event) => {event.stopPropagation(); this.deleteProjectConfirm(pr.id)} }>DEL</Button>
+          </CardActions>
         </Card>
         rows.push(card);
       }
@@ -232,7 +227,11 @@ const styles: Record<string, CSSProperties> = {
     float: 'left'
   },
   action: {
-    width: '100%'
+    width: '100%',
+    minHeight: '70px'
+  },
+  content: {
+    paddingTop: 0
   },
   bullet: {
     display: 'inline-block',
@@ -250,6 +249,15 @@ const styles: Record<string, CSSProperties> = {
     maxWidth: 300,
     maxHeight: 200,
     minHeight: 200,
+  },
+  button: {
+    color: 'white'
+  },
+  cardActions: {
+    padding: '0px 12px 4px'
+  },
+  cardButton: {
+    margin: 0
   }
 };
 

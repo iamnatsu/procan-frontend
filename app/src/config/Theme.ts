@@ -1,5 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import { MAIN_COLOR, ACCENT_COLOR/*, ACCENT_COLOR, GREY*/ } from './Color';
+import { MAIN_COLOR, ACCENT_COLOR, P_LIGHT_BLUE } from './Color';
 
 export const topMuiTheme = createMuiTheme({
   palette: {
@@ -13,7 +13,7 @@ export const topMuiTheme = createMuiTheme({
   overrides: {
     MuiButton: {
       contained: {
-        color: '#88C542',
+        color: P_LIGHT_BLUE,
         backgroundColor: 'white'
       }
     },
@@ -81,7 +81,7 @@ export const appTheme = createMuiTheme({
     },
     MuiBackdrop: {
       root: {
-        backgroundColor: 'rgba(0, 0, 0, 0.2)'
+        backgroundColor: 'rgba(0, 0, 0, 0.5)'
       }
     },
     MuiPopover: {

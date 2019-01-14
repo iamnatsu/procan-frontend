@@ -103,7 +103,7 @@ class ProjectCustomDragLayer extends React.Component<ProjectCustomDragLayerProps
       height: '100%',
     }
     return (<div style={layerStyles}>
-              <div style={getItemStylesTask(this.props)}><TaskCard id={item.id} name={item.name} nextPos={item.nextPos} statusId={item.statusId} handleMoveTask={() => {}}/></div>
+              <div style={getItemStylesTask(this.props)}><TaskCard id={item.id} name={item.name} nextPos={item.nextPos} statusId={item.statusId} handleMoveTask={() => {}} handleSaveTask={() => {}}/></div>
             </div>);
   }
 }
