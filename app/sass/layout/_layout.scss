@@ -1,3 +1,4 @@
+/*
 #app {
   height: 100vh;
 }
@@ -28,4 +29,10 @@
   .right-el-4-950 {
     display: none;
   }
+}
+*/
+.clearfix:after {
+  clear: both;
+  content: '';
+  display: block;
 }

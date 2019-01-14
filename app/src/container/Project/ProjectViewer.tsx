@@ -18,6 +18,9 @@ import { Project } from '../../model/project';
 import { Task } from '../../model/task';
 import { User } from '../../model/user';
 import { Button, Modal, Avatar, withStyles, StyledComponentProps } from '@material-ui/core';
+import { getFormValues } from 'redux-form/immutable';
+import { TaskFormState } from 'src/redux/component/TaskForm/TaskFormReducer';
+import * as Tasks from '../../util/tasks';
 
 import { MODAL_STYLE } from '../../config/Style' 
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
@@ -124,11 +127,15 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
     } else {
       this.props.action.project.updateTask(values);
     }
-    this.handleCloseTaskModal();
+    this.props.action.project.closeTaskModal();
   }
 
   handleCloseTaskModal() {
-    this.props.action.project.closeTaskModal();
+    if (!Tasks.equals(this.props.taskForm.getTask().toJS(), this.props.values)) {
+      this.handleSubmitTask(this.props.values);
+    } else {
+      this.props.action.project.closeTaskModal();
+    }
   }
 
   taskComparator(t1: Task, t2: Task) {
@@ -140,7 +147,9 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
 
 
 interface StateProps {
-  project: ProjectState;
+  values: Task,
+  project: ProjectState,
+  taskForm: TaskFormState
 }
 
 interface DispatchProps {
@@ -153,8 +162,10 @@ interface DispatchProps {
 
 function mapStateToProps(state: AppState) {
   return {
+    values: getFormValues('$procan-form/task_form')(state) as Task,
     project: state.project,
-    userSelector: state.component.userSelector
+    userSelector: state.component.userSelector,
+    taskForm: state.component.taskForm
   };
 }
 
@@ -180,6 +191,7 @@ const styles: Record<string, CSSProperties> = {
     minWidth: '30px',
     width: '30px',
     borderRadius: '15px',
+    border: 'solid 1px lightgray',
     padding: 0,
     lineHeight: 1
   }
