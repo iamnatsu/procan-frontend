@@ -8,20 +8,23 @@ import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import { UserSelectorDispatcher } from '../../redux/component/UserSelector/UserSelectorDispatcher';
 import { UserCardDispatcher } from '../../redux/component/UserCard/UserCardDispatcher';
 import Label from './Lable'
+import { FIELD_STYLE } from '../../config/Style';
 
 export interface AssigneeProps {
   label: string;
+  style?: React.CSSProperties;
 }
 type MergedProps = AssigneeProps & DispatchProps & WrappedFieldArrayProps<User> & StyledComponentProps;
 
 class Assignee extends Component<MergedProps, any> {
   render() {
-    const { classes } = this.props;
+    const { classes, style, label } = this.props;
     if (!classes || !classes.button) return null;
 
+    const styles = style ? Object.assign({}, FIELD_STYLE, style) : FIELD_STYLE;
     return (
-      <div style={{ margin: '5px' }}>
-        <Label caption={this.props.label} />
+      <div style={styles}>
+        <Label caption={label} />
         { this.renderAvatar() }
         <Button
           classes={{

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { AppState } from '../../redux/index';
 import { StyledComponentProps, CSSProperties } from '@material-ui/core/styles/withStyles';
+import { P_IVORY } from '../../config/Color';
 import { ProjectState } from '../../redux/Project/ProjectReducer';
 import { ProjectDispatcher } from '../../redux/Project/ProjectDispatcher';
 import { MessageDialogState } from '../../redux/component/MessageDialog/MessageDialogReducer';
@@ -58,7 +59,8 @@ class ProjectBoard extends React.Component<MergedProps, ProjectBoardState> {
     if (project.get('statuses')) {
       statusCount = project.get('statuses').length | 0;
     } 
-    const style = { width: '100%', height: '100%', backgroundColor: 'ivory' };    this.isMoving = false;
+    const style = { width: '100%', height: '100%', backgroundColor: P_IVORY };
+    this.isMoving = false;
     return <span>{ connectDropTarget(
       <div style={style}>
         <CustomScrollbars renderThumbHorizontal={this.renderThumbHorizontal.bind(this)}>

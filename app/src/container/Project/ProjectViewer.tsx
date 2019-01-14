@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { AppState } from '../../redux/index';
 import { RouteComponentProps } from 'react-router';
+import { P_RED, P_IVORY, WHITE } from '../../config/Color';
 import { ProjectState } from '../../redux/Project/ProjectReducer';
 import { ProjectDispatcher } from '../../redux/Project/ProjectDispatcher';
 import UserSelector from '../../component/UserSelector/UserSelector'
@@ -40,9 +41,9 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
 
   render() {
     const style = { width: '100vw', height: 'calc(100vh - 50px)' };
-    const innerHeader = { width: '100vw', height: '30px', backgroundColor: 'lightblue' };
+    const innerHeader = { width: '100vw', height: '30px', backgroundColor: P_RED, color: WHITE };
     const headerItem: React.CSSProperties = { float: 'left', height: 30, lineHeight: '30px', margin: '0 10px'}
-    const innerBody = { width: '100vw', height: 'calc(100% - 30px)', backgroundColor: 'ivory' };
+    const innerBody = { width: '100vw', height: 'calc(100% - 30px)', backgroundColor: P_IVORY };
     if (!this.props.classes) return null;
 
     const projectMap = this.props.project.getProject();
@@ -76,7 +77,7 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
 
   renderAvatar(assignees: User[]) {
     if (!assignees || assignees.length <= 0) return;
-    const style: React.CSSProperties = { width: 28, height: 28, float: 'left', fontSize: '16px', cursor: 'pointer' };
+    const style: React.CSSProperties = { width: 28, height: 28, float: 'left', fontSize: '16px', cursor: 'pointer', top: '1px' };
     return assignees.map(a => {
       return <Avatar key={a.id} style={style} onClick={((e: React.MouseEvent<HTMLInputElement>) => { this.handleOpenUserCard(e, a)}).bind(this)}>{a.name.substr(0, 1)}</Avatar>
     })
@@ -190,8 +191,9 @@ const styles: Record<string, CSSProperties> = {
     height: '30px',
     minWidth: '30px',
     width: '30px',
+    color: WHITE,
     borderRadius: '15px',
-    border: 'solid 1px lightgray',
+    border: 'solid 2px rgba(0, 0, 0, 0.1)',
     padding: 0,
     lineHeight: 1
   }

@@ -7,6 +7,7 @@ import Label from './Lable'
 import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
 import { createStyles, withStyles, Theme, StyledComponentProps } from '@material-ui/core/styles';
+import { FIELD_STYLE } from '../../config/Style';
 
 export interface DateProps {
   label: string;
@@ -15,14 +16,14 @@ export interface DateProps {
 }
 type MergedProps = DateProps & WrappedFieldProps & StyledComponentProps;
 class DateField extends Component<MergedProps, any> {
-  static DEFAULT_STYLE = { margin: '5px'};
   render() {
-    const styles = this.props.style ? Object.assign({}, DateField.DEFAULT_STYLE, this.props.style) : DateField.DEFAULT_STYLE;
-    const { classes } = this.props; 
+    const { classes, style, label } = this.props; 
     if (!classes) return;
+
+    const styles = style ? Object.assign({}, FIELD_STYLE, style) : FIELD_STYLE;
     return (
       <div style={styles}>
-        <Label caption={this.props.label} />
+        <Label caption={label} />
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <InlineDatePicker value={this.props.input.value ? (new Date(this.props.input.value)).getTime() : null} 
             onChange={this.handleChange.bind(this)}

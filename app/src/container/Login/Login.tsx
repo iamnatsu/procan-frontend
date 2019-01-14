@@ -10,6 +10,7 @@ import { AppState } from 'src/redux';
 import LoginStore from 'src/redux/Login/LoginStore';
 import LoginDispatcher from '../../redux/Login/LoginDispatcher';
 import { topMuiTheme } from '../../config/Theme';
+import { P_LIGHT_BLUE, LOGIN_ERR_MSG } from '../../config/Color';
 
 export interface ReactProps extends RouteComponentProps<any> { }
 
@@ -45,7 +46,7 @@ export class Login extends React.Component<MergedProps, LoginState> {
     if (this.state.loading) return null;
     return (
       <MuiThemeProvider theme={topMuiTheme}>
-        <div style={{ width: '100vw', height: '100vh', backgroundColor: '#88C542'}}>
+        <div style={{ width: '100vw', height: '100vh', backgroundColor: P_LIGHT_BLUE}}>
           <div style={{ width: 400, margin: 'auto', paddingTop: 'calc(50vh - 175px)'}}>
             <h2 style={{ color: 'white' }}>Procan</h2>
             <form onSubmit={this.handleLogin.bind(this)} style={{ padding: 20 }}>
@@ -83,7 +84,7 @@ export class Login extends React.Component<MergedProps, LoginState> {
   }
 
   renderErrorMessage(): any {
-    return (this.props.login.getErrorMessage()) ? (<div style={{ color: '#f44336', fontSize: 14, padding: '10px 0' }}>{this.props.login.getErrorMessage()}</div>) : '';
+    return (this.props.login.getErrorMessage()) ? (<div style={{ color: LOGIN_ERR_MSG, fontSize: 14, padding: '10px 0' }}>{this.props.login.getErrorMessage()}</div>) : '';
   }
 }
 

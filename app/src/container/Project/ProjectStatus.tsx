@@ -39,6 +39,7 @@ export interface ProjectStatusState {
 type MergedProps = StateProps & DispatchProps & ProjectStatusProps & StyledComponentProps;
 
 class ProjectStatus extends React.Component<MergedProps, ProjectStatusState> {
+  private lastHoverTime: number;
   constructor(props: MergedProps) {
     super(props);
     this.state = {
@@ -132,10 +133,19 @@ class ProjectStatus extends React.Component<MergedProps, ProjectStatusState> {
 
     if (sorted && sorted.size > 0) {
       return sorted.map((t, index) => {
-        if (t) {return <TaskCard key={t.id} id={t.id} name={t.name} statusId={this.props.id} pos={t.boardPos}beforePos={this.getBeforePos(t, sorted, index)} nextPos={this.getNextPos(t, sorted, index)} handleMoveTask={this.handleMoveTask.bind(this)}></TaskCard>} else {return null} 
+        if (t) {
+          return <TaskCard key={t.id} id={t.id} name={t.name} statusId={this.props.id} pos={t.boardPos}
+            beforePos={this.getBeforePos(t, sorted, index)} nextPos={this.getNextPos(t, sorted, index)}
+            handleMoveTask={this.handleMoveTask.bind(this)} handleSaveTask={this.handleSaveTask.bind(this)}
+            lastHover={this.lastHover.bind(this)}></TaskCard>
+        } else {
+          return null;
+        } 
       }).toArray();
     } else {
-      return <TaskCard key={'$dummy' + this.props.id} id={'$dummy'} statusId={this.props.id} name={'$dummy'} nextPos={10000} handleMoveTask={this.handleMoveTask.bind(this)}></TaskCard>
+      return <TaskCard key={'$dummy' + this.props.id} id={'$dummy'} statusId={this.props.id} name={'$dummy'} 
+        nextPos={10000} handleMoveTask={this.handleMoveTask.bind(this)} handleSaveTask={this.handleSaveTask.bind(this)}
+        lastHover={this.lastHover.bind(this)}></TaskCard>
     }
   }
 
@@ -143,18 +153,25 @@ class ProjectStatus extends React.Component<MergedProps, ProjectStatusState> {
     const targetTask = this.props.project.getTasks().find(t => !!t && t.id === srcTaskId);
     if (!targetTask) return;
 
-    const beforeStatusId = targetTask.statusId;
-    const beforeBoardPos = targetTask.boardPos;
     targetTask.statusId = distStatusId;
     targetTask.boardPos = distBoardPos;
 
-    TaskService.put(targetTask).catch(() => {
-      targetTask.statusId = beforeStatusId;
-      targetTask.boardPos = beforeBoardPos;
-      this.props.action.project.updateTasks(this.props.project.getTasks().toJS());
-    });
-
     this.props.action.project.updateTasks(this.props.project.getTasks().toJS());
+  }
+
+  handleSaveTask(id: string) {
+    const targetTask = this.props.project.getTasks().find(t => !!t && t.id === id);
+    if (!targetTask) return;
+    TaskService.put(targetTask);
+  }
+
+  lastHover(time: number) {
+    if (time) {
+      this.lastHoverTime = time;
+      return time;
+    } else {
+      return this.lastHoverTime;
+    }
   }
 
   taskComparator(t1: Task, t2: Task) {

@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
-import Badge from '@material-ui/core/Badge';
+// import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -14,11 +14,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 // import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+// import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 
 import * as AuthService from '../../service/AuthService'
 import { transitionToLoginPage } from '../../util/transition';
+import { P_LIGHT_BLUE } from '../../config/Color';
 
 class PrimarySearchAppBar extends React.Component<any, any> {
   static propTypes = {
@@ -74,6 +75,7 @@ class PrimarySearchAppBar extends React.Component<any, any> {
         open={isMobileMenuOpen}
         onClose={this.handleMobileMenuClose}
       >
+        {/*}
         <MenuItem>
           <IconButton color='inherit'>
             <Badge className={classes.margin} badgeContent={11} color='secondary'>
@@ -82,6 +84,7 @@ class PrimarySearchAppBar extends React.Component<any, any> {
           </IconButton>
           <p>Notifications</p>
         </MenuItem>
+        */}
         <MenuItem onClick={this.handleProfileMenuOpen}>
           <IconButton color='inherit'>
             <AccountCircle />
@@ -93,7 +96,7 @@ class PrimarySearchAppBar extends React.Component<any, any> {
 
     return (
       <div className={classes.root}>
-        <AppBar position='static'>
+        <AppBar position='static' className={classes.appBar}>
           <Toolbar>
             <IconButton className={classes.menuButton} color='inherit' aria-label='Open drawer'>
               <MenuIcon />
@@ -115,11 +118,13 @@ class PrimarySearchAppBar extends React.Component<any, any> {
             </div>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
+              {/*
               <IconButton color='inherit'>
                 <Badge className={classes.margin} badgeContent={1} color='secondary'>
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
+              */}
               <IconButton
                 aria-owns={isMenuOpen ? 'material-appbar' : undefined}
                 aria-haspopup='true'
@@ -162,7 +167,10 @@ const styles = (theme: Theme ) => createStyles({
     [theme.breakpoints.up('sm')]: {
         height: 50,
         minHeight: 50,
-      },
+      }
+  },
+  appBar: {
+    backgroundColor: P_LIGHT_BLUE
   },
   regular: {
   },
