@@ -9,7 +9,8 @@ export interface TextProps {
   type?: string;
   placeholder?: string;
   inputProps?: Object;
-  autoFocus?: boolean
+  autoFocus?: boolean;
+  fullWidth?: boolean;
   style?: React.CSSProperties;
 }
 type MergedProps = TextProps & WrappedFieldProps;
@@ -22,6 +23,7 @@ class Text extends Component<MergedProps, any> {
         <Label caption={label} />
         <TextField type={this.props.type ? this.props.type : 'text'} autoFocus={this.props.autoFocus || false}
           inputProps={this.props.inputProps || {}}
+          fullWidth={this.props.fullWidth || false}
           placeholder={this.props.placeholder || ''} {...this.props.input}></TextField>
       </div>
     )

@@ -31,6 +31,10 @@
   }
 }
 */
+.main-contents {
+  height: calc(100vh - 50px);
+  width: 100vw;
+}
 .clearfix:after {
   clear: both;
   content: '';

@@ -35,6 +35,11 @@ class PrimarySearchAppBar extends React.Component<any, any> {
     this.setState({ anchorEl: event.currentTarget });
   };
 
+  transitionToProfile = () => {
+    this.handleMenuClose();
+    location.href = '#/profile';
+  }
+
   handleMenuClose = () => {
     this.setState({ anchorEl: null });
     this.handleMobileMenuClose();
@@ -62,7 +67,7 @@ class PrimarySearchAppBar extends React.Component<any, any> {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
+        <MenuItem onClick={this.transitionToProfile}>Profile</MenuItem>
         <MenuItem onClick={this.logout}>LogOut</MenuItem>
       </Menu>
     );
@@ -102,7 +107,7 @@ class PrimarySearchAppBar extends React.Component<any, any> {
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant='h6' color='inherit' noWrap>
-            <a href='#/dashboard'  style={{ color: 'white', display: 'block', textDecoration: 'none' }}>ProCan</a>
+            <a href='#/dashboard' style={{ color: 'white', display: 'block', textDecoration: 'none' }}>ProCan</a>
             </Typography>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
