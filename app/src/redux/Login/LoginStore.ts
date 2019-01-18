@@ -8,7 +8,7 @@ export default class LoginStore extends LoginRecord {
     return this.set('loginUser', fromJS(user)) as this;
   }
 
-  getLoginUser() {
+  getLoginUser(): Map<keyof Credential, string> {
     return this.get('loginUser');
   }
 

@@ -30,7 +30,7 @@ export default class MessageDialogStore extends MessageDialogRecord {
   }
 
   getMessageList() {
-    return (this.get('messageList') && this.get('messageList').size > 0) ? this.get('messageList').toJS() : [{ message: '処理中にエラーが発生しました。時間をおいて処理を再してください' }];
+    return (this.get('messageList') && this.get('messageList').size > 0) ? this.get('messageList').toJS() : [];
   }
 
   setMessageList(message: Array<string>) {

@@ -22,14 +22,17 @@ export class MessageDialog extends React.Component<MessageDialogProps, MessageDi
 
   render() {
     if (!this.props.MessageDialog.isShow()) return null;
+    const messageList: Array<{message: string}> = this.props.MessageDialog.getMessageList();
     return (
       <Dialog open={this.props.MessageDialog.isShow()}>
         {this.props.MessageDialog.getTitle() && <DialogTitle>{this.props.MessageDialog.getTitle()}</DialogTitle>}
-        <DialogContent>
-          <DialogContentText id='alert-dialog-description'>
-            {this.renderInner(this.props.MessageDialog.getMessageList())}
-          </DialogContentText>
-        </DialogContent>
+        { messageList && messageList.length > 0 &&
+          <DialogContent>
+            <DialogContentText id='alert-dialog-description'>
+              {this.renderInner(this.props.MessageDialog.getMessageList())}
+            </DialogContentText>
+          </DialogContent>
+        }
         <DialogActions>
           {this.renderActions()}
         </DialogActions>

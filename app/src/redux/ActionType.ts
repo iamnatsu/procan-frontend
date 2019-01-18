@@ -32,4 +32,7 @@ export const enum ActionType {
   ProjectUpdateTasks = 'ProjectUpdateTasks',
   ProjectAddTask = 'ProjectAddTask',
   ProjectUpdateTask = 'ProjectUpdateTask',
+
+  // profile
+  ProfileUpdateUser = 'ProfileUpdateUser',
 }

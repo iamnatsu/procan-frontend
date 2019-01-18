@@ -1,3 +1,10 @@
 {
-  "Welcome to React": "ようこそ React へ。"
+  "Welcome to React": "ようこそ React へ。",
+  "updated": "更新しました",
+  "unmatch password": "パスワードが一致しません",
+
+  "username": "名前",
+  "password": "パスワード",
+  "passwordc": "パスワード（確認）",
+  "": ""
 }
