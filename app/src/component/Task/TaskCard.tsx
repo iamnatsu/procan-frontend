@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { findDOMNode } from 'react-dom'
+import { XYCoord } from 'dnd-core'
 import { AppState } from '../../redux/index';
 import * as moment from 'moment';
 import { StyledComponentProps } from '@material-ui/core/styles/withStyles';
@@ -241,27 +243,34 @@ const dropTarget: DropTargetSpec<any> = {
     }
 
     const time = new Date().getTime();
+    if (props.lastHover && time - props.lastHover() < 100) {
+      // パフォーマンスのため、短時間での移動は無視
+      return;
+    }
+
+		const hoverBoundingRect = (findDOMNode(
+			component,
+    ) as Element).getBoundingClientRect()
+		const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+		const clientOffset = monitor.getClientOffset()
+    const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top
+
     if (item.boardPos > props.nextPos && props.beforePos && item.statusId == props.statusId) {
-      if (props.lastHover && time - props.lastHover() < 100) {
-        // パフォーマンスのため、短時間での移動は無視
-        return;
-      } else if (props.lastHover) {
+      if (props.lastHover) {
         props.lastHover(time);
       }
+      if (hoverClientY > hoverMiddleY) return;
       if (props.handleMoveTask) props.handleMoveTask(dragId, props.statusId, props.beforePos);
     } else if (props.beforePos && item.statusId != props.statusId) {
-      if (props.lastHover && time - props.lastHover() < 100) {
-        return;
-      } else if (props.lastHover) {
+      if (props.lastHover) {
         props.lastHover(time);
       }
       if (props.handleMoveTask) props.handleMoveTask(dragId, props.statusId, props.beforePos);
-    } else {
-      if (props.lastHover && time - props.lastHover() < 100) {
-        return;
-      } else if (props.lastHover) {
+    } else if(item.boardPos < props.nextPos && props.beforePos && item.statusId == props.statusId) {
+      if (props.lastHover) {
         props.lastHover(time);
       }
+      if (hoverClientY < hoverMiddleY) return;
       if (props.handleMoveTask) props.handleMoveTask(dragId, props.statusId, props.nextPos);
     }
 
