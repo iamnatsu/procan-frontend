@@ -6,7 +6,7 @@ export class UserCardDispatcher {
     this.dispatch = dispatch
   }
 
-  show(anchorEl: HTMLElement, user: User, onDelete: () => void) {
+  show(anchorEl: HTMLElement, user: User, onDelete?: () => void) {
     this.dispatch(UserCardUpdateIsShowAction(true, anchorEl, user, onDelete));
   }
   close() {

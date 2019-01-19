@@ -31,11 +31,12 @@ class TaskForm extends React.Component<MergedProps, TaskFormState> {
       <form autoComplete='off' className='task' style={style}>
           <Button type='button' color='secondary' style={{ width: '100px', position: 'absolute', right: '10px' }} onClick={this.props.onClose}>close</Button>
         <div className='clearfix'>
-          <Field autoComplete='off' component={Text} name='name' label={'name'} autoFocus={true}></Field>
+          <Field autoComplete='off' component={Text} name='name' label={'name'} autoFocus={true} fullWidth={true}></Field>
           { /*}
           <Field component={Select} name='statusId' label={'statusId'} options={this.toOptions(project.statuses)}></Field>
           */}
           <FieldArray component={Assignee} name='assignees' label='assignees'></FieldArray>
+          <Field component={Text} name='progress' label={'progress'} type='number' placeholder='%' inputProps={{min:0, max: 100}}></Field>
           <Field component={DateField} name='expectedStartDay' label={'expectedStartDay'} style={{ float: 'left' }}
                   onChangeValue={((date: number) => {this.onChangeDate('expectedStartDay', date)}).bind(this)}></Field>
           <Field component={DateField} name='expectedEndDay' label={'expectedEndDay'} style={{ float: 'left' }}
@@ -48,7 +49,6 @@ class TaskForm extends React.Component<MergedProps, TaskFormState> {
                   onChangeValue={((date: number) => {this.onChangeDate('actualEndDay', date)}).bind(this)}></Field>
           <div style={{clear: 'both'}}></div>
           <Field component={Text} name='actualCost' label={'actualCost'} type='number' placeholder='人日'></Field>
-          <Field component={Text} name='progress' label={'progress'} type='number' placeholder='%' inputProps={{min:0, max: 100}}></Field>
         </div>
       </form>
     );

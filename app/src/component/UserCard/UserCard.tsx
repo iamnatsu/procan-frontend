@@ -43,10 +43,13 @@ class UserCard extends Component<MergedProps, UserCardState> {
           <Avatar style={{ width: 36, height: 36, float: 'left', fontSize: '16px', marginRight: '5px'}}>
             {user && user.get('name') ? user.get('name').substr(0, 1) : '?'}</Avatar>
           <Typography style={{lineHeight: '36px'}}>{user.get('name')}</Typography>
+          <Typography style={{lineHeight: '36px', opacity: 0.5}}>{user.get('loginId')}</Typography>
         </div>
-        <div>
-          <Button onClick={this.handleOnDelete.bind(this)}>UNASSIGN</Button>
-        </div>
+        { this.props.userCard.get('onDelete') && 
+          <div style={{ marginTop: '5px' }}>
+            <Button color='secondary' onClick={this.handleOnDelete.bind(this)}>UNASSIGN</Button>
+          </div>
+        }
         </Popover>
       </div>
     )
@@ -66,10 +69,9 @@ class UserCard extends Component<MergedProps, UserCardState> {
 
 const styles: Record<string, CSSProperties> = {
   paper: {
-    minWidth: 300,
-    maxWidth: 300,
-    maxHeight: 120,
-    minHeight: 120,
+    minWidth: 250,
+    maxWidth: 250,
+    minHeight: 56,
   }
 };
 
