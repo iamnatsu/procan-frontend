@@ -8,6 +8,7 @@ import { UserSelectorReducer, UserSelectorState } from './component/UserSelector
 import { UserCardReducer, UserCardState } from './component/UserCard/UserCardReducer';
 import { TaskFormReducer, TaskFormState } from './component/TaskForm/TaskFormReducer';
 import { ProjectState, ProjectReducer } from './Project/ProjectReducer';
+import { ProfileState, ProfileReducer } from './Profile/ProfileReducer';
 
 export interface AppComponentState {
   messageDialog: MessageDialogState,
@@ -27,6 +28,7 @@ export interface AppState {
   login: LoginState;
   dashboard: DashBoardState;
   project: ProjectState;
+  profile: ProfileState;
   form: any
 }
 
@@ -36,6 +38,7 @@ export const reducers = combineReducers<AppState>({
   login: LoginReducer,
   dashboard: DashBoardReducer,
   project: ProjectReducer,
+  profile: ProfileReducer,
   form: reduxFormReducer,
 });
 

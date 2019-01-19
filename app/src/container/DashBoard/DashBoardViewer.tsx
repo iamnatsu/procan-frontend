@@ -62,11 +62,10 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
     const { t, classes } = this.props;
     const { anchorEl } = this.state;
     const openGroup = Boolean(anchorEl);
-    const style = { width: '100vw', height: 'calc(100vh - 50px)' };
     const projects = this.props.dashboard.getProjects();
     if (!classes) return;
     return (
-      <div style={style}>
+      <div className="main-contents">
         <div style={{height: '100%', width:'300px', padding: '10px', backgroundColor: P_RED, float: 'left'}}>
           <p><Button className={classes.button} onClick={this.handleOpenProjectModal.bind(this)} >プロジェクトを作成する</Button></p>
           <p><Button className={classes.button} onClick={this.handleGroupOpen.bind(this)}>グループを作成する</Button></p>

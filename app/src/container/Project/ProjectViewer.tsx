@@ -40,7 +40,6 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
   }
 
   render() {
-    const style = { width: '100vw', height: 'calc(100vh - 50px)' };
     const innerHeader = { width: '100vw', height: '30px', backgroundColor: P_RED, color: WHITE };
     const headerItem: React.CSSProperties = { float: 'left', height: 30, lineHeight: '30px', margin: '0 10px'}
     const innerBody = { width: '100vw', height: 'calc(100% - 30px)', backgroundColor: P_IVORY };
@@ -49,7 +48,7 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
     const projectMap = this.props.project.getProject();
  
     return (
-      <div style={style}>
+      <div className="main-contents">
         <div style={innerHeader}>
           <div style={headerItem}>{projectMap.get('name')}</div>
           <div style={headerItem}>{this.renderAvatar(projectMap.get('assignees'))}</div>
@@ -79,7 +78,9 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
     if (!assignees || assignees.length <= 0) return;
     const style: React.CSSProperties = { width: 28, height: 28, float: 'left', fontSize: '16px', cursor: 'pointer', top: '1px' };
     return assignees.map(a => {
-      return <Avatar key={a.id} style={style} onClick={((e: React.MouseEvent<HTMLInputElement>) => { this.handleOpenUserCard(e, a)}).bind(this)}>{a.name.substr(0, 1)}</Avatar>
+      return <Avatar key={a.id} style={style} 
+        onClick={((e: React.MouseEvent<HTMLInputElement>) => { this.handleOpenUserCard(e, a)}).bind(this)}>
+          { a && a.name ? a.name.substr(0, 1) : '?' }</Avatar>
     })
   }
 
