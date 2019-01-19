@@ -14,6 +14,8 @@ export const enum ActionType {
   // TaskFormUpdateIsShowAction = 'TaskFormUpdateIsShowAction',
   TaskFormUpdateTask = 'TaskFormUpdateTask',
 
+  AppBarUpdateConfig = 'AppBarUpdateConfig',
+
   // container
   // login
   LoginUpdateLoginUser = 'LoginUpdateLoginUser',
@@ -29,6 +31,7 @@ export const enum ActionType {
   ProjectIsShowProjectModal = 'ProjectIsShowProjectModal',
   ProjectIsShowTaskModal = 'ProjectIsShowTaskModal',
   ProjectUpdateProject = 'ProjectUpdateProject',
+  ProjectLoadTasks = 'ProjectLoadTasks',
   ProjectUpdateTasks = 'ProjectUpdateTasks',
   ProjectAddTask = 'ProjectAddTask',
   ProjectUpdateTask = 'ProjectUpdateTask',

@@ -11,8 +11,10 @@ export const ProjectReducer: Reducer<Store> = (state = new Store(), action) => {
       return state.setIsShowTaskModal(action.isShow);
     case ActionType.ProjectUpdateProject:
       return state.setProject(action.project);
+    case ActionType.ProjectLoadTasks:
+        return state.initTasks(action.tasks);
     case ActionType.ProjectUpdateTasks:
-      return state.setTasks(action.tasks);
+        return state.setTasks(action.tasks);
     case ActionType.ProjectAddTask:
       return state.addTask(action.task);
     default:

@@ -6,6 +6,7 @@ const ProjectRecord = Record({
   isShowProjectModal: false,
   isShowTaskModal: false,
   project: Map(),
+  allTasks: List(),
   tasks: List()
 });
 
@@ -35,16 +36,24 @@ export default class ProjectStore extends ProjectRecord {
     return this.set('project', Map(project)) as this;
   }
 
-  getTasks(): List<Task> {
-    return this.get('tasks');
-  }
-
   addTask(task: Task) {
     return this.setTasks(this.getTasks().push(task).toJS());
   }
 
+  initTasks(tasks: Array<Task>): this {
+    return this.set('tasks', List(tasks)).set('allTasks', List(tasks)) as this;
+  }
+
+  getTasks(): List<Task> {
+    return this.get('tasks');
+  }
+
   setTasks(tasks: Array<Task>): this {
     return this.set('tasks', List(tasks)) as this;
+  }
+
+  getAllTasks(): List<Task> {
+    return this.get('allTasks');
   }
 
   updateTask(task: Task): this {

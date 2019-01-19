@@ -10,6 +10,7 @@ import UserCard from '../../component/UserCard/UserCard'
 import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
 import { UserSelectorDispatcher } from '../../redux/component/UserSelector/UserSelectorDispatcher';
 import { UserCardDispatcher } from '../../redux/component/UserCard/UserCardDispatcher';
+import { AppBarDispatcher } from '../../redux/component/AppBar/AppBarDispatcher';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import ProjectBoard from './ProjectBoard';
@@ -36,6 +37,25 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
     if (this.props.match.params.id) {
       this.props.action.project.loadProject(this.props.match.params.id);
       this.props.action.project.loadTasks(this.props.match.params.id);
+    }
+    this.props.action.appBar.update({ isShowSearch: true, searchAction: this.search.bind(this)});
+  }
+
+  componentWillUnmount() {
+    this.props.action.appBar.update({ isShowSearch: false, searchAction: () => {}});
+  }
+
+  search(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.keyCode === 13) {
+      const word = event.currentTarget.value;
+      if (event.currentTarget.value) {
+        const tasks: Task[] = this.props.project.getAllTasks().toJS() || [];
+        this.props.action.project.updateTasks(
+          tasks.filter(t => t.name && t.name.indexOf(word) >= 0)
+        );
+      } else {
+        this.props.action.project.loadTasks(this.props.match.params.id);
+      }
     }
   }
 
@@ -158,7 +178,8 @@ interface DispatchProps {
   action: {
     project: ProjectDispatcher,
     userSelector: UserSelectorDispatcher,
-    userCard: UserCardDispatcher
+    userCard: UserCardDispatcher,
+    appBar: AppBarDispatcher
   };
 }
 
@@ -178,6 +199,7 @@ function mapDispatchToProps(dispatch: any) {
       userSelector: new UserSelectorDispatcher(dispatch),
       userCard: new UserCardDispatcher(dispatch),
       messageDialog: new MessageDialogDispatcher(dispatch),
+      appBar: new AppBarDispatcher(dispatch),
     }
   };
 }

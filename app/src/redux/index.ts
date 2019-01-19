@@ -7,6 +7,7 @@ import { MessageDialogReducer, MessageDialogState } from './component/MessageDia
 import { UserSelectorReducer, UserSelectorState } from './component/UserSelector/UserSelectorReducer';
 import { UserCardReducer, UserCardState } from './component/UserCard/UserCardReducer';
 import { TaskFormReducer, TaskFormState } from './component/TaskForm/TaskFormReducer';
+import { AppBarReducer, AppBarState } from './component/AppBar/AppBarReducer';
 import { ProjectState, ProjectReducer } from './Project/ProjectReducer';
 import { ProfileState, ProfileReducer } from './Profile/ProfileReducer';
 
@@ -15,12 +16,14 @@ export interface AppComponentState {
   userSelector: UserSelectorState,
   userCard: UserCardState,
   taskForm: TaskFormState,
+  appBar: AppBarState
 }
 const component = combineReducers<AppComponentState>({
   messageDialog: MessageDialogReducer,
   userSelector: UserSelectorReducer,
   userCard: UserCardReducer,
   taskForm: TaskFormReducer,
+  appBar: AppBarReducer
 });
 
 export interface AppState {
