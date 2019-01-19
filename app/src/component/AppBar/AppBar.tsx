@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -10,7 +11,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { createStyles, withStyles, Theme } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
+import { StyledComponentProps } from '@material-ui/core/styles/withStyles';
+// import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 // import MailIcon from '@material-ui/icons/Mail';
@@ -20,8 +22,12 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import * as AuthService from '../../service/AuthService'
 import { transitionToLoginPage } from '../../util/transition';
 import { P_LIGHT_BLUE } from '../../config/Color';
+import AppBarStore from '../../redux/component/AppBar/AppBarStore';
+import { AppBarConfig } from '../../model/common'
+import { AppState } from 'src/redux';
 
-class PrimarySearchAppBar extends React.Component<any, any> {
+type MergedProps = StateProps & DispatchProps & StyledComponentProps;
+class PrimarySearchAppBar extends React.Component<MergedProps, any> {
   static propTypes = {
     classes: PropTypes.object.isRequired,
   };
@@ -55,9 +61,10 @@ class PrimarySearchAppBar extends React.Component<any, any> {
 
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
-    const { classes } = this.props;
+    const classes = this.props.classes as any;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const config: AppBarConfig  = this.props.appBar.get('config').toJS();
 
     const renderMenu = (
       <Menu
@@ -103,24 +110,29 @@ class PrimarySearchAppBar extends React.Component<any, any> {
       <div className={classes.root}>
         <AppBar position='static' className={classes.appBar}>
           <Toolbar>
+            {/*
             <IconButton className={classes.menuButton} color='inherit' aria-label='Open drawer'>
               <MenuIcon />
             </IconButton>
+            */}
             <Typography className={classes.title} variant='h6' color='inherit' noWrap>
             <a href='#/dashboard' style={{ color: 'white', display: 'block', textDecoration: 'none' }}>ProCan</a>
             </Typography>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
+            { config && config.isShowSearch && 
+              <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
+                <InputBase
+                  placeholder='Search…'
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                  onKeyDown={config.searchAction}
+                />
               </div>
-              <InputBase
-                placeholder='Search…'
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-              />
-            </div>
+            }
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               {/*
@@ -245,4 +257,17 @@ const styles = (theme: Theme ) => createStyles({
   },
 });
 
-export default withStyles(styles as any)(PrimarySearchAppBar);
+export interface StateProps {
+  appBar: AppBarStore;
+}
+export interface DispatchProps {
+}
+const mapStateToProps = (state: AppState) => {
+  return { appBar: state.component.appBar };
+}
+const mapDispatchToProps = (dispatch: any) => {
+  return {}
+}
+
+const styled = withStyles(styles as any)(PrimarySearchAppBar as any);
+export default connect<StateProps, DispatchProps, any>(mapStateToProps, mapDispatchToProps)(styled);

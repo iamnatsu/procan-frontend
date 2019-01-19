@@ -1,4 +1,4 @@
-import { ProjectIsShowProjectModal, ProjectIsShowTaskModal, ProjectUpdateProject, ProjectUpdateTasks, ProjectUpdateTask, ProjectAddTask } from './ProjectActionCreator';
+import { ProjectIsShowProjectModal, ProjectIsShowTaskModal, ProjectUpdateProject, ProjectLoadTasks, ProjectUpdateTasks, ProjectUpdateTask, ProjectAddTask } from './ProjectActionCreator';
 import { Project } from '../../model/project';
 import * as ProjectService from '../../service/ProjectService';
 import * as TaskService from '../../service/TaskService';
@@ -19,7 +19,7 @@ export class ProjectDispatcher {
   loadTasks(projectId: string) {
     // TODO
     TaskService.find(projectId).then(result => {
-      this.dispatch(ProjectUpdateTasks(result.data));
+      this.dispatch(ProjectLoadTasks(result.data));
     });
   }
 

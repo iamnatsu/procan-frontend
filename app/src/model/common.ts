@@ -63,3 +63,8 @@ export type FilterQuery<T> = {
         [key: string]: any;
     };
 } | { [key: string]: any };
+
+export class AppBarConfig {
+    isShowSearch: boolean;
+    searchAction: () => void;
+}
