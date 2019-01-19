@@ -1,24 +1,32 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { AppState } from '../../redux/index';
+import * as moment from 'moment';
 import { StyledComponentProps } from '@material-ui/core/styles/withStyles';
 import { TASK_CARD } from '../../config/Style'
+import { User } from '../../model/user'
 import { ProjectState } from '../../redux/Project/ProjectReducer';
 import { ProjectDispatcher } from '../../redux/Project/ProjectDispatcher';
 import { MessageDialogState } from '../../redux/component/MessageDialog/MessageDialogReducer';
 import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
 import { TaskFormDispatcher } from '../../redux/component/TaskForm/TaskFormDispatcher';
+import { UserCardDispatcher } from '../../redux/component/UserCard/UserCardDispatcher';
 import { DragSource, DragSourceSpec, DragSourceMonitor, DragSourceCollector, DragSourceConnector, ConnectDragSource,
   DropTargetCollector, DropTargetConnector, DropTargetMonitor, DropTarget, ConnectDropTarget, DropTargetSpec, ConnectDragPreview } from 'react-dnd';
   import { getEmptyImage } from 'react-dnd-html5-backend'
 import { ItemTypes } from '../../config/DnDItemType';
 import * as TaskService from '../../service/TaskService';
+import { Avatar } from '@material-ui/core';
+import { P_LIGHT_LIGHT_BLUE } from '../../config/Color';
 
 export interface TaskCardProps { 
   id: string;
   name: string;
   statusId: string;
   pos?: number;
+  assignees?: User[];
+  expectedEndDay?: Date;
+  progress?: number;
   nextPos: number;
   beforePos?: number;
   connectDragSource?: ConnectDragSource;
@@ -74,14 +82,61 @@ class TaskCard extends React.Component<MergedProps, TaskCardState> {
       style.height = 'calc(100% - 20px)';
       style.boxShadow = 'none';
       return connectDropTarget(<div style={style}></div>);
+    } else if (this.props.progress) {
+      style.background = `linear-gradient(90deg,${P_LIGHT_LIGHT_BLUE} 0%,${P_LIGHT_LIGHT_BLUE} ${this.props.progress}%,white ${this.props.progress}%,white 100%)`
     }
-/*
-    const handleStyle: React.CSSProperties  = { backgroundColor: 'lightgray', margin: '10px', width: 'calc(100% - 56px)', height: '24px', fontSize:'14px',
-            borderRadius: '3px', padding:'5px', float: 'left', cursor: 'move', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'};
-            */
-    return connectDropTarget(
-      connectDragSource(<div id={"task-card-" + this.props.id} className="task-card" onClick={this.handleClick.bind(this)} style={style}>
-        {this.props.name}</div>));
+    return connectDropTarget(connectDragSource(this.renderTask(style)));
+  }
+
+  renderTask(style: React.CSSProperties) {
+    return <div className="task-card" 
+        onClick={this.handleClick.bind(this)}
+        style={style}>
+        <div>{this.props.name}</div>
+        {this.renderAvatar()}
+        {this.renderExpectedEndDay()}
+      </div>
+  }
+
+  renderAvatar() {
+    if (!this.props.assignees || this.props.assignees.length <= 0) return null;
+
+    const padding = 28 * (7 - this.props.assignees.length) + 17;
+    return <div style={{height: '30px', width: '215px', paddingLeft: padding + 'px'}}>
+        {this.renderAvatars()}
+      </div>;
+  }
+
+  renderAvatars() {
+    if (!this.props.assignees || this.props.assignees.length <= 0) return null;
+    const styleEtc: React.CSSProperties = { width: 28, height: 28, float: 'left', fontSize: '12px', top: '1px' };
+    const style: React.CSSProperties = { width: 28, height: 28, float: 'left', fontSize: '16px', cursor: 'pointer', top: '1px' };
+    return this.props.assignees.map((a, i) => {
+      if (i === 6 && this.props.assignees) {
+        return <Avatar key={a.id} style={styleEtc}>+{ this.props.assignees.length - 6 }</Avatar>
+      }
+      if (i > 6) return null;
+
+      return <Avatar key={a.id} style={style} 
+        onClick={((e: React.MouseEvent<HTMLInputElement>) => { this.handleOpenUserCard(e, a)}).bind(this)}>
+          { a && a.name ? a.name.substr(0, 1) : '?' }</Avatar>
+    })
+  }
+
+  handleOpenUserCard(event: React.MouseEvent<HTMLInputElement>, user: User) {
+    event.stopPropagation();
+    this.props.action.userCard.show(event.target as any, user);
+    //
+  }
+
+  renderExpectedEndDay() {
+    if (this.props.expectedEndDay) {
+      return <div style={{height: '16px', fontSize: '12px', color: 'rgba(0, 0, 0, 0.65)', textAlign: 'right'}}>
+          {moment(this.props.expectedEndDay).format('YYYY/MM/DD')}
+        </div>
+    } else {
+      return null;
+    }
   }
 
   handleClick() {
@@ -102,6 +157,7 @@ interface DispatchProps {
   action: {
     project: ProjectDispatcher,
     taskForm: TaskFormDispatcher,
+    userCard: UserCardDispatcher,
     messageDialog: MessageDialogDispatcher
   };
 }
@@ -118,6 +174,7 @@ function mapDispatchToProps(dispatch: any) {
     action: {
       project: new ProjectDispatcher(dispatch),
       taskForm: new TaskFormDispatcher(dispatch),
+      userCard: new UserCardDispatcher(dispatch),
       messageDialog: new MessageDialogDispatcher(dispatch),
     }
   };

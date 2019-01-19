@@ -135,6 +135,7 @@ class ProjectStatus extends React.Component<MergedProps, ProjectStatusState> {
       return sorted.map((t, index) => {
         if (t) {
           return <TaskCard key={t.id} id={t.id} name={t.name} statusId={this.props.id} pos={t.boardPos}
+            expectedEndDay={t.expectedEndDay} assignees={t.assignees} progress={t.progress}
             beforePos={this.getBeforePos(t, sorted, index)} nextPos={this.getNextPos(t, sorted, index)}
             handleMoveTask={this.handleMoveTask.bind(this)} handleSaveTask={this.handleSaveTask.bind(this)}
             lastHover={this.lastHover.bind(this)}></TaskCard>

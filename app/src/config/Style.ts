@@ -17,7 +17,7 @@ export const FIELD_STYLE: React.CSSProperties = {
 
 export const TASK_CARD: React.CSSProperties = {
   width: '225px',
-  minHeight: '100px',
+  minHeight: '65px',
   backgroundColor: WHITE,
   color: 'rgba(0, 0, 0, 0.87)',
   boxShadow: 'rgba(0, 0, 0, 0.2) 0px 1px 3px 0px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 2px 1px -1px',
@@ -25,5 +25,6 @@ export const TASK_CARD: React.CSSProperties = {
   borderRadius: '3px',
   margin: '10px 5px',
   opacity: 1,
-  overflowWrap: 'break-word'
+  overflowWrap: 'break-word',
+  position: 'relative'
 }

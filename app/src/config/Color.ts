@@ -1,4 +1,5 @@
 export const P_LIGHT_BLUE = '#6fb1c6'
+export const P_LIGHT_LIGHT_BLUE = '#d4e4f4'
 export const P_DARK_BLUE = '#85ada4'
 export const P_BROWN = '#82725c'
 export const P_RED = '#d87d6b'
