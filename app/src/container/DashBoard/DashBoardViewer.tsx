@@ -4,15 +4,18 @@ import { AppState } from '../../redux/index';
 import { RouteComponentProps } from 'react-router';
 import { withNamespaces, TransProps } from 'react-i18next';
 import Modal from '@material-ui/core/Modal';
-import { P_RED, P_IVORY } from '../../config/Color';
+import { P_RED, P_IVORY, P_BLACK, P_RED_LIGHT } from '../../config/Color';
 import { MODAL_STYLE } from '../../config/Style';
 import * as AuthService from '../../service/AuthService'
 import * as ProjectService from '../../service/ProjectService'
+import * as GroupService from '../../service/GroupService'
 import { transitionToLoginPage } from '../../util/transition';
 import { DashBoardDispatcher } from '../../redux/DashBoard/DashBoardDispatcher';
 import { DashBoardState } from '../../redux/DashBoard/DashBoardReducer';
 import ProjectForm from '../../component/ProjectForm/ProjectForm';
-import { Project } from '../../model/project';
+import GroupForm from '../../component/GroupForm/GroupForm';
+import { Project, ROOT_GROUP_ID } from '../../model/project';
+import { Group } from '../../model/group';
 import { Button } from '@material-ui/core';
 import { List } from 'immutable';
 
@@ -25,16 +28,21 @@ import { withStyles } from '@material-ui/core/styles';
 import { StyledComponentProps, ClassNameMap, CSSProperties } from '@material-ui/core/styles/withStyles';
 import { MessageDialogState } from '../../redux/component/MessageDialog/MessageDialogReducer';
 import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
-
-import Popover from '@material-ui/core/Popover';
-import TextField from '@material-ui/core/TextField';
+import UserSelector from '../../component/UserSelector/UserSelector'
+import UserCard from '../../component/UserCard/UserCard'
+import { UserSelectorDispatcher } from '../../redux/component/UserSelector/UserSelectorDispatcher';
+import { UserCardDispatcher } from '../../redux/component/UserCard/UserCardDispatcher';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import { default as CustomScrollbars } from 'react-custom-scrollbars';
+import { MessageDialogActionMap } from '../../redux/component/MessageDialog/MessageDialogStore';
 
 export interface DashBoardProps extends RouteComponentProps<any> {
 }
 
 export interface DashBoardViewerState extends React.Props<any> {
   toggleDrawer: boolean;
-  anchorEl: HTMLElement |  null;
 }
 
 type MergedProps = StateProps & DispatchProps & DashBoardProps & StyledComponentProps & TransProps;
@@ -44,12 +52,12 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
     super(props);
     this.state = {
       toggleDrawer: false,
-      anchorEl: null
     }
   }
 
   componentWillMount() {
     this.props.action.dashboard.loadProjects();
+    this.props.action.dashboard.loadGroups();
   }
 
   componentDidMount() {
@@ -60,20 +68,27 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
 
   render() {
     const { /*t,*/ classes } = this.props;
-    const { anchorEl } = this.state;
-    const openGroup = Boolean(anchorEl);
     const projects = this.props.dashboard.getProjects();
+    const { groupId } = this.props.match.params;
     if (!classes) return;
     return (
       <div className="main-contents">
         <div style={{height: '100%', width:'300px', padding: '10px', backgroundColor: P_RED, float: 'left'}}>
-          <p><Button className={classes.button} onClick={this.handleOpenProjectModal.bind(this)} >プロジェクトを作成する</Button></p>
-          <p><Button className={classes.button} onClick={this.handleGroupOpen.bind(this)}>グループを作成する</Button></p>
+          <CustomScrollbars style={{width: 'calc(100% + 8px)'}}>
+            <p><Button className={classes.button} onClick={(() => {this.transitionDashboard()})} >ダッシュボード</Button></p>
+            <Divider style={{margin: '5px 0'}} />
+            <p><Button className={classes.button} onClick={this.handleOpenProjectModal.bind(this)} >プロジェクトを作成する</Button></p>
+            <p><Button className={classes.button} onClick={this.handleOpenGroupModal.bind(this)}>グループを作成する</Button></p>
+            { this.renderGroups(classes) }
+          </CustomScrollbars>
         </div>
         <div style={{height: '100%', width:'calc(100% - 300px)', padding: '10px', backgroundColor: P_IVORY, float: 'left'}}>
-          { projects && projects.size > 0 && (
-            this.renderProjects(projects, this.props.classes || {})
-          )}
+          <CustomScrollbars style={{width: 'calc(100% + 8px)'}}>
+            { !groupId && <p className={classes.label}>参加中のプロジェクト{this.groupName(groupId)}</p> }
+            { projects && projects.size > 0 && (
+              this.renderProjects(projects, this.props.classes || {}, groupId)
+            )}
+          </CustomScrollbars>
         </div>
         <Modal
           aria-labelledby='simple-modal-title'
@@ -85,37 +100,57 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
             <ProjectForm onSubmit={this.handleSubmitProject.bind(this)} onClose={this.handleCloseProjectModal.bind(this)}></ProjectForm>
           </div>
         </Modal>
-        <Popover
-          //className={this.props.classes ? this.props.classes.popover : ''}
-          classes={{
-            paper: classes.paper
-          }}
-          id="simple-popper"
-          open={openGroup}
-          anchorEl={anchorEl}
-          onClose={this.handleGroupClose.bind(this)}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
+        <Modal
+          aria-labelledby='simple-modal-title'
+          aria-describedby='simple-modal-description'
+          open={this.props.dashboard.isShowGroupModal()}
+          onClose={this.handleCloseGroupModal.bind(this)}
         >
-          <Typography >The content of the Popover.</Typography>
-          <TextField fullWidth={true} />
-          <Button color='primary'>Test</Button>
-        </Popover>
+          <div style={MODAL_STYLE} >
+            <GroupForm onSubmit={this.handleSubmitGroup.bind(this)} onDelete={this.deleteGroupConfirm.bind(this)} onClose={this.handleCloseGroupModal.bind(this)}></GroupForm>
+          </div>
+        </Modal>
+        <UserSelector />
+        <UserCard />
       </div>
     );
   }
 
-  renderProjects(projects: List<Project>, classes: Partial<ClassNameMap<string>>) {
+  renderProjects(projects: List<Project>, classes: Partial<ClassNameMap<string>>, gid = '') {
+    const { groupId } = this.props.match.params;
     const rows: any = [];
+    let groups: Group[] = this.props.dashboard.getGroups().toJS() || [];
+    groups.unshift({id: ROOT_GROUP_ID, name: 'uncategrize'} as Group);
+    if (gid) {
+      groups = groups.filter(g => g.id === gid);
+    }
     
-    projects.forEach(pr => {
-      if (pr) {
+    groups.map(g => {
+      if (g.id === ROOT_GROUP_ID) {
+        rows.push(
+          <div key={'outer-' + g.id} style={{clear: 'both'}}>
+            <p>&nbsp;</p>
+            {this.renderProject(classes, projects)}
+          </div>
+        )
+      } else {
+        rows.push(
+          <div key={'outer-' + g.id} style={{clear: 'both', paddingTop: groupId ? '0px' : '10px'}}>
+            <p className={classes.label} style={{marginBottom: '5px'}}>{g.name}</p>
+            {this.renderProject(classes, projects, g.id)}
+          </div>
+        )
+      }
+    });
+    return rows;
+  }
+
+  renderProject(classes: any, projects: List<Project>, groupId = '') {
+    const rows: any = [];
+    projects
+      .filter(pr => !groupId || (!!pr && pr.groupId == groupId))
+      .forEach(pr => {
+        if (!pr) return null;
         const card = 
         <Card className={classes.card} key={pr.id}>
           <CardActionArea className={classes.action} onClick={ (event) => { this.transitionProject(pr.id); } }>
@@ -126,38 +161,135 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
             </CardContent>
           </CardActionArea>
           <CardActions className={classes.cardActions} >
-              <Button size='small' className={classes.cardButton} color='primary' onClick={ (event) => {event.stopPropagation(); /* edit */} }>EDIT</Button>
+              <Button size='small' className={classes.cardButton} color='primary' onClick={ (event) => {event.stopPropagation(); this.handleEditProject(pr.id)} }>EDIT</Button>
               <Button size='small' className={classes.cardButton} color='secondary' onClick={ (event) => {event.stopPropagation(); this.deleteProjectConfirm(pr.id)} }>DEL</Button>
           </CardActions>
         </Card>
         rows.push(card);
-      }
     });
+
+    const newCard = 
+    <Card className={classes.newCard} key={groupId + '-new'}>
+      <CardActionArea className={classes.newAction} onClick={ (event) => { this.handleOpenProjectModal(); } }>
+        <CardContent>
+            <Typography component='p' style={{textAlign: 'center'}}>
+              { "+ NEW PROJECT" }
+            </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
+    rows.push(newCard);
     return rows;
+  }
+
+  renderGroups(classes: Partial<ClassNameMap<string>>) {
+    const groups = this.props.dashboard.getGroups();
+    if (!groups || groups.size <= 0) return null;
+    return groups.map(g => { 
+      if (g) return <p key={'p' + g.id}><Button key={g.id} className={classes.buttonGrp} 
+        onClick={(() => {this.transitionDashboard(g.id)})}>{g.name}</Button>
+        <IconButton aria-label="Clear" className={classes.editBtn} onClick={(() => { this.handleEditGroup(g.id) }).bind(this)}>
+          <EditIcon />
+        </IconButton>
+        </p>
+    });
+  }
+
+  handleEditGroup(groupId: string) {
+    GroupService.get(groupId).then(res => {
+      this.props.action.dashboard.updateGroup(res.data);
+      this.props.action.dashboard.showGroupModal();
+    });
+  }
+
+  groupName(groupId: string) {
+    if (!groupId) return '';
+    const group = this.props.dashboard.getGroups().find(g => !!g && g.id === groupId)
+    return group && group.name ? ' [ ' +group.name + ' ]' : '';
+  }
+
+  transitionDashboard(groupId?: string) {
+    location.href = '#/dashboard' + (groupId ? '/' + groupId : '');
   }
 
   transitionProject(id: string) {
     location.href = '#/project/' + id
   }
 
+  handleEditProject(id: string) {
+    ProjectService.get(id).then(res => {
+      this.props.action.dashboard.updateProject(res.data);
+      this.props.action.dashboard.showProjectModal();
+    });
+  }
+
   deleteProjectConfirm(projectId: string) {
-    this.props.action.messageDialog.showMessage('削除してもよろしいですか？', 
-      [{ message: 'この操作は取り消すことができません。' }],
-      () => { /* NOP */ },
+    this.deleteConfirm(
       { delete: {
-        action: () => {},
+        action: () => {
+          ProjectService.del(projectId).then(res => {
+            this.props.action.messageDialog.closeMessage();
+            const index = this.props.dashboard.getProjects().findIndex(p => !!p && p.id === projectId);
+            if (index >= 0) {
+              const removed = this.props.dashboard.getProjects().remove(index);
+              this.props.action.dashboard.updateProjects(removed.toJS());
+            }
+          });
+        },
         caption: 'DELETE',
         color: 'secondary'
       }}
+    )
+  }
+
+  deleteGroupConfirm(groupId: string) {
+    this.deleteConfirm(
+      { delete: {
+        action: () => {
+          GroupService.del(groupId).then(res => {
+            this.props.action.messageDialog.closeMessage();
+            const index = this.props.dashboard.getProjects().findIndex(p => !!p && p.id === groupId);
+            if (index >= 0) {
+              const removed = this.props.dashboard.getGroups().remove(index);
+              this.props.action.dashboard.updateGroups(removed.toJS());
+            }
+          });
+        },
+        caption: 'DELETE',
+        color: 'secondary'
+      }}
+    )
+  }
+
+  deleteConfirm(actionMap: MessageDialogActionMap) {
+    this.props.action.messageDialog.showMessage('削除してもよろしいですか？', 
+      [{ message: 'この操作は取り消すことができません。' }],
+      () => { /* NOP */ },
+      actionMap
     );
   }
 
   handleSubmitProject(values: Project) {
-    ProjectService.post(values);
-    this.props.action.dashboard.updateProject(values);
-    this.handleCloseProjectModal();
+    if (!values.id) {
+      ProjectService.post(values).then(res => {
+        this.props.action.dashboard.updateProject(values);
+        this.props.action.dashboard.updateProjects(this.props.dashboard.getProjects().push(res.data).toJS());
+        this.handleCloseProjectModal();
+      });
+    } else {
+      ProjectService.put(values).then(res => {
+        this.props.action.dashboard.updateProject(values);
+        const index = this.props.dashboard.getProjects().findIndex(p => !!p && p.id === values.id);
+        this.props.action.dashboard.updateProjects(
+          this.props.dashboard.getProjects().update(index, () => res.data ).toArray()
+        );
+        this.handleCloseProjectModal();
+      });
+    }
   }
-  handleOpenProjectModal() {
+
+  handleOpenProjectModal(project = new Project()) {
+    this.props.action.dashboard.updateProject(project);
     this.props.action.dashboard.showProjectModal();
   }
 
@@ -165,16 +297,32 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
     this.props.action.dashboard.closeProjectModal();
   }
 
-  handleGroupOpen(event: React.MouseEvent<HTMLElement>) {
-    this.setState(Object.assign({}, this.state, {
-      anchorEl: event.currentTarget,
-    }));
+  handleSubmitGroup(values: Group) {
+    if (!values.id) {
+      GroupService.post(values).then(res => {
+        this.props.action.dashboard.updateGroups(
+          this.props.dashboard.getGroups().push(res.data).toArray()
+        );
+        this.handleCloseGroupModal();  
+      });
+    } else {
+      GroupService.put(values).then(res => {
+        const index = this.props.dashboard.getGroups().findIndex(g => !!g && g.id === values.id);
+        this.props.action.dashboard.updateGroups(
+          this.props.dashboard.getGroups().update(index, () => res.data ).toArray()
+        );
+        this.handleCloseGroupModal();
+      });
+    }
   }
 
-  handleGroupClose() {
-    this.setState(Object.assign({}, this.state, {
-      anchorEl: null,
-    }));
+  handleOpenGroupModal() {
+    this.props.action.dashboard.updateGroup(new Group());
+    this.props.action.dashboard.showGroupModal();
+  }
+
+  handleCloseGroupModal() {
+    this.props.action.dashboard.closeGroupModal();
   }
 
   logout() {
@@ -193,7 +341,9 @@ interface StateProps {
 interface DispatchProps {
   action: {
     dashboard: DashBoardDispatcher,
-    messageDialog: MessageDialogDispatcher
+    messageDialog: MessageDialogDispatcher,
+    userSelector: UserSelectorDispatcher,
+    userCard: UserCardDispatcher,
   };
 }
 
@@ -209,6 +359,8 @@ function mapDispatchToProps(dispatch: any) {
     action: {
       dashboard: new DashBoardDispatcher(dispatch),
       messageDialog: new MessageDialogDispatcher(dispatch),
+      userSelector: new UserSelectorDispatcher(dispatch),
+      userCard: new UserCardDispatcher(dispatch),
     }
   };
 }
@@ -224,9 +376,22 @@ const styles: Record<string, CSSProperties> = {
     margin: '0 10px 10px 0',
     float: 'left'
   },
+  newCard: {
+    minWidth: 200,
+    maxWidth: 200,
+    minHeight: 107,
+    maxHeight: 107,
+    margin: '0 10px 10px 0',
+    float: 'left'
+  },
   action: {
     width: '100%',
     minHeight: '70px'
+  },
+  newAction: {
+    width: '100%',
+    height: '107px',
+    backgroundColor: P_RED_LIGHT
   },
   content: {
     paddingTop: 0
@@ -249,13 +414,31 @@ const styles: Record<string, CSSProperties> = {
     minHeight: 200,
   },
   button: {
-    color: 'white'
+    color: 'white',
+  },
+  buttonGrp: {
+    fontSize: '12px',
+    color: 'white',
+    marginLeft: '20px',
+    width: '222px',
+    justifyContent: 'left',
+    textAlign: 'left',
+    whiteSpace: 'nowrap',
+    display: 'block',
+    float: 'left',
+    textTransform: 'none'
+  },
+  editBtn: {
+    padding: '6px'
   },
   cardActions: {
     padding: '0px 12px 4px'
   },
   cardButton: {
     margin: 0
+  },
+  label: {
+    color: P_BLACK
   }
 };
 

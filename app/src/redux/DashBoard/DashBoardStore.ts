@@ -1,11 +1,15 @@
 import { Record, Map, List } from 'immutable';
 import { Project } from '../../model/project';
+import { Group } from '../../model/group';
 
 
 const DashBoardRecord = Record({ 
   isShowProjectModal: false,
+  isShowGroupModal: false,
   project: Map(),
-  projects: List()
+  projects: List(),
+  group: Map(),
+  groups: List(),
 });
 export default class DashBoardStore extends DashBoardRecord {
 
@@ -17,7 +21,15 @@ export default class DashBoardStore extends DashBoardRecord {
     return this.set('isShowProjectModal', isShowProjectModal) as this;
   }
 
-  getProject(): Map<string, any> {
+  isShowGroupModal() {
+    return this.get('isShowGroupModal');
+  }
+
+  setIsShowGroupModal(isShowGroupModal: boolean): this {
+    return this.set('isShowGroupModal', isShowGroupModal) as this;
+  }
+
+  getProject(): Map<keyof Project, any> {
     return this.get('project');
   }
 
@@ -33,4 +45,19 @@ export default class DashBoardStore extends DashBoardRecord {
     return this.set('projects', List(projects)) as this;
   }
 
+  getGroup(): Map<keyof Group, any> {
+    return this.get('group');
+  }
+
+  setGroup(gropu: Group): this {
+    return this.set('group', Map(gropu)) as this;
+  }
+
+  getGroups(): List<Group> {
+    return this.get('groups');
+  }
+
+  setGroups(groups: Array<Group>): this {
+    return this.set('groups', List(groups)) as this;
+  }
 }

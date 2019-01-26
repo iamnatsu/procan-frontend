@@ -261,11 +261,15 @@ const dropTarget: DropTargetSpec<any> = {
       }
       if (hoverClientY > hoverMiddleY) return;
       if (props.handleMoveTask) props.handleMoveTask(dragId, props.statusId, props.beforePos);
-    } else if (props.beforePos && item.statusId != props.statusId) {
+    } else if (item.statusId != props.statusId) {
       if (props.lastHover) {
         props.lastHover(time);
       }
-      if (props.handleMoveTask) props.handleMoveTask(dragId, props.statusId, props.beforePos);
+      if (!props.beforePos) {
+        if (props.handleMoveTask) props.handleMoveTask(dragId, props.statusId, 10000);
+      } else {
+        if (props.handleMoveTask) props.handleMoveTask(dragId, props.statusId, props.beforePos);
+      }
     } else if(item.boardPos < props.nextPos && props.beforePos && item.statusId == props.statusId) {
       if (props.lastHover) {
         props.lastHover(time);

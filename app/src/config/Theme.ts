@@ -70,6 +70,10 @@ export const appTheme = createMuiTheme({
       contained: {
         color: 'white',
         backgroundColor: MAIN_COLOR
+      },
+      label: {
+        textOverflow: 'ellipsis',
+        overflow: 'hidden'
       }
     },
     MuiToolbar: {
