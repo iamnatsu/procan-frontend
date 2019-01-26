@@ -18,6 +18,7 @@ class ContentsBase extends React.Component<any, any> {
         <AppBar elevation={24}></AppBar>
         <Switch>
           <Route strict exact path='/dashboard' component={DashBoardViewer} />
+          <Route strict exact path='/dashboard/:groupId' component={DashBoardViewer} />
           <Route strict exact path='/project/:id' component={ProjectViewer} />
           <Route strict exact path='/profile' component={ProfileViewer} />
         </Switch>

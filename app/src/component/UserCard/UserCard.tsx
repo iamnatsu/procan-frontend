@@ -21,7 +21,7 @@ class UserCard extends Component<MergedProps, UserCardState> {
 
     if (!classes) return null;
     return (
-      <div style={{ margin: '5px' }}>
+      <div >
         <Popover
           classes={{
             paper: classes.paper

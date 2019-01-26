@@ -24,7 +24,7 @@ class UserSelector extends Component<MergedProps, UserSelectorState> {
 
     if (!classes) return null;
     return (
-      <div style={{ marginTop: '5px' }}>
+      <div>
         <Popover
           classes={{
             paper: classes.paper

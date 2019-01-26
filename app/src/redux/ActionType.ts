@@ -24,8 +24,11 @@ export const enum ActionType {
 
   // dashboard
   DashBoardIsShowProjectModal = 'DashBoardIsShowProjectModal',
+  DashBoardIsShowGroupModal = 'DashBoardIsShowGroupModal',
   DashBoardUpdateProject = 'DashBoardUpdateProject',
   DashBoardUpdateProjects = 'DashBoardUpdateProjects',
+  DashBoardUpdateGroup = 'DashBoardUpdateGroup',
+  DashBoardUpdateGroups = 'DashBoardUpdateGroups',
 
   // project
   ProjectIsShowProjectModal = 'ProjectIsShowProjectModal',

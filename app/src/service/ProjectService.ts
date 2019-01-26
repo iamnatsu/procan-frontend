@@ -25,4 +25,11 @@ export function find(): HttpService._Promise<Array<Project>> {
   return HttpService.get(PROJECT).then((response: HttpService._Response<Array<Project>>) => {
     return response;
   });
+};
+
+export function del(id: string) {
+  const url = PROJECT + '/' + id;
+  return HttpService.del(url).then((response: HttpService._Response<Project>) => {
+    return response;
+  });
 }

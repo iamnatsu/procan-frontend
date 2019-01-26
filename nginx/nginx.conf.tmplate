@@ -26,7 +26,7 @@ server {
         add_header  Content-Type    application/x-javascript;                  
     }
 
-    location ~ /(auth|user|regist)(/.*|$) { 
+    location ~ /(auth|user|regist|project|group|task)(/.*|$) { 
         proxy_pass http://127.17.0.1:3000/$1$2$is_args$args;
     }
 
