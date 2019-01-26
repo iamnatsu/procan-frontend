@@ -26,6 +26,7 @@ import * as Tasks from '../../util/tasks';
 
 import { MODAL_STYLE } from '../../config/Style' 
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
+import { default as CustomScrollbars } from 'react-custom-scrollbars';
 
 export interface ProjectViewerProps extends RouteComponentProps<any> { }
 export interface ProjectViewerState extends React.Props<any> { }
@@ -85,7 +86,9 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
           onClose={this.handleCloseTaskModal.bind(this)}
         >
           <div style={MODAL_STYLE} >
-            <TaskForm onSubmit={this.handleSubmitTask.bind(this)} onClose={this.handleCloseTaskModal.bind(this)} />
+            <CustomScrollbars>
+              <TaskForm onSubmit={this.handleSubmitTask.bind(this)} onClose={this.handleCloseTaskModal.bind(this)} />
+            </CustomScrollbars>
           </div>
         </Modal>
         <UserSelector />

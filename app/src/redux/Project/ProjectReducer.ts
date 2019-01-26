@@ -15,6 +15,8 @@ export const ProjectReducer: Reducer<Store> = (state = new Store(), action) => {
         return state.initTasks(action.tasks);
     case ActionType.ProjectUpdateTasks:
         return state.setTasks(action.tasks);
+    case ActionType.ProjectUpdateTask:
+        return state.updateTask(action.task);
     case ActionType.ProjectAddTask:
       return state.addTask(action.task);
     default:
