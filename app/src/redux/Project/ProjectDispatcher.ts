@@ -1,8 +1,9 @@
-import { ProjectIsShowProjectModal, ProjectIsShowTaskModal, ProjectUpdateProject, ProjectLoadTasks, ProjectUpdateTasks, ProjectUpdateTask, ProjectAddTask } from './ProjectActionCreator';
+import { ProjectIsShowProjectModal, ProjectIsShowTaskModal, ProjectUpdateProject, ProjectLoadTasks, ProjectUpdateTasks, ProjectUpdateTask, ProjectAddTask, ProjectChangeView, ProjectShowPopOver, ProjectUpdatePopOverValue, ProjectUpdateMenuAnchor } from './ProjectActionCreator';
 import { Project } from '../../model/project';
 import * as ProjectService from '../../service/ProjectService';
 import * as TaskService from '../../service/TaskService';
 import { Task } from 'src/model/task';
+import { ViewMode, PopOverTarget } from 'src/model/common';
 
 export class ProjectDispatcher {
   constructor(public dispatch: (action: any) => any) {
@@ -56,6 +57,14 @@ export class ProjectDispatcher {
       this.dispatch(ProjectAddTask(result.data));
     })
   }
+
+  showStatusMenu(anchor: HTMLElement, pos: number) {
+    this.dispatch(ProjectUpdateMenuAnchor(anchor, pos));
+  }
+
+  closeStatusMenu() {
+    this.dispatch(ProjectUpdateMenuAnchor());
+  }
   
   showProjectModal() {
     this.dispatch(ProjectIsShowProjectModal(true));
@@ -77,6 +86,22 @@ export class ProjectDispatcher {
     ProjectService.put(project).then(result => {
       this.dispatch(ProjectUpdateProject(project));
     });
+  }
+
+  updateViewMode(viewMode: ViewMode) {
+    this.dispatch(ProjectChangeView(viewMode));
+  }
+
+  showPopOver(target: PopOverTarget, anchor: HTMLElement, value: string, action: (v: string) => {}) {
+    this.dispatch(ProjectShowPopOver(target, anchor, value, action));
+  }
+
+  closePopOver() {
+    this.dispatch(ProjectShowPopOver());
+  }
+
+  updatePopOverValue(value: string) {
+    this.dispatch(ProjectUpdatePopOverValue(value));
   }
 
 }

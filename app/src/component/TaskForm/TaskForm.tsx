@@ -33,7 +33,7 @@ class TaskForm extends React.Component<MergedProps, TaskFormState> {
     const style = Object.assign({}, this.props.style, { padding: '10px' });
     return (
       <form autoComplete='off' className='task' style={style}>
-          <IconButton aria-label="Clear" style={{position: 'absolute', right: '15px'}}
+          <IconButton aria-label="Clear" style={{position: 'absolute', top: '0px', right: '5px', zIndex: 1}}
             onClick={(() => {if (this.props.onClose) this.props.onClose()}).bind(this)}>
             <ClearIcon />
           </IconButton>

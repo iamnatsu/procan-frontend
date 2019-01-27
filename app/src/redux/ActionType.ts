@@ -33,12 +33,22 @@ export const enum ActionType {
   // project
   ProjectIsShowProjectModal = 'ProjectIsShowProjectModal',
   ProjectIsShowTaskModal = 'ProjectIsShowTaskModal',
+  ProjectUpdateMenuAnchor = 'ProjectUpdateMenuAnchor',
   ProjectUpdateProject = 'ProjectUpdateProject',
   ProjectLoadTasks = 'ProjectLoadTasks',
   ProjectUpdateTasks = 'ProjectUpdateTasks',
   ProjectAddTask = 'ProjectAddTask',
   ProjectUpdateTask = 'ProjectUpdateTask',
+  ProjectChangeView = 'ProjectChangeView',
+  ProjectShowPopOver = 'ProjectShowPopOver',
+  ProjectUpdatePopOverValue = 'ProjectUpdatePopOverValue',
 
   // profile
   ProfileUpdateUser = 'ProfileUpdateUser',
+
+  // gantt
+  GanttUpdateScrollLeft = 'GanttUpdateScrollLeft',
+  GanttUpdateWidth = 'GanttUpdateWidth',
+  GanttUpdateStartDay = 'GanttUpdateStartDay',
+  GanttUpdateWidthAndStartDay = 'GanttUpdateWidthAndStartDay',
 }

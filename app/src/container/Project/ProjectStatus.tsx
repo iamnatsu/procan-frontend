@@ -20,6 +20,8 @@ import TaskCard from '../../component/Task/TaskCard';
 import { Task } from '../../model/task';
 import { Iterable } from 'immutable';
 import * as TaskService from '../../service/TaskService';
+import { PopOverTarget } from '../../model/common';
+import { Project } from 'src/model/project';
 
 export interface ProjectStatusProps { 
   id: string;
@@ -33,19 +35,13 @@ export interface ProjectStatusProps {
   handleMoveStatus?: (dragId: string, hoveId: string) => void;
 }
 export interface ProjectStatusState {
-  anchorEl: HTMLAnchorElement | null;
 }
 
 type MergedProps = StateProps & DispatchProps & ProjectStatusProps & StyledComponentProps;
 
 class ProjectStatus extends React.Component<MergedProps, ProjectStatusState> {
   private lastHoverTime: number;
-  constructor(props: MergedProps) {
-    super(props);
-    this.state = {
-      anchorEl: null
-    }
-  }
+
   shouldComponentUpdate(nextProps: ProjectStatusProps, nextState: ProjectStatusState) {
     return true;
     /*
@@ -61,39 +57,30 @@ class ProjectStatus extends React.Component<MergedProps, ProjectStatusState> {
     }
 	}
 
-  componentWillMount() {
-  }
-
-  handleMenuClose = () => {
-    this.setState({ anchorEl: null });
-  };
-
   addTask = () => {
     const task = new Task();
     task.statusId = this.props.id;
     this.props.action.taskForm.updateTask(task)
     this.props.action.project.showTaskModal();
-    this.setState({ anchorEl: null });
   };
 
   handleProfileMenuOpen = (event: any) => {
-    this.setState({ anchorEl: event.currentTarget });
+    this.props.action.project.showStatusMenu(event.currentTarget, this.props.pos);
   };
 
   render() {
     const { connectDropTarget, connectDragSource, connectDragPreview } = this.props;
     if (!connectDropTarget || !connectDragSource || !connectDragPreview) return null;
-    const { anchorEl } = this.state;
-    const isMenuOpen = Boolean(anchorEl);
+    const isMenuOpen = this.props.pos === this.props.project.getMenuAnchorPos() && !!this.props.project.getMenuAnchor();
     const renderMenu = (
       <Menu
-        anchorEl={this.state.anchorEl}
+        anchorEl={this.props.project.getMenuAnchor()}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose.bind(this)}>ステータス名編集</MenuItem>
+        <MenuItem onClick={this.handleOpenStatusPopOver.bind(this)}>ステータス名編集</MenuItem>
         <MenuItem onClick={this.addTask.bind(this)}>タスク追加</MenuItem>
       </Menu>
     );
@@ -105,7 +92,7 @@ class ProjectStatus extends React.Component<MergedProps, ProjectStatusState> {
             borderRadius: '3px', padding:'5px', float: 'left', cursor: 'move', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'};
     return <MuiThemeProvider theme={muiTheme}>{connectDropTarget(
       <div style={style}>
-        {connectDragSource(<div style={handleStyle}>{ this.props.name + this.props.pos }</div>)}
+        {connectDragSource(<div style={handleStyle}>{ this.props.name }</div>)}
         <div>
           <IconButton
             aria-owns={isMenuOpen ? 'material-appbar' : undefined}
@@ -208,6 +195,26 @@ class ProjectStatus extends React.Component<MergedProps, ProjectStatusState> {
       } else {
         return tmp;
       }
+    }
+  }
+
+  handleOpenStatusPopOver = (event: any) => {
+    this.props.action.project.showPopOver(PopOverTarget.STATUS_NAME, event.currentTarget
+        , this.props.name, this.updateStatusName.bind(this))
+    this.props.action.project.closeStatusMenu();
+  };
+
+  handleMenuClose = (event: any) => {
+    this.props.action.project.closeStatusMenu();
+  };
+
+  updateStatusName(value: string) {
+    if (!value) return;
+    const project: Project = this.props.project.getProject().toJS();
+    const status = project.statuses.find(s => s.id === this.props.id);
+    if (status) {
+      status.name = value;
+      this.props.action.project.updateProject(project);
     }
   }
 }

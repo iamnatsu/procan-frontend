@@ -68,3 +68,13 @@ export class AppBarConfig {
     isShowSearch: boolean;
     searchAction: () => void;
 }
+
+export enum ViewMode {
+    KANBAN = 'KANBAN',
+    GANTT = 'GANTT'
+}
+
+export enum PopOverTarget {
+    NEW_TASK = 'NEW_TASK',
+    STATUS_NAME = 'STATUS_NAME'
+}

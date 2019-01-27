@@ -42,7 +42,7 @@ export class Prepare extends React.Component<MergedProps, LoginState> {
       <MuiThemeProvider theme={topMuiTheme}>
         <div style={{ width: '100vw', height: '100vh', backgroundColor: '#88C542'}}>
           <div style={{ width: 400, margin: 'auto', paddingTop: 'calc(50vh - 175px)'}}>
-            <h2 style={{ color: 'white' }}>Procan</h2>
+            <h2 style={{ color: 'white' }}>Pro★Can</h2>
             <form onSubmit={this.handlePrepare.bind(this)} style={{ padding: 20 }}>
               <TextField autoComplete='off' id='email' label='email' fullWidth={true} InputLabelProps={{ shrink: true }} autoFocus={true} style={{marginBottom: 20}} onChange={this.handleChange}/>
               <div style={{ textAlign: 'right', marginTop: 15 }}><Button variant='contained' type='submit' fullWidth disabled={this.state.isSubmitting} >Sign Up (Send Mail)</Button></div>
