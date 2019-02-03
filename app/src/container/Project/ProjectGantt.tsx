@@ -63,6 +63,8 @@ class ProjectGantt extends React.Component<MergedProps, ProjectGanttState> {
     }
 
     // complete order if need
+    const project = this.props.project.getProject();
+    if (!project || project.size <= 0) return;
     const order: Array<string> = this.props.project.getProject().get('ganttOrder');
     if (!order || order.length < 0 || order.length > this.props.project.getAllTasks().size) {
       const p: Project = this.props.project.getProject().toJS();

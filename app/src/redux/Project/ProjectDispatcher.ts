@@ -59,9 +59,9 @@ export class ProjectDispatcher {
     TaskService.post(task).then(result => {
       ProjectService.get(task.projectId).then(res => {
         if(res.data.ganttOrder) {
-          res.data.ganttOrder.push(task.id);
+          res.data.ganttOrder.push(result.data.id);
         } else {
-          res.data.ganttOrder = [task.id];
+          res.data.ganttOrder = [result.data.id];
         }
         this.dispatch(ProjectUpdateProject(res.data));
         ProjectService.put(res.data);
