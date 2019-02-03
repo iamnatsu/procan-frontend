@@ -11,7 +11,7 @@ const ProjectRecord = Record({
   project: Map(),
   allTasks: List(),
   tasks: List(),
-  viewMode: ViewMode.KANBAN,
+  viewMode: window.localStorage && window.localStorage.getItem('projectViewMode') ? window.localStorage.getItem('projectViewMode') : ViewMode.KANBAN,
   popOverTarget: null,
   popOverAnchor: null,
   popOverValue: null,
@@ -83,7 +83,7 @@ export default class ProjectStore extends ProjectRecord {
   updateTask(task: Task): this {
     const tasks = this.getTasks();
     const i = tasks.findIndex(t => !!t && t.id === task.id);
-    return this.set('tasks', tasks.set(i, task)) as this;
+    return this.setTasks(tasks.set(i, task).toJS());
   }
 
   getViewMode(): ViewMode {
@@ -91,6 +91,9 @@ export default class ProjectStore extends ProjectRecord {
   }
 
   setViewMode(viewMode: ViewMode): this {
+    if (window.localStorage) {
+      window.localStorage.setItem('projectViewMode', viewMode)
+    }
     return this.set('viewMode', viewMode) as this;
   }
 

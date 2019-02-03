@@ -1,6 +1,11 @@
 import { ActionType } from '../ActionType';
 import * as moment from 'moment';
+import { GanttHeader } from '../../model/common';
 export const GanttUpdateScrollLeft = (left: number) => ({ type: ActionType.GanttUpdateScrollLeft, left });
+export const GanttUpdateScrollTop = (top: number) => ({ type: ActionType.GanttUpdateScrollTop, top });
+export const GanttUpdateScrollCoord = (left: number, top: number) => ({ type: ActionType.GanttUpdateScrollCoord, left, top });
 export const GanttUpdateWidth = (width: number) => ({ type: ActionType.GanttUpdateWidth, width });
 export const GanttUpdateStartDay = (date: moment.Moment) => ({ type: ActionType.GanttUpdateStartDay, date });
 export const GanttUpdateWidthAndStartDay = (width: number, date: moment.Moment) => ({ type: ActionType.GanttUpdateWidthAndStartDay, width, date });
+export const GanttUpdateHeaders = (headers: GanttHeader[]) => ({ type: ActionType.GanttUpdateHeaders, headers });
+export const GanttUpdateSettingAnchor = (anchor: HTMLElement | null) => ({ type: ActionType.GanttUpdateSettingAnchor, anchor });

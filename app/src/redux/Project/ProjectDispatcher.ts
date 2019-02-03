@@ -18,10 +18,13 @@ export class ProjectDispatcher {
   }
 
   loadTasks(projectId: string) {
-    // TODO
     TaskService.find(projectId).then(result => {
       this.dispatch(ProjectLoadTasks(result.data));
     });
+  }
+
+  initTasks(tasks: Array<Task>) {
+    this.dispatch(ProjectLoadTasks(tasks));
   }
 
   updateTask(task: Task) {
@@ -54,6 +57,15 @@ export class ProjectDispatcher {
 
   addTask(task: Task) {
     TaskService.post(task).then(result => {
+      ProjectService.get(task.projectId).then(res => {
+        if(res.data.ganttOrder) {
+          res.data.ganttOrder.push(task.id);
+        } else {
+          res.data.ganttOrder = [task.id];
+        }
+        this.dispatch(ProjectUpdateProject(res.data));
+        ProjectService.put(res.data);
+      });
       this.dispatch(ProjectAddTask(result.data));
     })
   }
@@ -86,6 +98,10 @@ export class ProjectDispatcher {
     ProjectService.put(project).then(result => {
       this.dispatch(ProjectUpdateProject(project));
     });
+  }
+
+  localUpdateProject(project: Project) {
+    this.dispatch(ProjectUpdateProject(project));
   }
 
   updateViewMode(viewMode: ViewMode) {

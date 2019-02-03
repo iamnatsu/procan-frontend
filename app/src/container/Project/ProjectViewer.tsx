@@ -43,8 +43,12 @@ type MergedProps = StateProps & DispatchProps & ProjectViewerProps & StyledCompo
 class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
   componentWillMount() {
     if (this.props.match.params.id) {
-      this.props.action.project.loadProject(this.props.match.params.id);
-      this.props.action.project.loadTasks(this.props.match.params.id);
+      const localId = this.props.project.getProject().get('id')
+      if (this.props.match.params.id != localId) this.props.action.project.loadProject(this.props.match.params.id);
+      const tasks = this.props.project.getAllTasks().toJS();
+      if (!tasks || tasks.length <= 0 || tasks[0].projectId != this.props.match.params.id) {
+        this.props.action.project.loadTasks(this.props.match.params.id);
+      }
     }
     this.props.action.appBar.update({ isShowSearch: true, searchAction: this.search.bind(this)});
   }
@@ -89,8 +93,8 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
         </div>
         <div style={innerBody}>
           { viewMode === ViewMode.KANBAN && <ProjectBoard></ProjectBoard> }
-          { viewMode === ViewMode.KANBAN && <ProjectCustomDragLayer /> }
           { viewMode === ViewMode.GANTT && <ProjectGantt/> }
+          <ProjectCustomDragLayer />
         </div>
         <Modal
           aria-labelledby='simple-modal-title'

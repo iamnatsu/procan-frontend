@@ -8,6 +8,7 @@ import { P_RED, P_IVORY, P_BLACK, P_RED_LIGHT } from '../../config/Color';
 import { MODAL_STYLE } from '../../config/Style';
 import * as AuthService from '../../service/AuthService'
 import * as ProjectService from '../../service/ProjectService'
+import * as TaskService from '../../service/TaskService'
 import * as GroupService from '../../service/GroupService'
 import { transitionToLoginPage } from '../../util/transition';
 import { DashBoardDispatcher } from '../../redux/DashBoard/DashBoardDispatcher';
@@ -37,6 +38,7 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import { default as CustomScrollbars } from 'react-custom-scrollbars';
 import { MessageDialogActionMap } from '../../redux/component/MessageDialog/MessageDialogStore';
+import { ProjectDispatcher } from '../../redux/Project/ProjectDispatcher';
 
 export interface DashBoardProps extends RouteComponentProps<any> {
 }
@@ -213,7 +215,13 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
   }
 
   transitionProject(id: string) {
-    location.href = '#/project/' + id
+    ProjectService.get(id).then(result => {
+      this.props.action.project.localUpdateProject(result.data);
+      TaskService.find(id).then(result => {
+        this.props.action.project.initTasks(result.data);
+        location.href = '#/project/' + id;
+      });
+    });
   }
 
   handleEditProject(id: string) {
@@ -288,8 +296,8 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
     }
   }
 
-  handleOpenProjectModal(project = new Project()) {
-    this.props.action.dashboard.updateProject(project);
+  handleOpenProjectModal() {
+    this.props.action.dashboard.updateProject(new Project());
     this.props.action.dashboard.showProjectModal();
   }
 
@@ -341,6 +349,7 @@ interface StateProps {
 interface DispatchProps {
   action: {
     dashboard: DashBoardDispatcher,
+    project: ProjectDispatcher,
     messageDialog: MessageDialogDispatcher,
     userSelector: UserSelectorDispatcher,
     userCard: UserCardDispatcher,
@@ -358,6 +367,7 @@ function mapDispatchToProps(dispatch: any) {
   return {
     action: {
       dashboard: new DashBoardDispatcher(dispatch),
+      project: new ProjectDispatcher(dispatch),
       messageDialog: new MessageDialogDispatcher(dispatch),
       userSelector: new UserSelectorDispatcher(dispatch),
       userCard: new UserCardDispatcher(dispatch),

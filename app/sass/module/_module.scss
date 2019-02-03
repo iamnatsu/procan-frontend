@@ -15,3 +15,8 @@
 .candidate:hover {
   background-color: whitesmoke;
 }
+
+.gantt-rowheader-name:hover {
+  transition: 0.2s ease-in-out;
+  background-color: rgba(0, 0, 0, 0.1);
+}

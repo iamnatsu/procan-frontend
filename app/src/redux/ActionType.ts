@@ -48,7 +48,11 @@ export const enum ActionType {
 
   // gantt
   GanttUpdateScrollLeft = 'GanttUpdateScrollLeft',
+  GanttUpdateScrollTop = 'GanttUpdateScrollTop',
+  GanttUpdateScrollCoord = 'GanttUpdateScrollCoord',
   GanttUpdateWidth = 'GanttUpdateWidth',
   GanttUpdateStartDay = 'GanttUpdateStartDay',
   GanttUpdateWidthAndStartDay = 'GanttUpdateWidthAndStartDay',
+  GanttUpdateHeaders = 'GanttUpdateHeaders',
+  GanttUpdateSettingAnchor = 'GanttUpdateSettingAnchor',
 }
