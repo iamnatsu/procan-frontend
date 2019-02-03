@@ -1,5 +1,5 @@
-# procan
-KANBAN と GANTT によるタスク管理ツール
+# Pro★Can
+KANBAN と GANTT によるプロジェクト管理ツール
 
 の、フロントエンドサービス.
 
