@@ -57,6 +57,9 @@ class TaskCard extends React.Component<MergedProps, TaskCardState> {
     return this.props.id != nextProps.id ||
       this.props.name != nextProps.name ||
       this.props.statusId != nextProps.statusId ||
+      this.props.progress != nextProps.progress ||
+      this.props.expectedEndDay != nextProps.expectedEndDay ||
+      this.props.assignees != nextProps.assignees ||
       this.props.pos != nextProps.pos || 
       this.props.isOver != nextProps.isOver || 
       this.props.isDragging != nextProps.isDragging ||

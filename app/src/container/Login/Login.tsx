@@ -48,7 +48,7 @@ export class Login extends React.Component<MergedProps, LoginState> {
       <MuiThemeProvider theme={topMuiTheme}>
         <div style={{ width: '100vw', height: '100vh', backgroundColor: P_LIGHT_BLUE}}>
           <div style={{ width: 400, margin: 'auto', paddingTop: 'calc(50vh - 175px)'}}>
-            <h2 style={{ color: 'white' }}>Procan</h2>
+            <h2 style={{ color: 'white' }}>Pro★Can</h2>
             <form onSubmit={this.handleLogin.bind(this)} style={{ padding: 20 }}>
               <TextField autoComplete='off' id='loginId' label='email' fullWidth={true} InputLabelProps={{ shrink: true }} autoFocus={true} style={{marginBottom: 20}} onChange={this.handleChange}/>
               <TextField id='password' label='password' type='password' fullWidth={true} InputLabelProps={{ shrink: true }} style={{marginBottom: 20}} onChange={this.handleChange} />

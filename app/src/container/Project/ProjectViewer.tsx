@@ -19,13 +19,21 @@ import TaskForm from '../../component/TaskForm/TaskForm';
 import { Project } from '../../model/project';
 import { Task } from '../../model/task';
 import { User } from '../../model/user';
-import { Button, Modal, Avatar, withStyles, StyledComponentProps } from '@material-ui/core';
+import { Button, Modal, Avatar, Popover, withStyles, StyledComponentProps, TextField, IconButton } from '@material-ui/core';
 import { getFormValues } from 'redux-form/immutable';
 import { TaskFormState } from 'src/redux/component/TaskForm/TaskFormReducer';
 import * as Tasks from '../../util/tasks';
 
 import { MODAL_STYLE } from '../../config/Style' 
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
+import { default as CustomScrollbars } from 'react-custom-scrollbars';
+import ViewColumnIcon from '@material-ui/icons/ViewColumn';
+import ViewGanttIcon from '@material-ui/icons/Notes';
+import { ViewMode } from '../../model/common';
+import { MessageDialogActionMap } from '../../redux/component/MessageDialog/MessageDialogStore';
+import * as TaskService from '../../service/TaskService';
+import AddIcon from '@material-ui/icons/AddCircle';
+import ProjectGantt from './ProjectGantt';
 
 export interface ProjectViewerProps extends RouteComponentProps<any> { }
 export interface ProjectViewerState extends React.Props<any> { }
@@ -35,8 +43,12 @@ type MergedProps = StateProps & DispatchProps & ProjectViewerProps & StyledCompo
 class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
   componentWillMount() {
     if (this.props.match.params.id) {
-      this.props.action.project.loadProject(this.props.match.params.id);
-      this.props.action.project.loadTasks(this.props.match.params.id);
+      const localId = this.props.project.getProject().get('id')
+      if (this.props.match.params.id != localId) this.props.action.project.loadProject(this.props.match.params.id);
+      const tasks = this.props.project.getAllTasks().toJS();
+      if (!tasks || tasks.length <= 0 || tasks[0].projectId != this.props.match.params.id) {
+        this.props.action.project.loadTasks(this.props.match.params.id);
+      }
     }
     this.props.action.appBar.update({ isShowSearch: true, searchAction: this.search.bind(this)});
   }
@@ -60,11 +72,12 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
   }
 
   render() {
+    if (!this.props.classes) return null;
+
     const innerHeader = { width: '100vw', height: '30px', backgroundColor: P_RED, color: WHITE };
     const headerItem: React.CSSProperties = { float: 'left', height: 30, lineHeight: '30px', margin: '0 10px'}
     const innerBody = { width: '100vw', height: 'calc(100% - 30px)', backgroundColor: P_IVORY };
-    if (!this.props.classes) return null;
-
+    const viewMode = this.props.project.getViewMode();
     const projectMap = this.props.project.getProject();
  
     return (
@@ -72,10 +85,15 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
         <div style={innerHeader}>
           <div style={headerItem}>{projectMap.get('name')}</div>
           <div style={headerItem}>{this.renderAvatar(projectMap.get('assignees'))}</div>
-          <Button classes={this.props.classes} onClick={this.handleOpenUserSelector.bind(this)}>+</Button>
+          <IconButton aria-label="Clear" className={this.props.classes.addCircle} onClick={this.handleOpenUserSelector.bind(this)}>
+            <AddIcon />
+          </IconButton>
+          { viewMode === ViewMode.KANBAN && <Button className={this.props.classes.viewChanger} onClick={this.changeViewMode.bind(this)}><ViewGanttIcon />GANTT</Button> }
+          { viewMode === ViewMode.GANTT && <Button className={this.props.classes.viewChanger} onClick={this.changeViewMode.bind(this)}><ViewColumnIcon />KANBAN</Button> }
         </div>
         <div style={innerBody}>
-          <ProjectBoard></ProjectBoard>
+          { viewMode === ViewMode.KANBAN && <ProjectBoard></ProjectBoard> }
+          { viewMode === ViewMode.GANTT && <ProjectGantt/> }
           <ProjectCustomDragLayer />
         </div>
         <Modal
@@ -85,11 +103,42 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
           onClose={this.handleCloseTaskModal.bind(this)}
         >
           <div style={MODAL_STYLE} >
-            <TaskForm onSubmit={this.handleSubmitTask.bind(this)} onClose={this.handleCloseTaskModal.bind(this)} />
+            <CustomScrollbars>
+              <TaskForm onSubmit={this.handleSubmitTask.bind(this)} onDelete={this.deleteTaskConfirm.bind(this)} onClose={this.handleCloseTaskModal.bind(this)} />
+            </CustomScrollbars>
           </div>
         </Modal>
         <UserSelector />
         <UserCard />
+
+        <Popover
+          classes={{
+            paper: this.props.classes.paper
+          }}
+          id="simple-popper"
+          open={!!this.props.project.getPopOverTarget()}
+          onClose={this.handleClosePopOver.bind(this)}
+          anchorEl={this.props.project.getPopOverAnchor()}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          >
+          <div>
+            <TextField onChange={((event: React.KeyboardEvent<HTMLInputElement>) => {
+              this.props.action.project.updatePopOverValue(event.currentTarget.value)
+            }).bind(this)} value={this.props.project.getPopOverValue()} fullWidth></TextField>
+            <Button onClick={(() => {
+              const action = this.props.project.getPopOverAction();
+              if (action) action(this.props.project.getPopOverValue());
+              this.props.action.project.closePopOver();
+            }).bind(this)} color='primary' style={{position: 'absolute', bottom: '5px', right: '5px'}}>OK</Button>
+          </div>
+        </Popover>
       </div>
     );
   }
@@ -133,6 +182,10 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
   }
 
   handleSubmitTask(values: Task) {
+    if (!values.name) {
+      this.props.action.project.closeTaskModal();
+      return;
+    }
     if (!values.id) {
       values.projectId = this.props.project.getProject().get('id');
       let boardPos = 10000;
@@ -160,10 +213,51 @@ class ProjectViewer extends React.Component<MergedProps, ProjectViewerState> {
     }
   }
 
+  changeViewMode() {
+    const viewMode = this.props.project.getViewMode()
+    if (viewMode === ViewMode.KANBAN) {
+      this.props.action.project.updateViewMode(ViewMode.GANTT);
+    } else {
+      this.props.action.project.updateViewMode(ViewMode.KANBAN);
+    }
+  }
+
   taskComparator(t1: Task, t2: Task) {
     if (t1.boardPos < t2.boardPos) return -1;
     if (t1.boardPos > t2.boardPos) return 1;
     return 0;
+  }
+
+  deleteTaskConfirm(taskId: string) {
+    this.deleteConfirm(
+      { delete: {
+        action: () => {
+          TaskService.del(taskId).then(res => {
+            this.props.action.messageDialog.closeMessage();
+            const index = this.props.project.getTasks().findIndex(t => !!t && t.id === taskId);
+            if (index >= 0) {
+              const removed = this.props.project.getTasks().remove(index);
+              this.props.action.project.updateTasks(removed.toJS());
+            }
+            this.props.action.project.closeTaskModal();
+          });
+        },
+        caption: 'DELETE',
+        color: 'secondary'
+      }}
+    )
+  }
+
+  deleteConfirm(actionMap: MessageDialogActionMap) {
+    this.props.action.messageDialog.showMessage('削除してもよろしいですか？', 
+      [{ message: 'この操作は取り消すことができません。' }],
+      () => { /* NOP */ },
+      actionMap
+    );
+  }
+
+  handleClosePopOver() {
+    this.props.action.project.closePopOver();
   }
 }
 
@@ -179,7 +273,8 @@ interface DispatchProps {
     project: ProjectDispatcher,
     userSelector: UserSelectorDispatcher,
     userCard: UserCardDispatcher,
-    appBar: AppBarDispatcher
+    messageDialog: MessageDialogDispatcher,
+    appBar: AppBarDispatcher,
   };
 }
 
@@ -209,16 +304,23 @@ function mergeProps(stateProps: StateProps, dispatchProps: DispatchProps, ownPro
 }
 
 const styles: Record<string, CSSProperties> = {
-  root: {
+  viewChanger: {
     minHeight: '30px',
     height: '30px',
-    minWidth: '30px',
-    width: '30px',
+    position: 'absolute',
+    right: '10px',
     color: WHITE,
-    borderRadius: '15px',
-    border: 'solid 2px rgba(0, 0, 0, 0.1)',
-    padding: 0,
+    padding: '0 10px',
     lineHeight: 1
+  },
+  paper: {
+    minWidth: 250,
+    maxWidth: 250,
+    minHeight: 100,
+  },
+  addCircle: {
+    padding: '3px',
+    color: 'white'
   }
 }
 const styled = withStyles(styles)(ProjectViewer)

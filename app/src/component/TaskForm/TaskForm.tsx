@@ -12,11 +12,15 @@ import { Button } from '@material-ui/core';
 import { ProjectState } from 'src/redux/Project/ProjectReducer';
 import { Project } from 'src/model/project';
 import Assignee from '../Fields/Assignee';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ClearIcon from '@material-ui/icons/Clear';
 
 export interface OwnProps extends React.Props<InjectedFormProps> {
   style?: React.CSSProperties;
   onClose?: () => void;
   onSubmit?: any;
+  onDelete?: (id: string) => void;
 }
 export interface TaskFormState {
 }
@@ -29,9 +33,12 @@ class TaskForm extends React.Component<MergedProps, TaskFormState> {
     const style = Object.assign({}, this.props.style, { padding: '10px' });
     return (
       <form autoComplete='off' className='task' style={style}>
-          <Button type='button' color='secondary' style={{ width: '100px', position: 'absolute', right: '10px' }} onClick={this.props.onClose}>close</Button>
-        <div className='clearfix'>
-          <Field autoComplete='off' component={Text} name='name' label={'name'} autoFocus={true} fullWidth={true}></Field>
+          <IconButton aria-label="Clear" style={{position: 'absolute', top: '0px', right: '5px', zIndex: 1}}
+            onClick={(() => {if (this.props.onClose) this.props.onClose()}).bind(this)}>
+            <ClearIcon />
+          </IconButton>
+          <div className='clearfix'>
+          <Field autoComplete='off' component={Text} name='name' label={'name'} autoFocus={true} fullWidth={true} style={{width: '500px'}}></Field>
           { /*}
           <Field component={Select} name='statusId' label={'statusId'} options={this.toOptions(project.statuses)}></Field>
           */}
@@ -49,6 +56,13 @@ class TaskForm extends React.Component<MergedProps, TaskFormState> {
                   onChangeValue={((date: number) => {this.onChangeDate('actualEndDay', date)}).bind(this)}></Field>
           <div style={{clear: 'both'}}></div>
           <Field component={Text} name='actualCost' label={'actualCost'} type='number' placeholder='人日'></Field>
+          <footer style={{ marginTop: '10px' }}>
+          { this.props.taskForm.getTask().get('id') && 
+            <Button type='button' color='default' style={{ position: 'absolute', right: '10px', textDecoration: 'underline' }}
+              onClick={(() => { if (this.props.onDelete) this.props.onDelete(this.props.taskForm.getTask().get('id'))}).bind(this)}>
+              <DeleteIcon />
+              DELETE</Button> }
+        </footer>
         </div>
       </form>
     );

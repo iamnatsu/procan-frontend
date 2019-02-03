@@ -1,8 +1,9 @@
-import { ProjectIsShowProjectModal, ProjectIsShowTaskModal, ProjectUpdateProject, ProjectLoadTasks, ProjectUpdateTasks, ProjectUpdateTask, ProjectAddTask } from './ProjectActionCreator';
+import { ProjectIsShowProjectModal, ProjectIsShowTaskModal, ProjectUpdateProject, ProjectLoadTasks, ProjectUpdateTasks, ProjectUpdateTask, ProjectAddTask, ProjectChangeView, ProjectShowPopOver, ProjectUpdatePopOverValue, ProjectUpdateMenuAnchor } from './ProjectActionCreator';
 import { Project } from '../../model/project';
 import * as ProjectService from '../../service/ProjectService';
 import * as TaskService from '../../service/TaskService';
 import { Task } from 'src/model/task';
+import { ViewMode, PopOverTarget } from 'src/model/common';
 
 export class ProjectDispatcher {
   constructor(public dispatch: (action: any) => any) {
@@ -17,10 +18,13 @@ export class ProjectDispatcher {
   }
 
   loadTasks(projectId: string) {
-    // TODO
     TaskService.find(projectId).then(result => {
       this.dispatch(ProjectLoadTasks(result.data));
     });
+  }
+
+  initTasks(tasks: Array<Task>) {
+    this.dispatch(ProjectLoadTasks(tasks));
   }
 
   updateTask(task: Task) {
@@ -53,8 +57,25 @@ export class ProjectDispatcher {
 
   addTask(task: Task) {
     TaskService.post(task).then(result => {
+      ProjectService.get(task.projectId).then(res => {
+        if(res.data.ganttOrder) {
+          res.data.ganttOrder.push(task.id);
+        } else {
+          res.data.ganttOrder = [task.id];
+        }
+        this.dispatch(ProjectUpdateProject(res.data));
+        ProjectService.put(res.data);
+      });
       this.dispatch(ProjectAddTask(result.data));
     })
+  }
+
+  showStatusMenu(anchor: HTMLElement, pos: number) {
+    this.dispatch(ProjectUpdateMenuAnchor(anchor, pos));
+  }
+
+  closeStatusMenu() {
+    this.dispatch(ProjectUpdateMenuAnchor());
   }
   
   showProjectModal() {
@@ -77,6 +98,26 @@ export class ProjectDispatcher {
     ProjectService.put(project).then(result => {
       this.dispatch(ProjectUpdateProject(project));
     });
+  }
+
+  localUpdateProject(project: Project) {
+    this.dispatch(ProjectUpdateProject(project));
+  }
+
+  updateViewMode(viewMode: ViewMode) {
+    this.dispatch(ProjectChangeView(viewMode));
+  }
+
+  showPopOver(target: PopOverTarget, anchor: HTMLElement, value: string, action: (v: string) => {}) {
+    this.dispatch(ProjectShowPopOver(target, anchor, value, action));
+  }
+
+  closePopOver() {
+    this.dispatch(ProjectShowPopOver());
+  }
+
+  updatePopOverValue(value: string) {
+    this.dispatch(ProjectUpdatePopOverValue(value));
   }
 
 }

@@ -92,6 +92,11 @@ export const appTheme = createMuiTheme({
       paper: {
         padding: 10
       }
+    },
+    MuiSwitch: {
+      switchBase: {
+        height: '30px'
+      }
     }
   }
 });

@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import { WrappedFieldArrayProps } from 'redux-form';
 import { connect } from 'react-redux';
 import { User } from '../../model/user'
-import { Button, Avatar } from '@material-ui/core';
+import { IconButton, Avatar } from '@material-ui/core';
 import { withStyles, StyledComponentProps } from '@material-ui/core/styles';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import { UserSelectorDispatcher } from '../../redux/component/UserSelector/UserSelectorDispatcher';
 import { UserCardDispatcher } from '../../redux/component/UserCard/UserCardDispatcher';
 import Label from './Lable'
 import { FIELD_STYLE } from '../../config/Style';
+import AddIcon from '@material-ui/icons/AddCircle';
 
 export interface AssigneeProps {
   label: string;
@@ -26,11 +27,9 @@ class Assignee extends Component<MergedProps, any> {
       <div style={styles}>
         <Label caption={label} />
         { this.renderAvatar() }
-        <Button
-          classes={{
-            root: classes.button
-          }}
-          onClick={this.handleOpenUserSelector.bind(this)}>+</Button>
+        <IconButton aria-label="Clear" className={classes.addCircle} onClick={this.handleOpenUserSelector.bind(this)}>
+          <AddIcon />
+        </IconButton>
       </div>
     )
   }
@@ -103,6 +102,9 @@ const styles: Record<string, CSSProperties> = {
       border: 'solid 1px lightgray',
       padding: 0,
       lineHeight: 1
+  },
+  addCircle: {
+    padding: '7px',
   }
 };
 

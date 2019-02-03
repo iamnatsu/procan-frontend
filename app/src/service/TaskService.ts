@@ -26,3 +26,10 @@ export function find(projectId: string): HttpService._Promise<Array<Task>> {
     return response;
   });
 }
+
+export function del(id: String): HttpService._Promise<Task> {
+  const url = TASK + '/' + id;
+  return HttpService.del(url).then((response: HttpService._Response<Task>) => {
+    return response;
+  });
+}

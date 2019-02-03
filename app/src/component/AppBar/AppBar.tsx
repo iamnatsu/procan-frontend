@@ -116,7 +116,7 @@ class PrimarySearchAppBar extends React.Component<MergedProps, any> {
             </IconButton>
             */}
             <Typography className={classes.title} variant='h6' color='inherit' noWrap>
-            <a href='#/dashboard' style={{ color: 'white', display: 'block', textDecoration: 'none' }}>ProCan</a>
+            <a href='#/dashboard' style={{ color: 'white', display: 'block', textDecoration: 'none' }}>Pro★Can</a>
             </Typography>
             { config && config.isShowSearch && 
               <div className={classes.search}>

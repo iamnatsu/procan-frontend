@@ -10,6 +10,7 @@ import { TaskFormReducer, TaskFormState } from './component/TaskForm/TaskFormRed
 import { AppBarReducer, AppBarState } from './component/AppBar/AppBarReducer';
 import { ProjectState, ProjectReducer } from './Project/ProjectReducer';
 import { ProfileState, ProfileReducer } from './Profile/ProfileReducer';
+import { GanttState, GanttReducer } from './Gantt/GanttReducer';
 
 export interface AppComponentState {
   messageDialog: MessageDialogState,
@@ -32,6 +33,7 @@ export interface AppState {
   dashboard: DashBoardState;
   project: ProjectState;
   profile: ProfileState;
+  gantt: GanttState;
   form: any
 }
 
@@ -42,6 +44,7 @@ export const reducers = combineReducers<AppState>({
   dashboard: DashBoardReducer,
   project: ProjectReducer,
   profile: ProfileReducer,
+  gantt: GanttReducer,
   form: reduxFormReducer,
 });
 
