@@ -1,0 +1,36 @@
+user  root;
+worker_processes 1;
+
+events {
+    worker_connections  1024;
+}
+
+http {
+    server {
+        listen       80;
+        server_name  localhost;
+        add_header Access-Control-Allow-Methods "POST, GET, OPTIONS";
+        include /etc/nginx/mime.types;
+
+        charset utf-8;
+
+        location / {
+            root   /usr/share/nginx/html;
+            index  index.html index.htm;
+        }
+
+        location ~ .css$ {
+            root   /usr/share/nginx/html;
+            add_header  Content-Type    text/css;
+        }
+        location ~ .js$ {
+            root   /usr/share/nginx/html;
+            add_header  Content-Type    application/x-javascript;                  
+        }
+
+        location ~ /(auth|user|regist|project|group|task)(/.*|$) { 
+            proxy_pass ${BACK_URL}:3000/$1$2$is_args$args;
+        }
+
+    }
+}
