@@ -26,7 +26,7 @@ class Assignee extends Component<MergedProps, any> {
     return (
       <div style={styles}>
         <Label caption={label} />
-        { this.renderAvatar() }
+        <div style={{marginTop: '5px'}}>{ this.renderAvatar() }</div>
         <IconButton aria-label="Clear" className={classes.addCircle} onClick={this.handleOpenUserSelector.bind(this)}>
           <AddIcon />
         </IconButton>

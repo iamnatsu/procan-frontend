@@ -6,7 +6,7 @@ export interface LabelProps {
 class Label extends Component<LabelProps, any> {
   render() {
     if (!this.props.caption) return null;
-    return <p style={{color: 'rgba(0, 0, 0, 0.65)'}}>{this.props.caption}</p>
+    return <p style={{color: 'rgba(0, 0, 0, 0.5)', fontSize: '13px'}}>{this.props.caption}</p>
   }
 }
 export default Label as React.ComponentClass<LabelProps>;

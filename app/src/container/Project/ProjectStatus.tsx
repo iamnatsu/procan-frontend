@@ -20,8 +20,11 @@ import TaskCard from '../../component/Task/TaskCard';
 import { Task } from '../../model/task';
 import { Iterable } from 'immutable';
 import * as TaskService from '../../service/TaskService';
+import * as ProjectService from '../../service/ProjectService';
 import { PopOverTarget } from '../../model/common';
 import { Project } from 'src/model/project';
+import { MessageDialogActionMap } from '../../redux/component/MessageDialog/MessageDialogStore';
+import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
 
 export interface ProjectStatusProps { 
   id: string;
@@ -81,6 +84,7 @@ class ProjectStatus extends React.Component<MergedProps, ProjectStatusState> {
         onClose={this.handleMenuClose}
       >
         <MenuItem onClick={this.handleOpenStatusPopOver.bind(this)}>ステータス名編集</MenuItem>
+        <MenuItem onClick={this.handleDeleteStatus.bind(this)}>ステータス削除</MenuItem>
         <MenuItem onClick={this.addTask.bind(this)}>タスク追加</MenuItem>
       </Menu>
     );
@@ -217,6 +221,55 @@ class ProjectStatus extends React.Component<MergedProps, ProjectStatusState> {
       this.props.action.project.updateProject(project);
     }
   }
+
+  handleDeleteStatus() {
+    const projectId: string = this.props.project.getProject().get('id');
+    if (!projectId) return;
+
+    TaskService.find(projectId).then(res => {
+      const tasks = res.data;
+      if (tasks && tasks.length > 0 && tasks.filter(t => t.statusId === this.props.id).length > 0){
+        this.props.action.messageDialog.showMessage('タスクが存在します。タスクを移動してください。', []);
+        this.props.action.project.closeStatusMenu();
+      } else {
+        ProjectService.get(projectId).then(res => {
+          this._handleDeleteStatus(res.data);
+        });
+      }
+    });
+
+  }
+
+  _handleDeleteStatus(project: Project) {
+    const statusId = this.props.id;
+    this.deleteConfirm(
+      { delete: {
+        action: () => {
+          const index = project.statuses.findIndex(s => s.id === statusId);
+          if (index >= 0) {
+            project.statuses.splice(index, 1);
+            this.props.action.project.updateProject(project).then(() => {
+              this.props.action.messageDialog.closeMessage();
+              this.props.action.project.closeStatusMenu();
+            })
+          } else {
+            this.props.action.messageDialog.closeMessage();
+            this.props.action.project.closeStatusMenu();
+          }
+        },
+        caption: 'DELETE',
+        color: 'secondary'
+      }}
+    )
+  }
+
+  deleteConfirm(actionMap: MessageDialogActionMap) {
+    this.props.action.messageDialog.showMessage('削除してもよろしいですか？', 
+      [{ message: 'この操作は取り消すことができません。' }],
+      () => { /* NOP */ },
+      actionMap
+    );
+  }
 }
 
 
@@ -228,7 +281,8 @@ interface StateProps {
 interface DispatchProps {
   action: {
     project: ProjectDispatcher,
-    taskForm: TaskFormDispatcher
+    taskForm: TaskFormDispatcher,
+    messageDialog: MessageDialogDispatcher,
   };
 }
 
@@ -244,6 +298,7 @@ function mapDispatchToProps(dispatch: any) {
     action: {
       project: new ProjectDispatcher(dispatch),
       taskForm: new TaskFormDispatcher(dispatch),
+      messageDialog: new MessageDialogDispatcher(dispatch),
     }
   };
 }

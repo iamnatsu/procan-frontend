@@ -23,11 +23,12 @@ type GroupFormProps = OwnProps & InjectedFormProps<Group, OwnProps, GroupFormSta
 
 class GroupForm extends React.Component<GroupFormProps, GroupFormState> {
   render(): JSX.Element { 
-    const style = Object.assign({}, this.props.style, { padding: '10px' })
+    const style = Object.assign({}, this.props.style, { padding: '15px' })
     return (
       <form className='group' style={style} onSubmit={this.props.handleSubmit}>
-        <Field component={Text} name='name' label={'name'} autoFocus={true}></Field>
-        <FieldArray component={Assignee} name='assignees' label='assignees'></FieldArray>
+        <Field component={Text} name='name' fullWidth={true} autoFocus={true}></Field>
+        <br />
+        <FieldArray component={Assignee} name='assignees' label='メンバー'></FieldArray>
         <footer style={{ marginTop: '10px' }}>
           <Button type='submit' variant='contained' color='primary' style={{ width: '100px'}}>OK</Button>
           <Button type='button' color='secondary' style={{ width: '100px', marginLeft: '10px' }} onClick={this.props.onClose}>CANCEL</Button>

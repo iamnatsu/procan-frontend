@@ -12,7 +12,7 @@ export const MODAL_STYLE: React.CSSProperties = {
 }
 
 export const FIELD_STYLE: React.CSSProperties = {
-  margin: '5px 5px 15px'
+  margin: '5px 5px 10px'
 };
 
 export const TASK_CARD: React.CSSProperties = {

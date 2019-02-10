@@ -20,7 +20,7 @@ class Text extends Component<MergedProps, any> {
     const styles = style ? Object.assign({}, FIELD_STYLE, style) : FIELD_STYLE;
     return (
       <div style={styles}>
-        <Label caption={label} />
+        {label && <Label caption={label} />}
         <TextField type={this.props.type ? this.props.type : 'text'} autoFocus={this.props.autoFocus || false}
           inputProps={this.props.inputProps || {}}
           fullWidth={this.props.fullWidth || false}

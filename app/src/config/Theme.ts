@@ -66,6 +66,12 @@ export const appTheme = createMuiTheme({
         boxShadow: 'none !important',
       }
     },
+    MuiInputBase: {
+      input: {
+        fontSize: '14px',
+        padding: '4px 0 5px'
+      }
+    },
     MuiButton: {
       contained: {
         color: 'white',

@@ -30,7 +30,7 @@ class DateField extends Component<MergedProps, any> {
             format="YYYY/MM/DD"></InlineDatePicker>
         </MuiPickersUtilsProvider>
         <IconButton aria-label="Clear" className={classes.root} onClick={(() => {this.handleChange(null)}).bind(this)}>
-          <ClearIcon />
+          <ClearIcon className={classes.icon} />
         </IconButton>
       </div>
     )
@@ -44,6 +44,9 @@ class DateField extends Component<MergedProps, any> {
 const styles = (theme: Theme) => createStyles({
   root: {
     padding: '3px'
+  },
+  icon: {
+    fontSize: '16px'
   }
 });
 //export default DateField as React.ComponentClass<MergedProps>;
