@@ -95,7 +95,7 @@ export class ProjectDispatcher {
   }
 
   updateProject(project: Project) {
-    ProjectService.put(project).then(result => {
+    return ProjectService.put(project).then(result => {
       this.dispatch(ProjectUpdateProject(project));
     });
   }

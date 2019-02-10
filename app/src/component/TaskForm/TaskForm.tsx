@@ -15,6 +15,7 @@ import Assignee from '../Fields/Assignee';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ClearIcon from '@material-ui/icons/Clear';
+import Select from '../Fields/Select';
 
 export interface OwnProps extends React.Props<InjectedFormProps> {
   style?: React.CSSProperties;
@@ -29,7 +30,7 @@ type MergedProps = TaskFormProps & FormProps<Task, TaskFormProps, TaskFormState>
 
 class TaskForm extends React.Component<MergedProps, TaskFormState> {
   render(): JSX.Element { 
-    //const project: Project = this.props.project.getProject().toJS();
+    const project: Project = this.props.project.getProject().toJS();
     const style = Object.assign({}, this.props.style, { padding: '10px' });
     return (
       <form autoComplete='off' className='task' style={style}>
@@ -39,9 +40,7 @@ class TaskForm extends React.Component<MergedProps, TaskFormState> {
           </IconButton>
           <div className='clearfix'>
           <Field autoComplete='off' component={Text} name='name' label={'name'} autoFocus={true} fullWidth={true} style={{width: '500px'}}></Field>
-          { /*}
           <Field component={Select} name='statusId' label={'statusId'} options={this.toOptions(project.statuses)}></Field>
-          */}
           <FieldArray component={Assignee} name='assignees' label='assignees'></FieldArray>
           <Field component={Text} name='progress' label={'progress'} type='number' placeholder='%' inputProps={{min:0, max: 100}}></Field>
           <Field component={DateField} name='expectedStartDay' label={'expectedStartDay'} style={{ float: 'left' }}
