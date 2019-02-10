@@ -31,7 +31,7 @@ type MergedProps = TaskFormProps & FormProps<Task, TaskFormProps, TaskFormState>
 class TaskForm extends React.Component<MergedProps, TaskFormState> {
   render(): JSX.Element { 
     const project: Project = this.props.project.getProject().toJS();
-    const style = Object.assign({}, this.props.style, { padding: '10px' });
+    const style = Object.assign({}, this.props.style, { padding: '15px' });
     return (
       <form autoComplete='off' className='task' style={style}>
           <IconButton aria-label="Clear" style={{position: 'absolute', top: '0px', right: '5px', zIndex: 1}}
@@ -39,22 +39,23 @@ class TaskForm extends React.Component<MergedProps, TaskFormState> {
             <ClearIcon />
           </IconButton>
           <div className='clearfix'>
-          <Field autoComplete='off' component={Text} name='name' label={'name'} autoFocus={true} fullWidth={true} style={{width: '500px'}}></Field>
-          <Field component={Select} name='statusId' label={'statusId'} options={this.toOptions(project.statuses)}></Field>
-          <FieldArray component={Assignee} name='assignees' label='assignees'></FieldArray>
-          <Field component={Text} name='progress' label={'progress'} type='number' placeholder='%' inputProps={{min:0, max: 100}}></Field>
-          <Field component={DateField} name='expectedStartDay' label={'expectedStartDay'} style={{ float: 'left' }}
+          <Field autoComplete='off' component={Text} name='name' autoFocus={true} fullWidth={true} style={{width: '500px'}}></Field>
+          <br />
+          <FieldArray component={Assignee} name='assignees' label='担当'></FieldArray>
+          <Field component={Text} name='progress' label='進捗率' type='number' placeholder='%' inputProps={{min:0, max: 100}}></Field>
+          <Field component={DateField} name='expectedStartDay' label='予定開始日' style={{ float: 'left' }}
                   onChangeValue={((date: number) => {this.onChangeDate('expectedStartDay', date)}).bind(this)}></Field>
-          <Field component={DateField} name='expectedEndDay' label={'expectedEndDay'} style={{ float: 'left' }}
+          <Field component={DateField} name='expectedEndDay' label='予定終了日' style={{ float: 'left' }}
                   onChangeValue={((date: number) => {this.onChangeDate('expectedEndDay', date)}).bind(this)}></Field>
           <div style={{clear: 'both'}}></div>
-          <Field component={Text} name='expectedCost' label={'expectedCost'} type='number' placeholder='人日'></Field>
-          <Field component={DateField} name='actualStartDay' label={'actualStartDay'} style={{ float: 'left' }}
+          <Field component={Text} name='expectedCost' label='予定工数' type='number' placeholder='人日'></Field>
+          <Field component={DateField} name='actualStartDay' label='開始日' style={{ float: 'left' }}
                   onChangeValue={((date: number) => {this.onChangeDate('actualStartDay', date)}).bind(this)}></Field>
-          <Field component={DateField} name='actualEndDay' label={'actualEndDay'} style={{ float: 'left' }}
+          <Field component={DateField} name='actualEndDay' label='開始日' style={{ float: 'left' }}
                   onChangeValue={((date: number) => {this.onChangeDate('actualEndDay', date)}).bind(this)}></Field>
           <div style={{clear: 'both'}}></div>
-          <Field component={Text} name='actualCost' label={'actualCost'} type='number' placeholder='人日'></Field>
+          <Field component={Text} name='actualCost' label='実績工数' type='number' placeholder='人日'></Field>
+          <Field component={Select} name='statusId' label='ステータス' options={this.toOptions(project.statuses)}></Field>
           <footer style={{ marginTop: '10px' }}>
           { this.props.taskForm.getTask().get('id') && 
             <Button type='button' color='default' style={{ position: 'absolute', right: '10px', textDecoration: 'underline' }}

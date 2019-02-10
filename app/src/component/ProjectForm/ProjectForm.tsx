@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, InjectedFormProps, Field, change } from 'redux-form';
+import { reduxForm, InjectedFormProps, Field, FieldArray, change } from 'redux-form';
 import { AppState } from 'src/redux/index';
 import { FormName } from '../../config/FormName';
 import { Project, PermissionLevel } from '../../model/project';
@@ -10,6 +10,7 @@ import Select from '../Fields/Select';
 import Select2, { SelectOption }  from '../Fields/Select2';
 import { Button } from '@material-ui/core';
 import { Group } from '../../model/group';
+import Assignee from '../Fields/Assignee';
 
 export interface OwnProps extends React.Props<InjectedFormProps> {
   style?: React.CSSProperties;
@@ -28,12 +29,14 @@ class ProjectForm extends React.Component<ProjectFormProps, ProjectFormState> {
     ASSIGNEES: { value: PermissionLevel.ASSIGNEES, caption: 'プロジェクトメンバーに公開' },
   }
   render(): JSX.Element { 
-    const style = Object.assign({}, this.props.style, { padding: '10px' })
+    const style = Object.assign({}, this.props.style, { padding: '15px' })
     return (
       <form className='project' style={style} onSubmit={this.props.handleSubmit}>
-        <Field component={Text} name='name' label={'name'} autoFocus={true}></Field>
-        <Field component={Select} name='permissionLevel' label={'permissionLevel'} options={ProjectForm.options} ></Field>
-        <Field component={Select2} name='groupId' label={'groupId'} options={this.getGroupOptions()} onChangeSelect={this.handleGroupChange.bind(this)}></Field>
+        <Field component={Text} name='name'  fullWidth={true} autoFocus={true}></Field>
+        <br />
+        <FieldArray component={Assignee} name='assignees' label='メンバー'></FieldArray>
+        <Field component={Select} name='permissionLevel' label='権限設定' options={ProjectForm.options} ></Field>
+        <Field component={Select2} name='groupId' label='グループ' options={this.getGroupOptions()} onChangeSelect={this.handleGroupChange.bind(this)}></Field>
         <footer style={{ marginTop: '10px' }}>
           <Button type='submit' variant='contained' color='primary' style={{ width: '100px'}}>OK</Button>
           <Button type='button' color='secondary' style={{ width: '100px', marginLeft: '10px' }} onClick={this.props.onClose}>CANCEL</Button>
