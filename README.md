@@ -19,7 +19,9 @@ GANTT
 
 ## demo
 
-Coming soon...
+[here](http://ec2-13-231-227-209.ap-northeast-1.compute.amazonaws.com/#/login)
+
+id: u001, pass: u001
 
 ## tech stack
 
