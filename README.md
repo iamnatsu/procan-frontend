@@ -19,7 +19,7 @@ GANTT
 
 ## demo
 
-[here](http://ec2-13-231-227-209.ap-northeast-1.compute.amazonaws.com/#/login)
+[here](http://ec2-18-182-9-211.ap-northeast-1.compute.amazonaws.com/#/login)
 
 id: u001, pass: u001
 
