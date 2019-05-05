@@ -69,24 +69,24 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
   }
 
   render() {
-    const { /*t,*/ classes } = this.props;
+    const { classes, t } = this.props;
     const projects = this.props.dashboard.getProjects();
     const { groupId } = this.props.match.params;
-    if (!classes) return;
+    if (!classes || !t) return;
     return (
-      <div className="main-contents">
+      <div className='main-contents'>
         <div style={{height: '100%', width:'300px', padding: '10px', backgroundColor: P_RED, float: 'left'}}>
           <CustomScrollbars style={{width: 'calc(100% + 8px)'}}>
-            <p><Button className={classes.button} onClick={(() => {this.transitionDashboard()})} >ダッシュボード</Button></p>
+            <p><Button className={classes.button} onClick={(() => {this.transitionDashboard()})} >{t('dashboard')}</Button></p>
             <Divider style={{margin: '5px 0'}} />
-            <p><Button className={classes.button} onClick={this.handleOpenProjectModal.bind(this)} >プロジェクトを作成する</Button></p>
-            <p><Button className={classes.button} onClick={this.handleOpenGroupModal.bind(this)}>グループを作成する</Button></p>
+            <p><Button className={classes.button} onClick={this.handleOpenProjectModal.bind(this)} >{t('create_project')}</Button></p>
+            <p><Button className={classes.button} onClick={this.handleOpenGroupModal.bind(this)}>{t('create_group')}</Button></p>
             { this.renderGroups(classes) }
           </CustomScrollbars>
         </div>
         <div style={{height: '100%', width:'calc(100% - 300px)', padding: '10px', backgroundColor: P_IVORY, float: 'left'}}>
           <CustomScrollbars style={{width: 'calc(100% + 8px)'}}>
-            { !groupId && <p className={classes.label}>参加中のプロジェクト{this.groupName(groupId)}</p> }
+            { !groupId && <p className={classes.label}>{t('my_project')}{this.groupName(groupId)}</p> }
             { projects && projects.size > 0 && (
               this.renderProjects(projects, this.props.classes || {}, groupId)
             )}
@@ -175,7 +175,7 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
       <CardActionArea className={classes.newAction} onClick={ (event) => { this.handleOpenProjectModal(); } }>
         <CardContent>
             <Typography component='p' style={{textAlign: 'center'}}>
-              { "+ NEW PROJECT" }
+              { '+ NEW PROJECT' }
             </Typography>
         </CardContent>
       </CardActionArea>
@@ -190,7 +190,7 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
     return groups.map(g => { 
       if (g) return <p key={'p' + g.id}><Button key={g.id} className={classes.buttonGrp} 
         onClick={(() => {this.transitionDashboard(g.id)})}>{g.name}</Button>
-        <IconButton aria-label="Clear" className={classes.editBtn} onClick={(() => { this.handleEditGroup(g.id) }).bind(this)}>
+        <IconButton aria-label='Clear' className={classes.editBtn} onClick={(() => { this.handleEditGroup(g.id) }).bind(this)}>
           <EditIcon />
         </IconButton>
         </p>
@@ -270,8 +270,10 @@ class DashBoard extends React.Component<MergedProps, DashBoardViewerState> {
   }
 
   deleteConfirm(actionMap: MessageDialogActionMap) {
-    this.props.action.messageDialog.showMessage('削除してもよろしいですか？', 
-      [{ message: 'この操作は取り消すことができません。' }],
+    const { t } = this.props;
+    if (!t) return;
+    this.props.action.messageDialog.showMessage(t('sure_delete'), 
+      [{ message: t('cannot_undone') }],
       () => { /* NOP */ },
       actionMap
     );

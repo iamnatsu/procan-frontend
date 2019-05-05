@@ -10,6 +10,8 @@ import { ProfileDispatcher } from '../../redux/Profile/ProfileDispatcher';
 import { LoginState } from '../../redux/Login/LoginReducer';
 import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
 import { withNamespaces, TransProps } from 'react-i18next';
+import * as i18next from 'i18next';
+import { LANGUAGE } from '../../model/common';
 
 export interface ProfileViewerProps extends RouteComponentProps<any> { }
 export interface ProfileViewerState extends React.Props<any> { }
@@ -29,12 +31,14 @@ class ProfileViewer extends React.Component<MergedProps, ProfileViewerState> {
   }
 
   handleSubmit(values: any) {
-    const { t } = this.props;
+    const fn = () => {};
+    const t = this.props.t || fn;
     if ((values.password || values.passwordc) && values.password != values.passwordc) {
       this.props.action.messageDialog.showMessage(t('unmatch password'), []);
       return;
     }
     UserService.put(values).then(result => {
+      i18next.changeLanguage(result.data.lang || LANGUAGE.ja_JP);
       this.props.action.messageDialog.showMessage(t('updated'), []);
     });
   }

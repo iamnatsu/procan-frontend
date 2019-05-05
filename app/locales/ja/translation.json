@@ -1,10 +1,22 @@
 {
-  "Welcome to React": "ようこそ React へ。",
+  "current": "ja_JP",
+
   "updated": "更新しました",
   "unmatch password": "パスワードが一致しません",
+  "language": "言語",
+  "en": "英語",
+  "ja": "日本語",
 
   "username": "名前",
   "password": "パスワード",
   "passwordc": "パスワード（確認）",
+
+  "dashboard": "ダッシュボード",
+  "create_project": "プロジェクトを作成する",
+  "create_group": "グループを作成する",
+  "my_project": "参加中のプロジェクト",
+
+  "sure_delete": "削除してもよろしいですか？",
+  "cannot_undone": "この操作は取り消すことができません。",
   "": ""
 }

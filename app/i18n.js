@@ -6,11 +6,11 @@ import translationEN from './locales/en/translation.json';
 
 // the translations
 const resources = {
-  ja: {
+  ja_JP: {
     translation: translationJA
   },
-  en: {
-    translation: translationJA
+  en_US: {
+    translation: translationEN
   }
 };
 
@@ -18,7 +18,7 @@ i18n
   .use(reactI18nextModule) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: 'ja',
+    lng: 'ja_JP',
 
     keySeparator: false, // we do not use keys in form messages.welcome
 
