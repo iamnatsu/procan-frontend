@@ -77,6 +77,9 @@ export const appTheme = createMuiTheme({
         color: 'white',
         backgroundColor: MAIN_COLOR
       },
+      root: {
+        textTransform: "none",
+      },
       label: {
         textOverflow: 'ellipsis',
         overflow: 'hidden'

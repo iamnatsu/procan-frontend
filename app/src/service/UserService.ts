@@ -1,4 +1,5 @@
 import * as HttpService from './HttpService'
+import * as AuthService from './AuthService'
 import { USER } from './URL';
 import { FilterQuery } from '../model/common';
 import { User } from '../model/user';
@@ -11,7 +12,9 @@ export function post(user: User): HttpService._Promise<User> {
 
 export function put(task: User): HttpService._Promise<User> {
   return HttpService.put(USER + '/' + task.id, task).then((response: HttpService._Response<User>) => {
-    return response;
+    return AuthService.sessionProceed().then(() => {
+      return response;
+    });
   });
 }
 

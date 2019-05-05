@@ -89,3 +89,8 @@ export enum GanttHeader {
     PROGRESS = 7,
     ASSIGNEE = 8,
 }
+
+export enum LANGUAGE {
+    ja_JP = 'ja_JP',
+    en_US = 'en_US',
+}

@@ -1,10 +1,22 @@
 {
-  "Welcome to React": "Welcome to React and react-i18next",
+  "current": "en_US",
+
   "updated": "updated",
   "unmatch password": "unmatch password",
+  "language": "language",
+  "en": "English",
+  "ja": "Japanese",
 
   "username": "name",
   "password": "password",
   "passwordc": "password(confirm)",
+
+  "dashboard": "DashBoard",
+  "create_project": "Create Project",
+  "create_group": "Create Group",
+  "my_project": "My Project",
+
+  "sure_delete": "Are you sure you want to delete?",
+  "cannot_undone": "This operation cannot be undone",
   "": ""
 }
