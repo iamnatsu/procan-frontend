@@ -45,9 +45,9 @@ class ProjectGantt extends React.Component<MergedProps, ProjectGanttState> {
   static beforeResizerOffset = 0;
 
   componentWillMount() {
-    this.props.action.gantt.updateLeft(200);
-    this.props.action.gantt.updateWidth(window.parent.screen.width + 400);
-    const startDay = moment().subtract(Math.floor(200 / this.props.gantt.getColumnWidth()) + 10 /* margin */, 'd');
+    this.props.action.gantt.updateLeft(600);
+    this.props.action.gantt.updateWidth((window.parent.screen.width * 2));
+    const startDay = moment().subtract(Math.floor(600 / this.props.gantt.getColumnWidth()) + 20 /* margin */, 'd');
     this.props.action.gantt.updateStartDay(startDay);
   }
 
@@ -434,15 +434,15 @@ class ProjectGantt extends React.Component<MergedProps, ProjectGanttState> {
     if (event.srcElement && event.srcElement.scrollLeft >= 0) {
       const colWidth = this.props.gantt.getColumnWidth();
       const startDay = this.props.gantt.getStartDay();
-      if (event.srcElement.scrollLeft < 100) {
-        const additional = this.props.isDragging ? 30 : 100; // 適当
+      if (event.srcElement.scrollLeft < 50) {
+        const additional = 50; // 適当
         const additionalDays = additional / colWidth;
         this.props.action.gantt.updateWidthAndStartDay(this.props.gantt.getWidth() + additional, startDay.clone().subtract(additionalDays, 'd'));
         if (scrollBody) {
           scrollBody.scrollLeft(scrollBody.getScrollLeft() + additional);
         }
       } else {
-        const additional = 60; // 適当
+        const additional = 50; // 適当
         const additionalDays = additional / colWidth;
         if (el && el.children[0] && el.children[0].clientWidth) {
           if (this.props.gantt.getWidth() - el.children[0].clientWidth - event.srcElement.scrollLeft < 100) {
@@ -522,7 +522,7 @@ const dropTarget: DropTargetSpec<any> = {
         if (!offset) return;
         const dom: any = ReactDOM.findDOMNode(component);
         const node = dom.getElementsByClassName("gantt-body").item(0).children[0];
-        const l = ProjectGantt.startLeft + offset.x;
+        const l = ProjectGantt.startLeft - offset.x;
         const t = ProjectGantt.startTop + offset.y;
         node.scrollLeft = l;
         node.scrollTop = t > 0 ? t : 0;
