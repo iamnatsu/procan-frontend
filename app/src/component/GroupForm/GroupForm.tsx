@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, InjectedFormProps, Field, FieldArray } from 'redux-form';
+import { withNamespaces, TransProps } from 'react-i18next';
 import { AppState } from 'src/redux/index';
 import { FormName } from '../../config/FormName';
 import { Group } from '../../model/group';
@@ -19,22 +20,26 @@ export interface OwnProps extends React.Props<InjectedFormProps> {
 export interface GroupFormState {
 }
 
-type GroupFormProps = OwnProps & InjectedFormProps<Group, OwnProps, GroupFormState> & DispatchProps & StateProps;
+type GroupFormProps = OwnProps & InjectedFormProps<Group, OwnProps, GroupFormState> & DispatchProps & StateProps & TransProps;
 
 class GroupForm extends React.Component<GroupFormProps, GroupFormState> {
-  render(): JSX.Element { 
+  render(): JSX.Element {
     const style = Object.assign({}, this.props.style, { padding: '15px' })
+    const t = this.props.t || ((s: string) => s);
     return (
       <form className='group' style={style} onSubmit={this.props.handleSubmit}>
         <Field component={Text} name='name' fullWidth={true} autoFocus={true}></Field>
         <br />
-        <FieldArray component={Assignee} name='assignees' label='メンバー'></FieldArray>
+        <FieldArray component={Assignee} name='assignees' label={t('member')}></FieldArray>
         <footer style={{ marginTop: '10px' }}>
           <Button type='submit' variant='contained' color='primary' style={{ width: '100px'}}>OK</Button>
           <Button type='button' color='secondary' style={{ width: '100px', marginLeft: '10px' }} onClick={this.props.onClose}>CANCEL</Button>
           { this.props.dashboard.getGroup().get('id') && 
             <Button type='button' color='default' style={{ position: 'absolute', right: '10px', textDecoration: 'underline' }}
-              onClick={(() => { if (this.props.onDelete) this.props.onDelete(this.props.dashboard.getGroup().get('id'))}).bind(this)}>
+              onClick={
+                (() => { if (this.props.onDelete) {
+                  this.props.onDelete(this.props.dashboard.getGroup().get('id'))}
+                }).bind(this)}>
               <DeleteIcon />
               DELETE</Button> }
         </footer>
@@ -65,7 +70,8 @@ function mergeProps(stateProps: StateProps, dispatchProps: DispatchProps, ownPro
 }
 
 const reduxFormObject: any = reduxForm<Group, OwnProps, GroupFormState>({ form: FormName.GroupForm, enableReinitialize: true})(GroupForm);
-const connected: React.ComponentClass<OwnProps> = connect(mapStateToProps, mapDispatchToProps, mergeProps)(reduxFormObject);
+const i18n = withNamespaces()(reduxFormObject)
+const connected: React.ComponentClass<OwnProps> = connect(mapStateToProps, mapDispatchToProps, mergeProps)(i18n);
 
 export default connected;
 

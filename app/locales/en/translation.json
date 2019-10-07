@@ -16,6 +16,14 @@
   "create_group": "Create Group",
   "my_project": "My Project",
 
+  "member": "member",
+  "group": "group",
+
+  "permission_level": "権限設定",
+  "permission_level_public": "public",
+  "permission_level_group": "group",
+  "permission_level_assignees": "assignees",
+
   "sure_delete": "Are you sure you want to delete?",
   "cannot_undone": "This operation cannot be undone",
   "": ""

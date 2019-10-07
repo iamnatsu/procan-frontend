@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, InjectedFormProps, Field, FieldArray, change } from 'redux-form';
+import { withNamespaces, TransProps } from 'react-i18next';
 import { AppState } from 'src/redux/index';
 import { FormName } from '../../config/FormName';
 import { Project, PermissionLevel } from '../../model/project';
@@ -20,23 +21,24 @@ export interface OwnProps extends React.Props<InjectedFormProps> {
 export interface ProjectFormState {
 }
 
-type ProjectFormProps = OwnProps & InjectedFormProps<Project, OwnProps, ProjectFormState> & DispatchProps & StateProps;
+type ProjectFormProps = OwnProps & InjectedFormProps<Project, OwnProps, ProjectFormState> & DispatchProps & StateProps & TransProps;
 
 class ProjectForm extends React.Component<ProjectFormProps, ProjectFormState> {
-  static options = {
-    PUBLIC: { value: PermissionLevel.PUBLIC, caption: '全員に公開' },
-    GROUP: { value: PermissionLevel.GROUP, caption: 'グループメンバーに公開' },
-    ASSIGNEES: { value: PermissionLevel.ASSIGNEES, caption: 'プロジェクトメンバーに公開' },
-  }
-  render(): JSX.Element { 
-    const style = Object.assign({}, this.props.style, { padding: '15px' })
+  render(): JSX.Element {
+    const style = Object.assign({}, this.props.style, { padding: '15px' });
+    const t = this.props.t || ((s: string) => s);
+    const options = {
+      PUBLIC: { value: PermissionLevel.PUBLIC, caption: t('permission_level_public') },
+      GROUP: { value: PermissionLevel.GROUP, caption: t('permission_level_group') },
+      ASSIGNEES: { value: PermissionLevel.ASSIGNEES, caption: t('permission_level_assignees') },
+    };
     return (
       <form className='project' style={style} onSubmit={this.props.handleSubmit}>
-        <Field component={Text} name='name'  fullWidth={true} autoFocus={true}></Field>
+        <Field component={Text} name='name' label={'名称'} fullWidth={true} autoFocus={true}></Field>
         <br />
-        <FieldArray component={Assignee} name='assignees' label='メンバー'></FieldArray>
-        <Field component={Select} name='permissionLevel' label='権限設定' options={ProjectForm.options} ></Field>
-        <Field component={Select2} name='groupId' label='グループ' options={this.getGroupOptions()} onChangeSelect={this.handleGroupChange.bind(this)}></Field>
+        <FieldArray component={Assignee} name='assignees' label={t('member')}></FieldArray>
+        <Field component={Select} name='permissionLevel' label={t('permission_level')} options={options} ></Field>
+        <Field component={Select2} name='groupId' label={t('group')} options={this.getGroupOptions()} onChangeSelect={this.handleGroupChange.bind(this)}></Field>
         <footer style={{ marginTop: '10px' }}>
           <Button type='submit' variant='contained' color='primary' style={{ width: '100px'}}>OK</Button>
           <Button type='button' color='secondary' style={{ width: '100px', marginLeft: '10px' }} onClick={this.props.onClose}>CANCEL</Button>
@@ -81,7 +83,8 @@ function mergeProps(stateProps: StateProps, dispatchProps: DispatchProps, ownPro
 }
 
 const reduxFormObject: any = reduxForm<Project, OwnProps, ProjectFormState>({ form: FormName.ProjectForm, enableReinitialize: true})(ProjectForm);
-const connected: React.ComponentClass<OwnProps> = connect(mapStateToProps, mapDispatchToProps, mergeProps)(reduxFormObject);
+const i18n = withNamespaces()(reduxFormObject)
+const connected: React.ComponentClass<OwnProps> = connect(mapStateToProps, mapDispatchToProps, mergeProps)(i18n);
 
 export default connected;
 

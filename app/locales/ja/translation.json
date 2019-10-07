@@ -16,6 +16,26 @@
   "create_group": "グループを作成する",
   "my_project": "参加中のプロジェクト",
 
+  "member": "メンバー",
+  "group": "グループ",
+
+  "name":"名称",
+  "assignees":"担当",
+  "progress":"進捗率",
+  "expectedStartDay":"予定開始日",
+  "expectedEndDay":"予定終了日",
+  "expectedCost":"予定工数",
+  "actualStartDay":"開始日",
+  "actualEndDay":"終了日",
+  "actualCost":"実績工数",
+  "status":"ステータス",
+  "workload":"人日",
+
+  "permission_level": "権限設定",
+  "permission_level_public": "全員に公開",
+  "permission_level_group": "グループメンバーに公開",
+  "permission_level_assignees": "プロジェクトメンバーに公開",
+
   "sure_delete": "削除してもよろしいですか？",
   "cannot_undone": "この操作は取り消すことができません。",
   "": ""
