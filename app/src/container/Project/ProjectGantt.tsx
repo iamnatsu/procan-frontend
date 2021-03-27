@@ -431,10 +431,10 @@ class ProjectGantt extends React.Component<MergedProps, ProjectGanttState> {
   handleScrollBody(event: Event) {
     const scrollBody = this.refs.scrollBody as Scrollbars;
     const el = window.document.getElementById('gantt-body');
-    if (event.srcElement && event.srcElement.scrollLeft >= 0) {
+    if (event.srcElement && (event.srcElement as any).scrollLeft >= 0) {
       const colWidth = this.props.gantt.getColumnWidth();
       const startDay = this.props.gantt.getStartDay();
-      if (event.srcElement.scrollLeft < 50) {
+      if ((event.srcElement as any).scrollLeft < 50) {
         const additional = 50; // 適当
         const additionalDays = additional / colWidth;
         this.props.action.gantt.updateWidthAndStartDay(this.props.gantt.getWidth() + additional, startDay.clone().subtract(additionalDays, 'd'));
@@ -445,12 +445,12 @@ class ProjectGantt extends React.Component<MergedProps, ProjectGanttState> {
         const additional = 50; // 適当
         const additionalDays = additional / colWidth;
         if (el && el.children[0] && el.children[0].clientWidth) {
-          if (this.props.gantt.getWidth() - el.children[0].clientWidth - event.srcElement.scrollLeft < 100) {
+          if (this.props.gantt.getWidth() - el.children[0].clientWidth - (event.srcElement as any).scrollLeft < 100) {
             this.props.action.gantt.updateWidthAndStartDay(this.props.gantt.getWidth() + additional, startDay.clone().add(additionalDays, 'd'));
           }
         }
       }
-      this.props.action.gantt.updateCoord(event.srcElement.scrollLeft, event.srcElement.scrollTop);
+      this.props.action.gantt.updateCoord((event.srcElement as any).scrollLeft, (event.srcElement as any).scrollTop);
     }
   }
   
