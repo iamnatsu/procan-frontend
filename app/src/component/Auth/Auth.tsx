@@ -2,14 +2,14 @@ import * as React from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import LoginDispatcher from '../../redux/Login/LoginDispatcher';
+import LoginDispatchFunctions from '../../redux/Login/LoginDispatchFunctions';
 import LoginStore from '../../redux/Login/LoginStore';
 import * as AuthService from '../../service/AuthService';
 import { transitionToLoginPage } from '../..//util/transition';
 
 export interface AuthProps extends React.Props<{}> {
   action: {
-    login: LoginDispatcher;
+    login: LoginDispatchFunctions;
   }
   login: LoginStore;
 }
@@ -75,7 +75,7 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     action: {
-      login: new LoginDispatcher(dispatch),
+      login: new LoginDispatchFunctions(dispatch),
     }
   }
 }

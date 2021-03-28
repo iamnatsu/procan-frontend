@@ -1,7 +1,7 @@
 import { UserSelectorUpdateIsShowAction,UserSelectorUpdateCandidates, UserSelectorUpdateSelections } from './UserSelectorActionCreator';
 import { User } from '../../../model/user';
 
-export class UserSelectorDispatcher {
+export class UserSelectorDispatchFunctions {
   constructor(public dispatch: (action: any) => any) {
     this.dispatch = dispatch
   }

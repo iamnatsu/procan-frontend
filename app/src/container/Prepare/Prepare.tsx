@@ -7,7 +7,7 @@ import { MuiThemeProvider} from '@material-ui/core/styles';
 import { TextField, Button } from '@material-ui/core';
 import { AppState } from 'src/redux';
 import * as RegistService from '../../service/RegistService'
-import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
+import { MessageDialogDispatchFunctions } from '../../redux/component/MessageDialog/MessageDialogDispatchFunctions';
 import { topMuiTheme } from '../../config/Theme';
 
 export interface ReactProps extends RouteComponentProps<any> { }
@@ -87,14 +87,14 @@ const mapStateToProps = (state: AppState) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     action: {
-      modal: new MessageDialogDispatcher(dispatch),
+      modal: new MessageDialogDispatchFunctions(dispatch),
     }
   }
 }
 
 export interface LoginStateProps {
   action: {
-    modal: MessageDialogDispatcher;
+    modal: MessageDialogDispatchFunctions;
   }
 }
 

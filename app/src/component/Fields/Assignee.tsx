@@ -5,8 +5,8 @@ import { User } from '../../model/user'
 import { IconButton, Avatar } from '@material-ui/core';
 import { withStyles, StyledComponentProps } from '@material-ui/core/styles';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
-import { UserSelectorDispatcher } from '../../redux/component/UserSelector/UserSelectorDispatcher';
-import { UserCardDispatcher } from '../../redux/component/UserCard/UserCardDispatcher';
+import { UserSelectorDispatchFunctions } from '../../redux/component/UserSelector/UserSelectorDispatchFunctions';
+import { UserCardDispatchFunctions } from '../../redux/component/UserCard/UserCardDispatchFunctions';
 import Label from './Lable'
 import { FIELD_STYLE } from '../../config/Style';
 import AddIcon from '@material-ui/icons/AddCircle';
@@ -70,8 +70,8 @@ interface StateProps {
 
 interface DispatchProps {
   action: {
-    userSelector: UserSelectorDispatcher,
-    userCard: UserCardDispatcher,
+    userSelector: UserSelectorDispatchFunctions,
+    userCard: UserCardDispatchFunctions,
   };
 }
 
@@ -82,8 +82,8 @@ function mapStateToProps(state: any) {
 function mapDispatchToProps(dispatch: any) {
   return {
     action: {
-      userSelector: new UserSelectorDispatcher(dispatch),
-      userCard: new UserCardDispatcher(dispatch)
+      userSelector: new UserSelectorDispatchFunctions(dispatch),
+      userCard: new UserCardDispatchFunctions(dispatch)
     }
   };
 }

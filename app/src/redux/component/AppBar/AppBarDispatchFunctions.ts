@@ -1,7 +1,7 @@
 import { AppBarUpdateConfig } from './AppBarCreator';
 import { AppBarConfig } from '../../../model/common'
 
-export class AppBarDispatcher {
+export class AppBarDispatchFunctions {
   constructor(public dispatch: (action: any) => any) {
     this.dispatch = dispatch
   }

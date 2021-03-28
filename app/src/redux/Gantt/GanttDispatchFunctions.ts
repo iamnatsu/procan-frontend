@@ -1,7 +1,7 @@
 import { GanttUpdateScrollLeft, GanttUpdateWidth, GanttUpdateStartDay, GanttUpdateWidthAndStartDay, GanttUpdateScrollTop, GanttUpdateScrollCoord, GanttUpdateHeaders, GanttUpdateSettingAnchor } from './GanttActionCreator';
 import * as moment from 'moment';
 import { GanttHeader } from '../../model/common';
-export class GanttDispatcher {
+export class GanttDispatchFunctions {
   constructor(public dispatch: (action: any) => any) {
     this.dispatch = dispatch
   }

@@ -6,7 +6,7 @@ import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import * as UserService from '../../service/UserService';
 import { User } from '../../model/user';
 import { AppState } from 'src/redux';
-import { UserSelectorDispatcher } from '../../redux/component/UserSelector/UserSelectorDispatcher';
+import { UserSelectorDispatchFunctions } from '../../redux/component/UserSelector/UserSelectorDispatchFunctions';
 import UserSelectorStore from '../../redux/component/UserSelector/UserSelectorStore';
 
 export interface UserSelectorProps {
@@ -112,14 +112,14 @@ export interface StateProps {
   userSelector: UserSelectorStore;
 }
 export interface DispatchProps {
-  actions: UserSelectorDispatcher;
+  actions: UserSelectorDispatchFunctions;
 }
 
 const mapStateToProps = (state: AppState) => {
   return { userSelector: state.component.userSelector };
 }
 const mapDispatchToProps = (dispatch: any) => {
-  return { actions: new UserSelectorDispatcher(dispatch) }
+  return { actions: new UserSelectorDispatchFunctions(dispatch) }
 }
 const connected = withStyles(styles)(UserSelector)
 export default connect<StateProps, DispatchProps, any>(mapStateToProps, mapDispatchToProps)(connected);

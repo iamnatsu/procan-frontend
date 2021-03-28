@@ -1,7 +1,7 @@
 import { UserCardUpdateIsShowAction } from './UserCardActionCreator';
 import { User } from '../../../model/user';
 
-export class UserCardDispatcher {
+export class UserCardDispatchFunctions {
   constructor(public dispatch: (action: any) => any) {
     this.dispatch = dispatch
   }

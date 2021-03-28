@@ -4,13 +4,13 @@ import { AppState } from '../../redux/index';
 import { RouteComponentProps } from 'react-router';
 import { P_RED, P_IVORY, WHITE } from '../../config/Color';
 import { ProjectState } from '../../redux/Project/ProjectReducer';
-import { ProjectDispatcher } from '../../redux/Project/ProjectDispatcher';
+import { ProjectDispatchFunctions } from '../../redux/Project/ProjectDispatchFunctions';
 import UserSelector from '../../component/UserSelector/UserSelector'
 import UserCard from '../../component/UserCard/UserCard'
-import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
-import { UserSelectorDispatcher } from '../../redux/component/UserSelector/UserSelectorDispatcher';
-import { UserCardDispatcher } from '../../redux/component/UserCard/UserCardDispatcher';
-import { AppBarDispatcher } from '../../redux/component/AppBar/AppBarDispatcher';
+import { MessageDialogDispatchFunctions } from '../../redux/component/MessageDialog/MessageDialogDispatchFunctions';
+import { UserSelectorDispatchFunctions } from '../../redux/component/UserSelector/UserSelectorDispatchFunctions';
+import { UserCardDispatchFunctions } from '../../redux/component/UserCard/UserCardDispatchFunctions';
+import { AppBarDispatchFunctions } from '../../redux/component/AppBar/AppBarDispatchFunctions';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import ProjectBoard from './ProjectBoard';
@@ -270,11 +270,11 @@ interface StateProps {
 
 interface DispatchProps {
   action: {
-    project: ProjectDispatcher,
-    userSelector: UserSelectorDispatcher,
-    userCard: UserCardDispatcher,
-    messageDialog: MessageDialogDispatcher,
-    appBar: AppBarDispatcher,
+    project: ProjectDispatchFunctions,
+    userSelector: UserSelectorDispatchFunctions,
+    userCard: UserCardDispatchFunctions,
+    messageDialog: MessageDialogDispatchFunctions,
+    appBar: AppBarDispatchFunctions,
   };
 }
 
@@ -290,11 +290,11 @@ function mapStateToProps(state: AppState) {
 function mapDispatchToProps(dispatch: any) {
   return {
     action: {
-      project: new ProjectDispatcher(dispatch),
-      userSelector: new UserSelectorDispatcher(dispatch),
-      userCard: new UserCardDispatcher(dispatch),
-      messageDialog: new MessageDialogDispatcher(dispatch),
-      appBar: new AppBarDispatcher(dispatch),
+      project: new ProjectDispatchFunctions(dispatch),
+      userSelector: new UserSelectorDispatchFunctions(dispatch),
+      userCard: new UserCardDispatchFunctions(dispatch),
+      messageDialog: new MessageDialogDispatchFunctions(dispatch),
+      appBar: new AppBarDispatchFunctions(dispatch),
     }
   };
 }

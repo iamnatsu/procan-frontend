@@ -11,7 +11,7 @@ import * as ProjectService from '../../service/ProjectService'
 import * as TaskService from '../../service/TaskService'
 import * as GroupService from '../../service/GroupService'
 import { transitionToLoginPage } from '../../util/transition';
-import { DashBoardDispatcher } from '../../redux/DashBoard/DashBoardDispatcher';
+import { DashBoardDispatchFunctions } from '../../redux/DashBoard/DashBoardDispatchFunctions';
 import { DashBoardState } from '../../redux/DashBoard/DashBoardReducer';
 import ProjectForm from '../../component/ProjectForm/ProjectForm';
 import GroupForm from '../../component/GroupForm/GroupForm';
@@ -28,17 +28,17 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import { StyledComponentProps, ClassNameMap, CSSProperties } from '@material-ui/core/styles/withStyles';
 import { MessageDialogState } from '../../redux/component/MessageDialog/MessageDialogReducer';
-import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
+import { MessageDialogDispatchFunctions } from '../../redux/component/MessageDialog/MessageDialogDispatchFunctions';
 import UserSelector from '../../component/UserSelector/UserSelector'
 import UserCard from '../../component/UserCard/UserCard'
-import { UserSelectorDispatcher } from '../../redux/component/UserSelector/UserSelectorDispatcher';
-import { UserCardDispatcher } from '../../redux/component/UserCard/UserCardDispatcher';
+import { UserSelectorDispatchFunctions } from '../../redux/component/UserSelector/UserSelectorDispatchFunctions';
+import { UserCardDispatchFunctions } from '../../redux/component/UserCard/UserCardDispatchFunctions';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import { default as CustomScrollbars } from 'react-custom-scrollbars';
 import { MessageDialogActionMap } from '../../redux/component/MessageDialog/MessageDialogStore';
-import { ProjectDispatcher } from '../../redux/Project/ProjectDispatcher';
+import { ProjectDispatchFunctions } from '../../redux/Project/ProjectDispatchFunctions';
 
 export interface DashBoardProps extends RouteComponentProps<any> {
 }
@@ -350,11 +350,11 @@ interface StateProps {
 
 interface DispatchProps {
   action: {
-    dashboard: DashBoardDispatcher,
-    project: ProjectDispatcher,
-    messageDialog: MessageDialogDispatcher,
-    userSelector: UserSelectorDispatcher,
-    userCard: UserCardDispatcher,
+    dashboard: DashBoardDispatchFunctions,
+    project: ProjectDispatchFunctions,
+    messageDialog: MessageDialogDispatchFunctions,
+    userSelector: UserSelectorDispatchFunctions,
+    userCard: UserCardDispatchFunctions,
   };
 }
 
@@ -368,11 +368,11 @@ function mapStateToProps(state: AppState) {
 function mapDispatchToProps(dispatch: any) {
   return {
     action: {
-      dashboard: new DashBoardDispatcher(dispatch),
-      project: new ProjectDispatcher(dispatch),
-      messageDialog: new MessageDialogDispatcher(dispatch),
-      userSelector: new UserSelectorDispatcher(dispatch),
-      userCard: new UserCardDispatcher(dispatch),
+      dashboard: new DashBoardDispatchFunctions(dispatch),
+      project: new ProjectDispatchFunctions(dispatch),
+      messageDialog: new MessageDialogDispatchFunctions(dispatch),
+      userSelector: new UserSelectorDispatchFunctions(dispatch),
+      userCard: new UserCardDispatchFunctions(dispatch),
     }
   };
 }

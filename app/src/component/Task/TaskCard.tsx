@@ -8,11 +8,11 @@ import { StyledComponentProps } from '@material-ui/core/styles/withStyles';
 import { TASK_CARD } from '../../config/Style'
 import { User } from '../../model/user'
 import { ProjectState } from '../../redux/Project/ProjectReducer';
-import { ProjectDispatcher } from '../../redux/Project/ProjectDispatcher';
+import { ProjectDispatchFunctions } from '../../redux/Project/ProjectDispatchFunctions';
 import { MessageDialogState } from '../../redux/component/MessageDialog/MessageDialogReducer';
-import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
-import { TaskFormDispatcher } from '../../redux/component/TaskForm/TaskFormDispatcher';
-import { UserCardDispatcher } from '../../redux/component/UserCard/UserCardDispatcher';
+import { MessageDialogDispatchFunctions } from '../../redux/component/MessageDialog/MessageDialogDispatchFunctions';
+import { TaskFormDispatchFunctions } from '../../redux/component/TaskForm/TaskFormDispatchFunctions';
+import { UserCardDispatchFunctions } from '../../redux/component/UserCard/UserCardDispatchFunctions';
 import { DragSource, DragSourceSpec, DragSourceMonitor, DragSourceCollector, DragSourceConnector, ConnectDragSource,
   DropTargetCollector, DropTargetConnector, DropTargetMonitor, DropTarget, ConnectDropTarget, DropTargetSpec, ConnectDragPreview } from 'react-dnd';
   import { getEmptyImage } from 'react-dnd-html5-backend'
@@ -160,10 +160,10 @@ interface StateProps {
 
 interface DispatchProps {
   action: {
-    project: ProjectDispatcher,
-    taskForm: TaskFormDispatcher,
-    userCard: UserCardDispatcher,
-    messageDialog: MessageDialogDispatcher
+    project: ProjectDispatchFunctions,
+    taskForm: TaskFormDispatchFunctions,
+    userCard: UserCardDispatchFunctions,
+    messageDialog: MessageDialogDispatchFunctions
   };
 }
 
@@ -177,10 +177,10 @@ function mapStateToProps(state: AppState) {
 function mapDispatchToProps(dispatch: any) {
   return {
     action: {
-      project: new ProjectDispatcher(dispatch),
-      taskForm: new TaskFormDispatcher(dispatch),
-      userCard: new UserCardDispatcher(dispatch),
-      messageDialog: new MessageDialogDispatcher(dispatch),
+      project: new ProjectDispatchFunctions(dispatch),
+      taskForm: new TaskFormDispatchFunctions(dispatch),
+      userCard: new UserCardDispatchFunctions(dispatch),
+      messageDialog: new MessageDialogDispatchFunctions(dispatch),
     }
   };
 }

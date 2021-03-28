@@ -8,7 +8,7 @@ import { TextField, Button/*, MenuItem, SelectField*/ } from '@material-ui/core'
 import { transitionTo } from '../../util/transition';
 import { AppState } from 'src/redux';
 import LoginStore from 'src/redux/Login/LoginStore';
-import LoginDispatcher from '../../redux/Login/LoginDispatcher';
+import LoginDispatchFunctions from '../../redux/Login/LoginDispatchFunctions';
 import { topMuiTheme } from '../../config/Theme';
 import { P_LIGHT_BLUE, LOGIN_ERR_MSG } from '../../config/Color';
 
@@ -95,14 +95,14 @@ const mapStateToProps = (state: AppState) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     action: {
-      login: new LoginDispatcher(dispatch),
+      login: new LoginDispatchFunctions(dispatch),
     }
   }
 }
 
 export interface LoginStateProps {
   action: {
-    login: LoginDispatcher;
+    login: LoginDispatchFunctions;
   }
 }
 

@@ -3,7 +3,7 @@ import { Credential } from '../../types/Credential';
 import * as AuthService from '../../service/AuthService';
 import { setToken } from '../../service/HttpService';
 
-export default class LoginDispatcher {
+export default class LoginDispatchFunctions {
   constructor(public dispatch: (action: any) => any) {
     this.dispatch = dispatch;
   }

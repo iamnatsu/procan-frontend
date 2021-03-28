@@ -1,7 +1,7 @@
 import { MessageDialogUpdateAction, MessageDialogUpdateIsShowAction } from './MessageDialogActionCreator';
 import { MessageDialogActionMap } from './MessageDialogStore';
 
-export class MessageDialogDispatcher {
+export class MessageDialogDispatchFunctions {
   constructor(public dispatch: (action: any) => any) {
     this.dispatch = dispatch
   }
