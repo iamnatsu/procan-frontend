@@ -34,7 +34,7 @@ class ProjectForm extends React.Component<ProjectFormProps, ProjectFormState> {
     };
     return (
       <form className='project' style={style} onSubmit={this.props.handleSubmit}>
-        <Field component={Text} name='name' label={'名称'} fullWidth={true} autoFocus={true}></Field>
+        <Field component={Text} name='name' label={t('name')} fullWidth={true} autoFocus={true}></Field>
         <br />
         <FieldArray component={Assignee} name='assignees' label={t('member')}></FieldArray>
         <Field component={Select} name='permissionLevel' label={t('permission_level')} options={options} ></Field>

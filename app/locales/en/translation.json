@@ -19,7 +19,8 @@
   "member": "member",
   "group": "group",
 
-  "permission_level": "権限設定",
+  "name":"name",
+  "permission_level": "permission",
   "permission_level_public": "public",
   "permission_level_group": "group",
   "permission_level_assignees": "assignees",
