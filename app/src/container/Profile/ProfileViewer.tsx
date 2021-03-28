@@ -6,9 +6,9 @@ import { AppState } from '../../redux/index';
 import { P_IVORY } from '../../config/Color';
 import ProfileForm from '../../component/ProfileForm/ProfileForm'
 import * as UserService from '../../service/UserService'
-import { ProfileDispatcher } from '../../redux/Profile/ProfileDispatcher';
+import { ProfileDispatchFunctions } from '../../redux/Profile/ProfileDispatchFunctions';
 import { LoginState } from '../../redux/Login/LoginReducer';
-import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
+import { MessageDialogDispatchFunctions } from '../../redux/component/MessageDialog/MessageDialogDispatchFunctions';
 import { withNamespaces, TransProps } from 'react-i18next';
 import * as i18next from 'i18next';
 import { LANGUAGE } from '../../model/common';
@@ -50,8 +50,8 @@ interface StateProps {
 
 interface DispatchProps {
   action: {
-    profile: ProfileDispatcher,
-    messageDialog: MessageDialogDispatcher
+    profile: ProfileDispatchFunctions,
+    messageDialog: MessageDialogDispatchFunctions
   };
 }
 
@@ -63,8 +63,8 @@ function mapStateToProps(state: AppState) {
 
 function mapDispatchToProps(dispatch: any) {
   return { action: {
-      profile: new ProfileDispatcher(dispatch),
-      messageDialog: new MessageDialogDispatcher(dispatch)
+      profile: new ProfileDispatchFunctions(dispatch),
+      messageDialog: new MessageDialogDispatchFunctions(dispatch)
     }
   };
 }

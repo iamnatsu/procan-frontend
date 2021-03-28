@@ -4,7 +4,7 @@ import { Button, Avatar, Popover, Typography, withStyles, StyledComponentProps }
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
 //import { User } from '../../model/user';
 import { AppState } from 'src/redux';
-import { UserCardDispatcher } from '../../redux/component/UserCard/UserCardDispatcher';
+import { UserCardDispatchFunctions } from '../../redux/component/UserCard/UserCardDispatchFunctions';
 import UserCardStore from '../../redux/component/UserCard/UserCardStore';
 
 export interface UserCardProps { }
@@ -80,7 +80,7 @@ export interface StateProps {
 }
 export interface DispatchProps {
   actions: {
-    userCard: UserCardDispatcher;
+    userCard: UserCardDispatchFunctions;
   }
 }
 
@@ -90,7 +90,7 @@ const mapStateToProps = (state: AppState) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     actions: {
-      userCard: new UserCardDispatcher(dispatch) 
+      userCard: new UserCardDispatchFunctions(dispatch) 
     }
   };
 }

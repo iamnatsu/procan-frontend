@@ -1,7 +1,7 @@
 import { TaskFormUpdateTask  } from './TaskFormActionCreator';
 import { Task } from '../../../model/task';
 
-export class TaskFormDispatcher {
+export class TaskFormDispatchFunctions {
   constructor(public dispatch: (action: any) => any) {
     this.dispatch = dispatch
   }

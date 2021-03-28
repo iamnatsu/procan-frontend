@@ -1,10 +1,11 @@
+
 import { DashBoardIsShowProjectModal, DashBoardIsShowGroupModal, DashBoardUpdateProject, DashBoardUpdateProjects, DashBoardUpdateGroup, DashBoardUpdateGroups } from './DashBoardActionCreator';
 import { Project } from '../../model/project';
 import { Group } from '../../model/group';
 import * as ProjectService from '../../service/ProjectService';
 import * as GroupService from '../../service/GroupService';
 
-export class DashBoardDispatcher {
+export class DashBoardDispatchFunctions {
   constructor(public dispatch: (action: any) => any) {
     this.dispatch = dispatch
   }

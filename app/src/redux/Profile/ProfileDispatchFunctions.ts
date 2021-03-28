@@ -1,7 +1,7 @@
 import { ProfileUpdateUser } from './ProfileActionCreator';
 import { User } from '../../model/user';
 
-export class ProfileDispatcher {
+export class ProfileDispatchFunctions {
   constructor(public dispatch: (action: any) => any) {
     this.dispatch = dispatch
   }

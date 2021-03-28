@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { AppState } from '../../redux/index';
 import { StyledComponentProps } from '@material-ui/core/styles/withStyles';
 import { ProjectState } from '../../redux/Project/ProjectReducer';
-import { ProjectDispatcher } from '../../redux/Project/ProjectDispatcher';
+import { ProjectDispatchFunctions } from '../../redux/Project/ProjectDispatchFunctions';
 import { TaskFormState } from '../../redux/component/TaskForm/TaskFormReducer';
-import { TaskFormDispatcher } from '../../redux/component/TaskForm/TaskFormDispatcher';
+import { TaskFormDispatchFunctions } from '../../redux/component/TaskForm/TaskFormDispatchFunctions';
 import { DragSource, DragSourceSpec, DragSourceMonitor, DragSourceCollector, DragSourceConnector, ConnectDragSource,
   DropTargetCollector, DropTargetConnector, DropTargetMonitor, DropTarget, ConnectDropTarget, DropTargetSpec, ConnectDragPreview } from 'react-dnd';
   import { getEmptyImage } from 'react-dnd-html5-backend'
@@ -24,7 +24,7 @@ import * as ProjectService from '../../service/ProjectService';
 import { PopOverTarget } from '../../model/common';
 import { Project } from 'src/model/project';
 import { MessageDialogActionMap } from '../../redux/component/MessageDialog/MessageDialogStore';
-import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
+import { MessageDialogDispatchFunctions } from '../../redux/component/MessageDialog/MessageDialogDispatchFunctions';
 
 export interface ProjectStatusProps { 
   id: string;
@@ -280,9 +280,9 @@ interface StateProps {
 
 interface DispatchProps {
   action: {
-    project: ProjectDispatcher,
-    taskForm: TaskFormDispatcher,
-    messageDialog: MessageDialogDispatcher,
+    project: ProjectDispatchFunctions,
+    taskForm: TaskFormDispatchFunctions,
+    messageDialog: MessageDialogDispatchFunctions,
   };
 }
 
@@ -296,9 +296,9 @@ function mapStateToProps(state: AppState) {
 function mapDispatchToProps(dispatch: any) {
   return {
     action: {
-      project: new ProjectDispatcher(dispatch),
-      taskForm: new TaskFormDispatcher(dispatch),
-      messageDialog: new MessageDialogDispatcher(dispatch),
+      project: new ProjectDispatchFunctions(dispatch),
+      taskForm: new TaskFormDispatchFunctions(dispatch),
+      messageDialog: new MessageDialogDispatchFunctions(dispatch),
     }
   };
 }

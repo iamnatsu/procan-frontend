@@ -10,7 +10,7 @@ import { AppState } from 'src/redux';
 import { topMuiTheme } from '../../config/Theme';
 
 import * as RegistService from '../../service/RegistService'
-import { MessageDialogDispatcher } from "../../redux/component/MessageDialog/MessageDialogDispatcher";
+import { MessageDialogDispatchFunctions } from "../../redux/component/MessageDialog/MessageDialogDispatchFunctions";
 
 export interface ReactProps extends RouteComponentProps<any> { }
 
@@ -93,14 +93,14 @@ const mapStateToProps = (state: AppState) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     action: {
-      modal: new MessageDialogDispatcher(dispatch),
+      modal: new MessageDialogDispatchFunctions(dispatch),
     }
   }
 }
 
 export interface LoginStateProps {
   action: {
-    modal: MessageDialogDispatcher;
+    modal: MessageDialogDispatchFunctions;
   }
 }
 

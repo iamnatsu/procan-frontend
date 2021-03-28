@@ -4,9 +4,9 @@ import { AppState } from '../../redux/index';
 import { StyledComponentProps, CSSProperties } from '@material-ui/core/styles/withStyles';
 import { P_IVORY } from '../../config/Color';
 import { ProjectState } from '../../redux/Project/ProjectReducer';
-import { ProjectDispatcher } from '../../redux/Project/ProjectDispatcher';
+import { ProjectDispatchFunctions } from '../../redux/Project/ProjectDispatchFunctions';
 import { MessageDialogState } from '../../redux/component/MessageDialog/MessageDialogReducer';
-import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
+import { MessageDialogDispatchFunctions } from '../../redux/component/MessageDialog/MessageDialogDispatchFunctions';
 import { withStyles } from '@material-ui/core/styles';
 import { DropTargetCollector, DropTargetConnector, DropTargetMonitor, DropTarget, ConnectDropTarget, DropTargetSpec } from 'react-dnd';
 import { ItemTypes } from '../../config/DnDItemType';
@@ -173,8 +173,8 @@ interface StateProps {
 
 interface DispatchProps {
   action: {
-    project: ProjectDispatcher,
-    messageDialog: MessageDialogDispatcher
+    project: ProjectDispatchFunctions,
+    messageDialog: MessageDialogDispatchFunctions
   };
 }
 
@@ -188,8 +188,8 @@ function mapStateToProps(state: AppState) {
 function mapDispatchToProps(dispatch: any) {
   return {
     action: {
-      project: new ProjectDispatcher(dispatch),
-      messageDialog: new MessageDialogDispatcher(dispatch),
+      project: new ProjectDispatchFunctions(dispatch),
+      messageDialog: new MessageDialogDispatchFunctions(dispatch),
     }
   };
 }

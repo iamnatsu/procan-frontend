@@ -5,7 +5,7 @@ import * as TaskService from '../../service/TaskService';
 import { Task } from 'src/model/task';
 import { ViewMode, PopOverTarget } from 'src/model/common';
 
-export class ProjectDispatcher {
+export class ProjectDispatchFunctions {
   constructor(public dispatch: (action: any) => any) {
     this.dispatch = dispatch
   }

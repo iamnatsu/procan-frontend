@@ -8,7 +8,7 @@ import * as moment from 'moment';
 import { P_IVORY } from '../../config/Color';
 import Scrollbars, { default as CustomScrollbars, ScrollbarProps } from 'react-custom-scrollbars';
 import { GanttState } from '../../redux/Gantt/GanttReducer';
-import { GanttDispatcher } from '../../redux/Gantt/GanttDispatcher';
+import { GanttDispatchFunctions } from '../../redux/Gantt/GanttDispatchFunctions';
 import { ProjectState } from '../../redux/Project/ProjectReducer';
 import GanttBar from '../../component/Gantt/GanttBar';
 import { DragSource, DragSourceSpec, DragSourceMonitor, DragSourceCollector, DragSourceConnector, ConnectDragSource, 
@@ -16,13 +16,13 @@ ConnectDragPreview, DropTargetCollector, ConnectDropTarget, DropTargetConnector,
 import { ItemTypes } from '../../config/DnDItemType';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { Task } from '../../model/task';
-import { ProjectDispatcher } from '../../redux/Project/ProjectDispatcher';
+import { ProjectDispatchFunctions } from '../../redux/Project/ProjectDispatchFunctions';
 import { dayStyle, monStyle, weekStyle, getWidthByHeader } from './GanttHelper';
 import { User } from '../../model/user';
 import { GanttHeader } from '../../model/common';
 import SettingsIcon from '@material-ui/icons/Settings';
 import GanttRowHeader from './GanttRowHeader';
-import { TaskFormDispatcher } from '../../redux/component/TaskForm/TaskFormDispatcher';
+import { TaskFormDispatchFunctions } from '../../redux/component/TaskForm/TaskFormDispatchFunctions';
 import * as TaskService from '../../service/TaskService';
 import * as ProjectService from '../../service/ProjectService';
 import { Project } from '../../model/project';
@@ -463,9 +463,9 @@ interface StateProps {
 
 interface DispatchProps {
   action: {
-    gantt: GanttDispatcher,
-    project: ProjectDispatcher,
-    taskForm: TaskFormDispatcher,
+    gantt: GanttDispatchFunctions,
+    project: ProjectDispatchFunctions,
+    taskForm: TaskFormDispatchFunctions,
   };
 }
 
@@ -479,9 +479,9 @@ function mapStateToProps(state: AppState) {
 function mapDispatchToProps(dispatch: any) {
   return {
     action: {
-      gantt: new GanttDispatcher(dispatch),
-      project: new ProjectDispatcher(dispatch),
-      taskForm: new TaskFormDispatcher(dispatch),
+      gantt: new GanttDispatchFunctions(dispatch),
+      project: new ProjectDispatchFunctions(dispatch),
+      taskForm: new TaskFormDispatchFunctions(dispatch),
     }
   };
 }

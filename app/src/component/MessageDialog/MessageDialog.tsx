@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@material-ui/core';
-import { MessageDialogDispatcher } from '../../redux/component/MessageDialog/MessageDialogDispatcher';
+import { MessageDialogDispatchFunctions } from '../../redux/component/MessageDialog/MessageDialogDispatchFunctions';
 import MessageDialogStore, { MessageDialogActionMap } from '../../redux/component/MessageDialog/MessageDialogStore';
 import { AppState } from 'src/redux';
 
@@ -9,7 +9,7 @@ export interface StateProps {
   MessageDialog: MessageDialogStore;
 }
 export interface DispatchProps {
-  actions: MessageDialogDispatcher;
+  actions: MessageDialogDispatchFunctions;
 }
 type MessageDialogProps = StateProps & DispatchProps;
 
@@ -98,6 +98,6 @@ const mapStateToProps = (state: AppState) => {
   return { MessageDialog: state.component.messageDialog };
 }
 const mapDispatchToProps = (dispatch: any) => {
-  return { actions: new MessageDialogDispatcher(dispatch) }
+  return { actions: new MessageDialogDispatchFunctions(dispatch) }
 }
 export default connect<StateProps, DispatchProps, any>(mapStateToProps, mapDispatchToProps)(MessageDialog);
